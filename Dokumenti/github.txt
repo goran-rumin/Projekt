@@ -1,0 +1,43 @@
+Github sažetak naredbi
+
+git config --global user.name "Ime Prezime"
+git config --global user.email email@email.com   -- podaci
+
+naredba cd u direktorij di ce bit spremljen projekt
+
+git init -- u nekom folderu stvara tu novi repozitorij
+
+git status -- status lokalnog repozitorija i fileova unutra
+
+git add imefilea -- dodaje file u repozitorij i git ga pocinje pratiti
+
+git commit [-a] -m "poruka" [ime_filea] -- potvrðuje promjene na fileovima i poveæava verziju repozitorija, -a znaci svi fileovi
+
+git branch imegrane -- stvara novu granu za testiranje ideja bez utjecaja na glavni "master" branch
+
+git checkout imegrane -- prebacuje pogled u drugu granu istog repozitorija
+
+git merge imegrane -- spaja branch sa master branchom, nakon sta se pozicionirani na master branch
+
+git push ime_online_repoa ime_grane -- uploada promjene na online repozitorij na githubu
+
+git pull -- downloada ...
+
+git remote add ime_online_repoa link do repoa -- dodaje poveznicu na github repo , ime_online_repoa vecinom origin
+
+git remote -v -- ispis dodanih online repoa
+
+git ls-tree -r --name-only ime_brancha -- ispis fileova u pojedinom branchu ili commitu
+
+git diff --name-only branch1 branch2 -- razlika u fileovima
+
+git push origin --delete ime_brancha -- brise branch na githubu
+
+git branch [-r] -- bez -r ispisuje lokalne branchove, sa -r ispisuje branchove na githubu
+
+git branch -d ime_brancha -- brise branch lokalno
+
+git reset --merge -- odustajanje od pokusavanja spajanja
+
+nakon pokusaja mergea, ako ima razlika, ispisati ce se u kojim fileovima ima razlike, i u samim fileovima ce naznaciti
+gdje je razlika, tako da se rucno to sredi, commit i push
