@@ -1,0 +1,19 @@
+Okvirni popis funkcija dijela za rukovanje podacima - sve vraæaju JSON
+
+- ID login(username, password)
+- lista(id_posta, user1, user2, ime1, ime2, profilna1, profilna2, vrijeme, tekst, slika) feed(user_ID, vrijeme)
+- lista(id_posta, user2, ime2, profilna2, vrijeme, tekst, slika) zid(user_ID)
+- lista(osobni podaci...) dohvati_podatke(user_ID)
+- lista(id_posta, url thumbnail) dohvati_galeriju(user_ID)
+- url_slike dohvati_sliku(id_posta)
+- lista(string, vrijeme) dohvati_razgovor(user_ID, user2)
+- void posalji_poruku(user1, user2, string)
+- void objavi(user1, user2, tekst, post_id)  -- ako post id null to je novi tekst post, ako nije null to je dodatak teksta uz postojeci upload slike
+- post_id upload_slike(user_ID, slika_file)
+- void like(post_komentar_id, user_id, zastavica post/komentar)
+- user_ID registracija(username, password, mail, ...)
+- void komentiraj(post_id, user_id, tekst)
+- lista(komentar_ID, user2, vrijeme) dohvati_komentare(post_id)
+- lista(user2, zadnja_poruka) razgovori(user_ID)
+- lista(imena) pretrazi(user_ID, query)
+- void edit(user_ID, podaci,...)
