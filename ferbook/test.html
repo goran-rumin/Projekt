@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Test page</title>
+
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            $.ajax({
+                url : "user/login/",
+                type : "POST",
+                data: {
+                    username : "jewbre",
+                    password : "pass123"
+                }
+            }).success(function(msg){
+                console.log(msg);
+                var json = JSON.parse(msg);
+            })
+
+
+        })
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
