@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -43,22 +44,32 @@ public class MainActivity extends Activity implements
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager
-				.beginTransaction()
-				.replace(R.id.container,
-						PlaceholderFragment.newInstance(position + 1)).commit();
+		if(position==2)
+			fragmentManager
+			.beginTransaction()
+			.replace(R.id.container,
+					WallFragment.newInstance(position + 1)).commit();
+		else
+			fragmentManager
+					.beginTransaction()
+					.replace(R.id.container,
+							PlaceholderFragment.newInstance(position + 1)).commit();
 	}
 
 	public void onSectionAttached(int number) {
+		String[] ladica = getResources().getStringArray(R.array.navigacijska_ladica);
 		switch (number) {
 		case 1:
-			mTitle = getString(R.string.title_section1);
+			mTitle = ladica[0];
 			break;
 		case 2:
-			mTitle = getString(R.string.title_section2);
+			mTitle = ladica[1];
 			break;
 		case 3:
-			mTitle = getString(R.string.title_section3);
+			mTitle = ladica[2];
+			break;
+		case 4:
+			mTitle = ladica[3];
 			break;
 		}
 	}
@@ -90,6 +101,11 @@ public class MainActivity extends Activity implements
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
+			return true;
+		}
+		if (id == R.id.action_example) {
+			Toast.makeText(this, "Example action.", Toast.LENGTH_SHORT)
+					.show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
