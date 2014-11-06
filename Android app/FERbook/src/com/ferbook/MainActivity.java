@@ -34,7 +34,7 @@ public class MainActivity extends Activity implements
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
-
+		Toast.makeText(this, getIntent().getStringExtra("username")+" "+getIntent().getStringExtra("password"), Toast.LENGTH_SHORT).show();
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
