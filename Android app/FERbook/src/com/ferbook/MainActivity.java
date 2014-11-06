@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements
-		NavigationDrawerFragment.NavigationDrawerCallbacks {
+		NavigationDrawerFragment.NavigationDrawerCallbacks, login.prenesi {
 
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 
@@ -149,6 +149,13 @@ public class MainActivity extends Activity implements
 			((MainActivity) activity).onSectionAttached(getArguments().getInt(
 					ARG_SECTION_NUMBER));
 		}
+	}
+
+	@Override
+	public void prenesi_login(String id, String error) {
+		// TODO Auto-generated method stub		
+		//ovo se poziva nakon sto dobijemo id od baze (ili error_info, u tom slucajno id=null)
+		
 	}
 
 }

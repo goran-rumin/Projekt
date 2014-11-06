@@ -23,8 +23,8 @@ import org.json.JSONObject;
 public class login extends AsyncTask<String, Void, String> {
 	
 	private String error_info=null;
-	private prenesi_login sucelje;
-	private static String url = "http://vdl.hr/";
+	private prenesi sucelje;
+	private static String url = "http://vdl.hr/user/login";
 	
 	
     protected String doInBackground(String... arg0) {
@@ -66,7 +66,7 @@ public class login extends AsyncTask<String, Void, String> {
     }
 
     protected void onPostExecute(String id) {
-        sucelje.prenesi(id, error_info);
+        sucelje.prenesi_login(id, error_info);
     }
     
     private void spremi_id(String id){
@@ -86,7 +86,7 @@ public class login extends AsyncTask<String, Void, String> {
     
     
     
-    public interface prenesi_login{
-    	void prenesi(String id, String error);
+    public interface prenesi{
+    	void prenesi_login(String id, String error);
     }
 }
