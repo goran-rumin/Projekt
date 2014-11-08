@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements
-		NavigationDrawerFragment.NavigationDrawerCallbacks, login.prenesi {
+		NavigationDrawerFragment.NavigationDrawerCallbacks {
 
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 
@@ -34,7 +34,7 @@ public class MainActivity extends Activity implements
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
-		Toast.makeText(this, getIntent().getStringExtra("username")+" "+getIntent().getStringExtra("password"), Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, getIntent().getStringExtra("id"), Toast.LENGTH_SHORT).show();
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
@@ -150,12 +150,4 @@ public class MainActivity extends Activity implements
 					ARG_SECTION_NUMBER));
 		}
 	}
-
-	@Override
-	public void prenesi_login(String id, String error) {
-		// TODO Auto-generated method stub		
-		//ovo se poziva nakon sto dobijemo id od baze (ili error_info, u tom slucajno id=null)
-		
-	}
-
 }

@@ -8,7 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.os.AsyncTask;
 
-public class info extends AsyncTask<String, Void, Void> {
+public class Info extends AsyncTask<String, Void, Void> {
 	private prenesi_info sucelje;
 	private static String url="http://vdl.hr/user/info";
 	private String userId=null, username=null , name=null, lastName=null, email=null, error_info=null;

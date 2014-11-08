@@ -14,6 +14,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+
+import android.util.Log;
  
 public class ServiceHandler {
  
@@ -55,7 +57,6 @@ public class ServiceHandler {
                 if (params != null) {
                     httpPost.setEntity(new UrlEncodedFormEntity(params));
                 }
- 
                 httpResponse = httpClient.execute(httpPost);
  
             } else if (method == GET) {

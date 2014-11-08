@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -20,34 +21,36 @@ import org.json.JSONObject;
 
 
 
-public class login extends AsyncTask<String, Void, String> {
+public class Login extends AsyncTask<Object, Void, String> {
 	
 	private String error_info=null;
 	private prenesi sucelje;
-	private static String url = "http://vdl.hr/user/login";
+	private static String url = "http://vdl.hr/ferbook/user/login";
 	
 	
-    protected String doInBackground(String... arg0) {
-    	String username=arg0[0];
-    	String pass = arg0[1];
-    	
+    protected String doInBackground(Object... arg0) {
+    	String username=(String) arg0[0];
+    	String pass = (String) arg0[1];
+    	sucelje = (prenesi) arg0[2];
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
     	NameValuePair user=new BasicNameValuePair("username", username);
     	NameValuePair pas=new BasicNameValuePair("password", pass);
     	
-    	params.add(user); params.add(pas);
-    	
+    	params.add(user);
+    	params.add(pas);
     	
     	String id=null;
     	ServiceHandler sh = new ServiceHandler();
     	
-    	String jsonStr =sh.makeServiceCall(url,  ServiceHandler.POST, params);
-    	
+    	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, params);
+		
     	if(jsonStr != null){
+    		Log.e("response", jsonStr);
     		try{
-    			JSONObject jsonObj= new JSONObject(jsonStr);
+    			JSONObject jsonObj = new JSONObject(jsonStr);
     			JSONArray data = jsonObj.getJSONArray("data");
+    			JSONObject err = jsonObj.getJSONObject("error");
     			JSONObject id_data = data.getJSONObject(0);
     			id= id_data.getString("userId");
     			
@@ -55,7 +58,6 @@ public class login extends AsyncTask<String, Void, String> {
     		}
     		catch(JSONException e){
     			e.printStackTrace();
-    			//error=
     		}
     	}
      return id;
@@ -79,13 +81,7 @@ public class login extends AsyncTask<String, Void, String> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
-    	
-    	
     }
-    
-    
-    
     public interface prenesi{
     	void prenesi_login(String id, String error);
     }
