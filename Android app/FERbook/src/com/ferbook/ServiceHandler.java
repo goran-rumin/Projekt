@@ -12,6 +12,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
@@ -43,7 +44,7 @@ public class ServiceHandler {
      * @params - http request params
      * */
     public String makeServiceCall(String url, int method,
-            List<NameValuePair> params) {				//ovu metodu zovemo! method=ServiceHandler.POST
+            String params) {				//ovu metodu zovemo! method=ServiceHandler.POST
         try {
             // http client
             DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -55,10 +56,12 @@ public class ServiceHandler {
                 HttpPost httpPost = new HttpPost(url);
                 // adding post params
                 if (params != null) {
-                    httpPost.setEntity(new UrlEncodedFormEntity(params));
+                	 httpPost.setEntity(new StringEntity(params));
                 }
                 httpResponse = httpClient.execute(httpPost);
  
+                
+                
             } else if (method == GET) {
                 // appending params to url
                 if (params != null) {

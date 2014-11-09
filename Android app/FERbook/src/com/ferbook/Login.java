@@ -6,12 +6,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,26 +34,40 @@ public class Login extends AsyncTask<Object, Void, String> {
 	
 	private String error_info=null;
 	private prenesi sucelje;
-	private static String url = "http://vdl.hr/ferbook/user/login";
+	private static String url = "http://vdl.hr/ferbook/user/login"; //treba "/" na kraju?
 	
 	
     protected String doInBackground(Object... arg0) {
     	String username=(String) arg0[0];
     	String pass = (String) arg0[1];
     	sucelje = (prenesi) arg0[2];
-    	List<NameValuePair> params= new ArrayList<NameValuePair>();
+    	//List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
-    	NameValuePair user=new BasicNameValuePair("username", username);
-    	NameValuePair pas=new BasicNameValuePair("password", pass);
+    	//NameValuePair user=new BasicNameValuePair("username", username);
+    	//NameValuePair pas=new BasicNameValuePair("password", pass);
     	
-    	params.add(user);
-    	params.add(pas);
+    	//params.add(user);
+    	//params.add(pas);
+
+    	JSONObject par=new JSONObject();
+        try {
+        	
+			par.put("username", username);
+			par.put("password", pass);
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     	
+        
     	String id=null;
+    	
     	ServiceHandler sh = new ServiceHandler();
     	
-    	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, params);
+    	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, par.toString());
 		
+    	//String jsonStr= makeServiceCall(url,paramshash);
+    	
     	if(jsonStr != null){
     		Log.e("response", jsonStr);
     		try{
@@ -85,4 +108,7 @@ public class Login extends AsyncTask<Object, Void, String> {
     public interface prenesi{
     	void prenesi_login(String id, String error);
     }
+
+
+
 }
