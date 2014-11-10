@@ -9,7 +9,7 @@
     include_once "../../classes/Crypter.php";
 
     // Define response array
-    $response = array("data"=>[], "error" => []);
+    $response = array("data"=>array(), "error" => array());
 
     // Check if the data is send in any way
 

@@ -10,11 +10,15 @@
         $(document).ready(function() {
 
             $.ajax({
-                url : "user/login/",
+                url : "http://vdl.hr/ferbook/user/register/",
                 type : "POST",
                 data: {
-                    username : "jewbre",
-                    password : "pass123"
+                    username : "jewbre1",
+                    password : "pass123",
+                    repeatPassword : "pass123",
+                    email : "jewbre19@gmail.com",
+                    name : "Vilim",
+                    lastname : "Stubičan"
                 }
             }).success(function(msg){
                 console.log(msg);

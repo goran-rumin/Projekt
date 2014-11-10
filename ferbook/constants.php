@@ -7,7 +7,7 @@
  */
 
 
-define("SQL_USERNAME", "vdlhr_ferbook");
-define("SQL_PASSWORD", "fer123");
-define("SQL_HOST", "");
-define("SQL_DBNAME", "vdlhr_ferbook");
+define("SQL_USERNAME", "vilim");
+define("SQL_PASSWORD", "vilim123");
+define("SQL_HOST", "localhost");
+define("SQL_DBNAME", "ferbook");
