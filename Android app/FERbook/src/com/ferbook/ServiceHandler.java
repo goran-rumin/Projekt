@@ -54,6 +54,9 @@ public class ServiceHandler {
             // Checking http request method type
             if (method == POST) {
                 HttpPost httpPost = new HttpPost(url);
+                httpPost.setHeader("Content-type", "application/json");
+                httpPost.setHeader("Accept", "application/json");
+                
                 // adding post params
                 if (params != null) {
                 	 httpPost.setEntity(new StringEntity(params));
