@@ -1,0 +1,59 @@
+div {
+    border-radius: 16px;
+}
+
+body {
+    margin-left: 15%;
+    font-family: Segoe UI, cursive;
+    text-align: center;
+}
+
+.sadrzaj {
+    color: #D9534F;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.gore {
+    width: 78%;
+    height: 65px;
+    background-color: #5882FA;/*#929292*/
+}
+
+.unutra {
+    height: 34px;
+    width: 78%;
+    background-color: #D9534F;
+    word-spacing: 15px;
+    text-align: center;
+}
+
+.naslov {
+    text-align: center;
+    font-size: 300%;
+    font-weight: 700;
+    font-family: Felix Titling Regular, cursive;
+    color: #CEF6F5;
+}
+
+.lijevo {
+    height: 800px;
+    background-color: #F7F8E0;
+}
+
+.desno {
+    padding-top: 5px;
+    height: 800px;
+    background-color: #F7F8E0;
+}
+
+.test {
+    font-size: 145%;
+}
+
+img {
+    width: 88%;
+    border-radius: 18px;
+}
+
