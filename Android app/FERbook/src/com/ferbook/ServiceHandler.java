@@ -28,11 +28,6 @@ public class ServiceHandler {
  
     }
  
-    /**
-     * Making service call
-     * @url - url to make request
-     * @method - http request method
-     * */
     public String makeServiceCall(String url, int method) {
         return this.makeServiceCall(url, method, null);
     }
@@ -44,7 +39,7 @@ public class ServiceHandler {
      * @params - http request params
      * */
     public String makeServiceCall(String url, int method,
-            String params) {				//ovu metodu zovemo! method=ServiceHandler.POST
+            List<NameValuePair> params) {				//ovu metodu zovemo! method=ServiceHandler.POST
         try {
             // http client
             DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -54,12 +49,10 @@ public class ServiceHandler {
             // Checking http request method type
             if (method == POST) {
                 HttpPost httpPost = new HttpPost(url);
-                httpPost.setHeader("Content-type", "application/json");
-                httpPost.setHeader("Accept", "application/json");
                 
                 // adding post params
                 if (params != null) {
-                	 httpPost.setEntity(new StringEntity(params));
+                	 httpPost.setEntity(new UrlEncodedFormEntity(params));
                 }
                 httpResponse = httpClient.execute(httpPost);
  

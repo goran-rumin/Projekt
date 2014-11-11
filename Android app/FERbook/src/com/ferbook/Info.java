@@ -22,7 +22,7 @@ public class Info extends AsyncTask<String, Void, Void> {
 		
 		ServiceHandler sh = new ServiceHandler();
     	
-    	String jsonStr =sh.makeServiceCall(url,  ServiceHandler.POST, params);
+    	//String jsonStr =sh.makeServiceCall(url,  ServiceHandler.POST, params);
 		
 		return null;
 	}

@@ -2,8 +2,11 @@ package com.ferbook;
 
 import java.io.BufferedWriter;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +14,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -28,55 +33,39 @@ import org.json.JSONObject;
 
 
 
-
-
 public class Login extends AsyncTask<Object, Void, String> {
 	
 	private String error_info=null;
 	private prenesi sucelje;
-	private static String url = "http://vdl.hr/ferbook/user/login"; //treba "/" na kraju?
+	Activity kontekst;
+	private static String url = "http://vdl.hr/ferbook/user/login/index.php";
 	
 	
     protected String doInBackground(Object... arg0) {
     	String username=(String) arg0[0];
     	String pass = (String) arg0[1];
     	sucelje = (prenesi) arg0[2];
-    	//List<NameValuePair> params= new ArrayList<NameValuePair>();
+    	kontekst = (LoginActivity) arg0[2];
+    	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
-    	//NameValuePair user=new BasicNameValuePair("username", username);
-    	//NameValuePair pas=new BasicNameValuePair("password", pass);
+    	NameValuePair user=new BasicNameValuePair("username", username);
+    	NameValuePair pas=new BasicNameValuePair("password", pass);
     	
-    	//params.add(user);
-    	//params.add(pas);
-
-    	JSONObject par=new JSONObject();
-        try {
-        	
-			par.put("username", username);
-			par.put("password", pass);
-		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-    	
+    	params.add(user);
+    	params.add(pas);
         
     	String id=null;
     	
     	ServiceHandler sh = new ServiceHandler();
     	
-    	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, par.toString());
-		
-    	//String jsonStr= makeServiceCall(url,paramshash);
+    	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, params);
     	
     	if(jsonStr != null){
-    		Log.e("response", jsonStr);
     		try{
     			JSONObject jsonObj = new JSONObject(jsonStr);
-    			JSONArray data = jsonObj.getJSONArray("data");
-    			JSONObject err = jsonObj.getJSONObject("error");
-    			JSONObject id_data = data.getJSONObject(0);
-    			id= id_data.getString("userId");
-    			
+    			JSONObject data = jsonObj.getJSONObject("data");
+    			//JSONObject err = jsonObj.getJSONObject("error");
+    			id = data.getString("userId");
     			spremi_id(id);
     		}
     		catch(JSONException e){
@@ -96,9 +85,8 @@ public class Login extends AsyncTask<Object, Void, String> {
     
     private void spremi_id(String id){
     	try {
-			PrintWriter out
-			   = new PrintWriter(new BufferedWriter(new FileWriter("id.txt")));
-			out.write(id);
+    		OutputStreamWriter out = new OutputStreamWriter(kontekst.openFileOutput("id.txt", Context.MODE_PRIVATE));
+    		out.write(id);
 			out.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
