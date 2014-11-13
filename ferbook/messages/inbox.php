@@ -46,7 +46,7 @@ foreach ( $inbox as $oneMessage) {
                 $friendInformations[$position]["lastMessage"] = $lastMessage;
                 $container = $friendInformations[$position];
                 array_splice($friendInformations, $position, 1);
-                array_push($friendInformations, $container);
+                $friendInformations[] = $container;
             //}
         } else {
             $allFriends[] = $oneMessage->sender;
@@ -61,7 +61,7 @@ foreach ( $inbox as $oneMessage) {
             $friend->setFetchMode(PDO::FETCH_OBJ);
             $friend->execute();
             $row = $friend->fetch();
-            $friendInformations[count($allFriends)-1] = array(
+            $friendInformations[] = array(
                 "userId" => $oneMessage->sender,
                 "name" => $row->name,
                 "lastname" => $row->last_name,
@@ -80,7 +80,7 @@ foreach ( $inbox as $oneMessage) {
             $friendInformations[$position]["lastMessage"] = $lastMessage;
             $container = $friendInformations[$position];
             array_splice($friendInformations, $position, 1);
-            array_push($friendInformations, $container);
+            $friendInformations[] = $container;
         //}
     } else {
         $allFriends[] = $oneMessage->recipient;
@@ -95,7 +95,7 @@ foreach ( $inbox as $oneMessage) {
         $friend->setFetchMode(PDO::FETCH_OBJ);
         $friend->execute();
         $row = $friend->fetch();
-        $friendInformations[count($allFriends)-1] = array(
+        $friendInformations[] = array(
             "userId" => $oneMessage->recipient,
             "name" => $row->name,
             "lastname" => $row->last_name,
