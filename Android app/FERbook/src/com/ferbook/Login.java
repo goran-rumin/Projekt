@@ -1,33 +1,14 @@
 package com.ferbook;
 
-import java.io.BufferedWriter;
-
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
-
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,14 +45,30 @@ public class Login extends AsyncTask<Object, Void, String> {
     		try{
     			JSONObject jsonObj = new JSONObject(jsonStr);
     			JSONObject data = jsonObj.getJSONObject("data");
-    			//JSONObject err = jsonObj.getJSONObject("error");
+    			//JSONArray data = jsonObj.getJSONArray("data");
+    			
     			id = data.getString("userId");
     			spremi_id(id);
     		}
     		catch(JSONException e){
+    			//if the mapping doesn't exist, tj, ako je data prazan pa userid ne postoji:
     			e.printStackTrace();
+    			try{
+    				JSONObject jsonObj = new JSONObject(jsonStr);
+    				JSONObject error = jsonObj.getJSONObject("error");
+    				error_info=error.getString("errInfo");
+    				
+    			}
+    			catch(JSONException e1){
+    				e1.printStackTrace();
+    				//System.out.print("greška u parsiranju");
+    			}
+    			
     		}
     	}
+    	else error_info="DB does not respond";
+    	
+    	
      return id;
     }
 
@@ -93,6 +90,10 @@ public class Login extends AsyncTask<Object, Void, String> {
 			e.printStackTrace();
 		}
     }
+    
+    
+    
+    
     public interface prenesi{
     	void prenesi_login(String id, String error);
     }

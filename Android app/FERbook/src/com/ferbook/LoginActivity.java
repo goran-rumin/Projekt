@@ -57,6 +57,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Log
 		pd.dismiss();
 		Intent prebaci = new Intent(getBaseContext(), MainActivity.class);
 		prebaci.putExtra("id", id);
+		//Toast.makeText(this, id+" "+error, Toast.LENGTH_SHORT).show(); //samo da vidimo radi li id
+		
 		startActivity(prebaci);
 	}
 	/**
