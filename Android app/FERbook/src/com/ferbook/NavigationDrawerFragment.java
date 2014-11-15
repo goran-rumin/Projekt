@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -267,7 +268,15 @@ public class NavigationDrawerFragment extends Fragment {
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-
+		if (item.getItemId() == R.id.action_logout) {
+			getActivity().deleteFile("id.txt");
+			Toast.makeText(getActivity(), "Odlogirano / file izbrisan", Toast.LENGTH_SHORT)
+					.show();
+			Intent prebaci = new Intent(getActivity().getBaseContext(), LoginActivity.class);
+			startActivity(prebaci);
+			getActivity().finish();
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 

@@ -11,49 +11,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class WallFragment extends Fragment {
+public class MessageFragment extends Fragment {
 
 		private static final String ARG_SECTION_NUMBER = "section_number";   //redni broj fragmenta, zbog naslova ActionBara
-
+		static String user_id;
 		static ArrayList<HashMap<String,?>> data;
 		
-		public static WallFragment newInstance(int sectionNumber) {
-			WallFragment fragment = new WallFragment();
+		public static MessageFragment newInstance(int sectionNumber, String userId) {
+			MessageFragment fragment = new MessageFragment();
 			Bundle args = new Bundle();
 			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 			fragment.setArguments(args);
+			user_id=userId;
 			
 			data = new ArrayList<HashMap<String,?>>();
-			HashMap<String,Object> redak = new HashMap<String,Object>();
-			redak.put("news_item_pimage",R.drawable.ic_launcher);
-			redak.put("news_item_ptext","Korisnik0");
-			redak.put("news_item_text","Objava 0");
-			data.add(redak);
-			redak = new HashMap<String,Object>();
-			redak.put("news_item_pimage",R.drawable.ic_launcher);
-			redak.put("news_item_ptext","Korisnik1");
-			redak.put("news_item_text","Objava 1");
-			data.add(redak);
 			return fragment;
 		}
 
-		public WallFragment() {
+		public MessageFragment() {
 		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.wall, container,
+			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
-			ListView listview = (ListView) rootView.findViewById(R.id.list_wall);
-			SimpleAdapter adapter = new SimpleAdapter(getActivity(),
-					data,
-					R.layout.news_layout,
-					new String[] {"news_item_pimage","news_item_ptext","news_item_text"},
-					new int[] { R.id.news_item_pimage, R.id.news_item_ptext,R.id.news_item_text});
-			listview.setAdapter(adapter);
+			TextView tv1 = (TextView) rootView.findViewById(R.id.section_label);
+			tv1.setText(user_id);
 			return rootView;
 		}
 

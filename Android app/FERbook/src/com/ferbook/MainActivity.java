@@ -22,6 +22,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+	
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 
 	private CharSequence mTitle;
@@ -44,16 +45,27 @@ public class MainActivity extends Activity implements
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getFragmentManager();
-		if(position==2)
+		fragmentManager.popBackStack();
+		switch (position){
+		case 1:
+			fragmentManager
+			.beginTransaction()
+			.replace(R.id.container,
+					InboxFragment.newInstance(position + 1, mNavigationDrawerFragment)).commit();
+			break;
+		case 2:
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.container,
 					WallFragment.newInstance(position + 1)).commit();
-		else
+			break;
+		default:
 			fragmentManager
-					.beginTransaction()
-					.replace(R.id.container,
-							PlaceholderFragment.newInstance(position + 1)).commit();
+			.beginTransaction()
+			.replace(R.id.container,
+					PlaceholderFragment.newInstance(position + 1)).commit();
+			break;
+		}
 	}
 
 	public void onSectionAttached(int number) {
@@ -111,6 +123,16 @@ public class MainActivity extends Activity implements
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	@Override
+	public void onBackPressed() {
+		MessageFragment f = (MessageFragment)getFragmentManager().findFragmentByTag("MessageFragment");
+		if(f!=null && f.isVisible()){
+			getFragmentManager().popBackStack();
+		}
+		else
+			super.onBackPressed();
+	}
 
 	/**
 	 * A placeholder fragment containing a simple view.
@@ -150,5 +172,8 @@ public class MainActivity extends Activity implements
 			((MainActivity) activity).onSectionAttached(getArguments().getInt(
 					ARG_SECTION_NUMBER));
 		}
+	}
+	public interface Back_tipka{
+		public void onBack();
 	}
 }

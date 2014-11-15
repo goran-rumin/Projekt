@@ -15,7 +15,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/news_item_ptext"
+        android:id="@+id/inbox_item_sender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/section_label"
@@ -31,7 +31,7 @@
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/news_item_ptext"
+        android:layout_below="@+id/inbox_item_sender"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="45dp"
         android:ems="10"
@@ -55,8 +55,8 @@
         android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/news_item_ptext"
-        android:layout_alignRight="@+id/news_item_ptext"
+        android:layout_alignLeft="@+id/inbox_item_sender"
+        android:layout_alignRight="@+id/inbox_item_sender"
         android:layout_below="@+id/password"
         android:layout_marginTop="28dp"
         android:text="Login" />

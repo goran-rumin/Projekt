@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.ferbook.MainActivity" >
+
+    <item
+        android:id="@+id/inbox_refresh"
+        android:showAsAction="always"
+        android:title="@string/inbox_refresh" android:icon="@drawable/refresh"/>
+
+</menu>

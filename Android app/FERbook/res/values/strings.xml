@@ -13,5 +13,6 @@
         <item >Gallery</item>
     </string-array>
     <string name="logout_text">Logout</string>
+    <string name="inbox_refresh">Refresh</string>
 
 </resources>

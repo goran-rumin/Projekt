@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_margin="10dp" >
+
+    <TextView
+        android:id="@+id/inbox_item_sender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/inbox_item_time"
+        android:singleLine="true"
+		android:ellipsize="marquee"
+        android:scrollHorizontally="true"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/inbox_item_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/inbox_item_sender"
+        android:layout_below="@+id/inbox_item_sender"
+        android:layout_marginTop="8dp"
+        android:singleLine="true"
+		android:ellipsize="marquee"
+        android:scrollHorizontally="true"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/inbox_item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/inbox_item_sender"
+        android:layout_alignBottom="@+id/inbox_item_sender"
+        android:layout_alignParentRight="true"
+        android:text="TextView" />
+
+</RelativeLayout>
+</LinearLayout>
