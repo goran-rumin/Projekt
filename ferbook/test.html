@@ -10,10 +10,10 @@
         $(document).ready(function() {
 
             $.ajax({
-                url : "post/newsfeed/",
+                url : "post/getComments/",
                 type : "POST",
                 data: {
-                    userId : 3
+                    postId : 6
                 }
             }).success(function(msg){
                 console.log(msg);
