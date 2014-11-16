@@ -10,13 +10,10 @@
         $(document).ready(function() {
 
             $.ajax({
-                url : "user/edit/",
+                url : "post/newsfeed/",
                 type : "POST",
                 data: {
-                    username : "jewbre",
-                    password : "pass123",
-                    name : "Vilim",
-                    lastname : "Stubičan"
+                    userId : 3
                 }
             }).success(function(msg){
                 console.log(msg);
