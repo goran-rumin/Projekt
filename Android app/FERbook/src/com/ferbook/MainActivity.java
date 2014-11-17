@@ -116,9 +116,6 @@ public class MainActivity extends Activity implements
 			return true;
 		}
 		if (id == R.id.action_example) {
-			deleteFile("id.txt");
-			Toast.makeText(this, "File logina izbrisan", Toast.LENGTH_SHORT)
-					.show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

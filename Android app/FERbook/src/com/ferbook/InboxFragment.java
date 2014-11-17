@@ -72,7 +72,7 @@ public class InboxFragment extends Fragment {
 				@Override
             	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					fragmm.beginTransaction().replace(((ViewGroup)getView().getParent()).getId(), 
-							MessageFragment.newInstance(2, "neki UserId"), "MessageFragment").addToBackStack("prebacivanje").commit();
+							MessageFragment.newInstance(2, "neki UserId", data.get(position).get("inbox_item_sender").toString()), "MessageFragment").addToBackStack("prebacivanje").commit();
             	}
 			});	
 			return rootView;

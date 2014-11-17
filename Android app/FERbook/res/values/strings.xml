@@ -4,7 +4,7 @@
     <string name="app_name">FERbook</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Brisi File</string>
+    <string name="action_example">Placeholder</string>
     <string name="action_settings">Settings</string>
     <string-array name="navigacijska_ladica">
         <item >News</item>

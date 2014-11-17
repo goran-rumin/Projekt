@@ -35,10 +35,10 @@ public class LoginActivity extends Activity implements View.OnClickListener, Log
 			prebaci.putExtra("id", id);
 			startActivity(prebaci);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 	}
@@ -55,11 +55,13 @@ public class LoginActivity extends Activity implements View.OnClickListener, Log
 	@Override
 	public void prenesi_login(String id, String error) {
 		pd.dismiss();
-		Intent prebaci = new Intent(getBaseContext(), MainActivity.class);
-		prebaci.putExtra("id", id);
-		//Toast.makeText(this, id+" "+error, Toast.LENGTH_SHORT).show(); //samo da vidimo radi li id
-		
-		startActivity(prebaci);
+		if(error==null){
+			Intent prebaci = new Intent(getBaseContext(), MainActivity.class);
+			prebaci.putExtra("id", id);
+			startActivity(prebaci);
+		}
+		else
+			Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
 	}
 	/**
 	 * Provjerava da li postoji veza na internet. Provjerava se WiFi i mobilni pristup.
