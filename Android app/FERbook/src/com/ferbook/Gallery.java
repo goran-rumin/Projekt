@@ -11,34 +11,27 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 
-public class Inbox extends AsyncTask<Object, Void, String> {
+public class Gallery extends AsyncTask<Object, Void, String> {
 
 	private String error_info=null;
-	private String userId=null, name=null, lastname=null, message=null, senderId=null,  timestamp=null;
-	private int flag=-1;
-	int br_ljudi=0;
+	int br_slika=0;
 	
-	List<String> userIds = new ArrayList<String>();
-	List<String> names = new ArrayList<String>();
-	List<String> lastnames = new ArrayList<String>();
-	List<String> messages = new ArrayList<String>();
-	List<String> senderIds=new ArrayList<String>();
-	List<String> timestamps= new ArrayList<String>();
-	List<Integer> flags=new ArrayList<Integer>();
+	List<String> postIds = new ArrayList<String>();
+	List<String> url_slika = new ArrayList<String>();
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/messages/inbox/index.php";
+	private static String url = "http://vdl.hr/ferbook/photos/galley/index.php";
 	
 	
     protected String doInBackground(Object... arg0) {
-    	//String userId=(String) arg0[0];
-
+    	
+    	String galleryId=(String) arg0[0];
     	sucelje = (prenesi) arg0[1];
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
-    	NameValuePair user=new BasicNameValuePair("userId", (String) arg0[0]);    	
+    	NameValuePair user=new BasicNameValuePair("galleryId", galleryId);    	
     	params.add(user);            	
     	
     	ServiceHandler sh = new ServiceHandler();    	
@@ -56,7 +49,7 @@ public class Inbox extends AsyncTask<Object, Void, String> {
     			//if the mapping doesn't exist, tj, ako je data prazan pa data ne postoji:
     			e.printStackTrace();
     			try{
-    				error_info="No messages";		//ako je data s razlogom prazan
+    				error_info="No pictures";		//ako je data s razlogom prazan
     				JSONObject jsonObj = new JSONObject(jsonStr);
     				JSONObject error = jsonObj.getJSONObject("error");
     				error_info=error.getString("errInfo");
@@ -69,38 +62,26 @@ public class Inbox extends AsyncTask<Object, Void, String> {
     			return null;
     		}
     			
+    		//{ "data" : [ {"postId" : id, "url" : url} , {second Image}...}
     			
-    		JSONObject poruka=new JSONObject();
-    		JSONObject conversation= new JSONObject();
-    			br_ljudi=0;
+    			JSONObject slika=new JSONObject();
+    			br_slika=0;
+    			String postId;
+    			String url_slike;
     			
     			while(true){
     				try {
-						poruka = data.getJSONObject(br_ljudi);
+						slika = data.getJSONObject(br_slika);
 						
-						userId=poruka.getString("UserId");
-						name=poruka.getString("name");
-						lastname=poruka.getString("lastname");
-						
-						conversation = poruka.getJSONObject("lastMessage");
-						
-						message=conversation.getString("message");
-						senderId=conversation.getString("senderId");
-						timestamp=conversation.getString("timestamp");
-						flag=conversation.getInt("flag");
+						postId=slika.getString("postId");
+						url_slike=slika.getString("url");
 						
 						//ako sve ovo gore uspije i ako nejde u catch:
 						
-						userIds.add(userId);
-						names.add(name);
-						lastnames.add(lastname);
+						postIds.add(postId);
+						url_slika.add(url_slike);
 						
-						messages.add(message);
-						senderIds.add(senderId);
-						timestamps.add(timestamp);
-						flags.add(flag);						
-						
-    					br_ljudi++;
+    					br_slika++;
     					
 					} catch (JSONException e) {
 						e.printStackTrace();
@@ -126,7 +107,7 @@ public class Inbox extends AsyncTask<Object, Void, String> {
     }
 
     protected void onPostExecute() {
-        sucelje.prenesi_inbox(userIds, names, lastnames, messages, senderIds, timestamps, flags, br_ljudi,  error_info);
+        sucelje.prenesi_gallery(postIds, url_slika, br_slika,  error_info);
     }
     
     
@@ -134,7 +115,7 @@ public class Inbox extends AsyncTask<Object, Void, String> {
     
     
     public interface prenesi{
-    	void prenesi_inbox(List<String> userIds, List<String> names, List<String> lastnames, List<String> messages, List<String> SenderIds, List<String> timestamps, List<Integer> flags, int broj_ljudi, String error);
+    	void prenesi_gallery(List<String> postIds, List<String> url_slika, int broj_slika, String error);
     }
 
 

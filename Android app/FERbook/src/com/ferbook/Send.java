@@ -65,7 +65,7 @@ public class Send extends AsyncTask<Object, Void, String> {
     }
 
     protected void onPostExecute() {
-        sucelje.prenesi_conversation(error_info);
+        sucelje.prenesi_send(error_info);
     }
     
     
@@ -73,7 +73,7 @@ public class Send extends AsyncTask<Object, Void, String> {
     
     
     public interface prenesi{
-    	void prenesi_conversation(String error);  //ako nema errora, sve kul
+    	void prenesi_send(String error);  //ako nema errora, sve kul
     }
 
 

@@ -10,15 +10,15 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 
-public class Info extends AsyncTask<String, Void, Void> {
+public class Image extends AsyncTask<String, Void, Void> {
 	private prenesi sucelje;
-	private static String url="http://vdl.hr/ferbook/user/info/index.php";
-	private String userId=null, username=null , name=null, lastName=null, email=null, error_info=null;
+	private static String url="http://vdl.hr/ferbook/photos/image/index.php";
+	private String url_slike=null, error_info=null;
 	
 
 	@Override
 	protected Void doInBackground(String... arg0) {
-		NameValuePair user=new BasicNameValuePair("userId", arg0[0]);
+		NameValuePair user=new BasicNameValuePair("postId", arg0[0]);
 		List<NameValuePair> params= new ArrayList<NameValuePair>();
 		params.add(user);
 		
@@ -31,18 +31,12 @@ public class Info extends AsyncTask<String, Void, Void> {
     		try{
     			JSONObject jsonObj = new JSONObject(jsonStr);
     			JSONObject data = jsonObj.getJSONObject("data");
-    			//JSONArray data = jsonObj.getJSONArray("data");
     			
-    			userId = data.getString("userId");
-    			username=data.getString("username");
-    			name=data.getString("name");
-    			lastName=data.getString("lastName");
-    			email=data.getString("email");
-    		
+    			url_slike=data.getString("url");
     		
     		}
     		catch(JSONException e){
-    			//if the mapping doesn't exist, tj, ako je data prazan pa userid ne postoji:
+    			//if the mapping doesn't exist, tj, ako je data prazan pa url ne postoji:
     			e.printStackTrace();
     			try{
     				JSONObject jsonObj = new JSONObject(jsonStr);
@@ -64,11 +58,11 @@ public class Info extends AsyncTask<String, Void, Void> {
 	}
 	
 	protected void onPostExecute() {
-	        sucelje.prenesi_info(userId,username,name,lastName,email,error_info);	//{ "data" : ["userId" : id,  "username":username, "name" : name, "lastName" : lastname, "email" : email] , "error" : [] }
+	        sucelje.prenesi_image(url_slike ,error_info);	
 	    }
 	
 	public interface prenesi{
-    	void prenesi_info(String userId, String username,String name, String lastName, String email,String error);
+    	void prenesi_image(String url_slike, String error);
     }
 
 }
