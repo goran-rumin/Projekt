@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 
-public class Send extends AsyncTask<Object, Void, String> {
+public class Send extends AsyncTask<Object, Void, Void> {
 
 	private String error_info=null;
 	
@@ -19,7 +19,7 @@ public class Send extends AsyncTask<Object, Void, String> {
 	private static String url = "http://vdl.hr/ferbook/messages/send/index.php";
 	
 	
-    protected String doInBackground(Object... arg0) {
+    protected Void doInBackground(Object... arg0) {
     	String userId1=(String) arg0[0];
     	String userId2 = (String) arg0[1];
     	String message = (String) arg0[2]; //redni broj poruke
@@ -64,7 +64,7 @@ public class Send extends AsyncTask<Object, Void, String> {
         
     }
 
-    protected void onPostExecute() {
+    protected void onPostExecute(Void param) {
         sucelje.prenesi_send(error_info);
     }
     

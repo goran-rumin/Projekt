@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,7 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class LoginActivity extends Activity implements View.OnClickListener, Login.prenesi{
+public class LoginActivity extends Activity implements View.OnClickListener, Login.prenesi{  //3. korisnik probni 1234
 	public String nesto;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,19 +28,13 @@ public class LoginActivity extends Activity implements View.OnClickListener, Log
 		setContentView(R.layout.login_layout);
 		Button login = (Button) findViewById(R.id.login);
 		login.setOnClickListener(this);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
-		try {
-			BufferedReader bf = new BufferedReader(new InputStreamReader(openFileInput("id.txt")));
-			String id = bf.readLine();
+		String id = Vrati_id.vrati(this);
+		if(id!=null){
 			Intent prebaci = new Intent(getBaseContext(), MainActivity.class);
 			prebaci.putExtra("id", id);
 			startActivity(prebaci);
-		} catch (FileNotFoundException e) {
-
-			e.printStackTrace();
-		} catch (IOException e) {
-
-			e.printStackTrace();
 		}
 	}
 	ProgressDialog pd;

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -24,10 +25,10 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MessageFragment extends Fragment implements Conversation.prenesi, View.OnClickListener{
+public class MessageFragment extends Fragment implements Conversation.prenesi, View.OnClickListener, Send.prenesi{
 
 		private static final String ARG_SECTION_NUMBER = "section_number";   //redni broj fragmenta, zbog naslova ActionBara
-		static String user_id, name;
+		static String user_id, name, my_id;
 		static ArrayList<HashMap<String,?>> data;
 		SimpleAdapter adapter; //potrebno za osvjezavanje poruka nakon slanja bez dohvacanja
 		EditText poruka;   //potrebno za dohvat teksta
@@ -42,22 +43,6 @@ public class MessageFragment extends Fragment implements Conversation.prenesi, V
 			name=name_pr;
 			data = new ArrayList<HashMap<String,?>>();
 			
-			HashMap<String,Object> redak = new HashMap<String,Object>();
-			redak.put("messages_text","Test poruka");
-			redak.put("messages_time","14.11.2014. 22:00");
-			data.add(redak);
-			redak = new HashMap<String,Object>();
-			redak.put("messages_text","Test poruka2");
-			redak.put("messages_time","14.11.2014. 22:00");
-			data.add(redak);
-			redak = new HashMap<String,Object>();
-			redak.put("messages_text","Test poruka2");
-			redak.put("messages_time","14.11.2014. 22:00");
-			data.add(redak);
-			redak = new HashMap<String,Object>();
-			redak.put("messages_text","Test poruka2");
-			redak.put("messages_time","14.11.2014. 22:00");
-			data.add(redak);
 			return fragment;
 		}
 
@@ -71,17 +56,9 @@ public class MessageFragment extends Fragment implements Conversation.prenesi, V
 					false);
 			Button send = (Button) rootView.findViewById(R.id.send);
 			send.setOnClickListener(this);
-			String my_id = null;
-			try {
-				BufferedReader bf = new BufferedReader(new InputStreamReader(getActivity().openFileInput("id.txt")));
-				my_id = bf.readLine();
-			} catch (FileNotFoundException e) {
-
-				e.printStackTrace();
-			} catch (IOException e) {
-
-				e.printStackTrace();
-			}
+			my_id = Vrati_id.vrati(getActivity());
+			
+			
 			listview = (ListView) rootView.findViewById(R.id.list_messages);
 			adapter = new SimpleAdapter(getActivity(),
 					data,
@@ -89,7 +66,7 @@ public class MessageFragment extends Fragment implements Conversation.prenesi, V
 					new String[] {"messages_text","messages_time"},
 					new int[] { R.id.messages_text, R.id.messages_time});
 			listview.setAdapter(adapter);
-			new Conversation().execute(my_id, user_id, 20, this);   //povezati podatke sa suceljem
+			new Conversation().execute(my_id, user_id, this);   //povezati podatke sa suceljem
 			TextView tv1 = (TextView) rootView.findViewById(R.id.messages_user);
 			tv1.setText(name);
 			poruka = (EditText) rootView.findViewById(R.id.message_text);
@@ -104,23 +81,44 @@ public class MessageFragment extends Fragment implements Conversation.prenesi, V
 		}
 
 		@Override
-		public void prenesi_conversation(String message, String SenderId,
-				String timestamp, int flag, String error) {
-			//vracanje podataka
+		public void prenesi_conversation(List<String> messages,
+				List<String> SenderIds, List<String> timestamps,
+				List<Integer> flags, int broj_poruka, String error) {
+			if(error!=null)
+				Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+			data.clear();
+			HashMap<String,Object> redak;
+			for(int i=0;i<broj_poruka;i++){
+				redak = new HashMap<String,Object>();
+				if(SenderIds.get(i).equals(my_id))
+					redak.put("messages_text","Me: "+messages.get(i));
+				else
+					redak.put("messages_text",name.split("\\ ")[0]+": "+messages.get(i));
+				redak.put("messages_time",timestamps.get(i));
+				data.add(redak);
+			}
+			adapter.notifyDataSetChanged();
+			listview.setSelection(adapter.getCount() - 1);
 		}
 
 		@Override
 		public void onClick(View v) {
 			String tekst = poruka.getText().toString();
-			//poslati tekst na server
 			poruka.setText("");
 			Time vrijeme = new Time();
 			vrijeme.setToNow();
+			new Send().execute(my_id, user_id, tekst, this);
 			HashMap<String,Object> redak = new HashMap<String,Object>();
-			redak.put("messages_text",tekst);
-			redak.put("messages_time",vrijeme.format("%d.%m.%y. %R"));
+			redak.put("messages_text","Me: "+tekst);
+			redak.put("messages_time",vrijeme.format("%F %T"));
 			data.add(redak);
 			adapter.notifyDataSetChanged();
 			listview.setSelection(adapter.getCount() - 1);
+		}
+
+		@Override
+		public void prenesi_send(String error) {
+			if(error!=null)
+				Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
 		}
 }

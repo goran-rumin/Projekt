@@ -10,8 +10,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
-public class Inbox extends AsyncTask<Object, Void, String> {
+public class Inbox extends AsyncTask<Object, Void, Void> {
 
 	private String error_info=null;
 	private String userId=null, name=null, lastname=null, message=null, senderId=null,  timestamp=null;
@@ -31,14 +33,14 @@ public class Inbox extends AsyncTask<Object, Void, String> {
 	private static String url = "http://vdl.hr/ferbook/messages/inbox/index.php";
 	
 	
-    protected String doInBackground(Object... arg0) {
+    protected Void doInBackground(Object... arg0) {
     	//String userId=(String) arg0[0];
 
     	sucelje = (prenesi) arg0[1];
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
-    	NameValuePair user=new BasicNameValuePair("userId", (String) arg0[0]);    	
+    	NameValuePair user=new BasicNameValuePair("userId1", (String) arg0[0]);    	
     	params.add(user);            	
     	
     	ServiceHandler sh = new ServiceHandler();    	
@@ -51,8 +53,7 @@ public class Inbox extends AsyncTask<Object, Void, String> {
     			JSONObject jsonObj = new JSONObject(jsonStr);
     			data = jsonObj.getJSONArray("data");
     			data.get(0); //ako je data prazan ide se na catch i parsiranje errora
-    			}	
-    		catch(JSONException e){
+    		}catch(JSONException e){
     			//if the mapping doesn't exist, tj, ako je data prazan pa data ne postoji:
     			e.printStackTrace();
     			try{
@@ -60,9 +61,7 @@ public class Inbox extends AsyncTask<Object, Void, String> {
     				JSONObject jsonObj = new JSONObject(jsonStr);
     				JSONObject error = jsonObj.getJSONObject("error");
     				error_info=error.getString("errInfo");
-    				
-    			}
-    			catch(JSONException e1){
+    			}catch(JSONException e1){
     				e1.printStackTrace();
     				//System.out.print("greška u parsiranju");
     			}
@@ -78,7 +77,7 @@ public class Inbox extends AsyncTask<Object, Void, String> {
     				try {
 						poruka = data.getJSONObject(br_ljudi);
 						
-						userId=poruka.getString("UserId");
+						userId=poruka.getString("userId");
 						name=poruka.getString("name");
 						lastname=poruka.getString("lastname");
 						
@@ -103,18 +102,11 @@ public class Inbox extends AsyncTask<Object, Void, String> {
     					br_ljudi++;
     					
 					} catch (JSONException e) {
-						e.printStackTrace();
 						break;
 					}
     				
-    			}
-    			
-    		}
-    		
-    			
-    			
-    		
-    	
+    			}	
+    	}
     	else error_info="DB does not respond";
     	
     	
@@ -125,7 +117,7 @@ public class Inbox extends AsyncTask<Object, Void, String> {
         
     }
 
-    protected void onPostExecute() {
+    protected void onPostExecute(Void param) {
         sucelje.prenesi_inbox(userIds, names, lastnames, messages, senderIds, timestamps, flags, br_ljudi,  error_info);
     }
     

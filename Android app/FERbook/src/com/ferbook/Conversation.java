@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 
-public class Conversation extends AsyncTask<Object, Void, String> {
+public class Conversation extends AsyncTask<Object, Void, Void> {
 
 	private String error_info=null;
 	private String message=null, senderId=null,  timestamp=null;
@@ -27,7 +27,7 @@ public class Conversation extends AsyncTask<Object, Void, String> {
 	private static String url = "http://vdl.hr/ferbook/messages/conversation/index.php";
 	
 	
-    protected String doInBackground(Object... arg0) {
+    protected Void doInBackground(Object... arg0) {
     	String userId1=(String) arg0[0];
     	String userId2 = (String) arg0[1];
     	//int br_poruke = (Integer) arg0[2]; //redni broj poruke
@@ -68,7 +68,6 @@ public class Conversation extends AsyncTask<Object, Void, String> {
     				e1.printStackTrace();
     				//System.out.print("greška u parsiranju");
     			}
-    			return null;
     		}
     			
     			
@@ -80,7 +79,7 @@ public class Conversation extends AsyncTask<Object, Void, String> {
 						poruka = data.getJSONObject(br_poruka);
     			 
 						message = poruka.getString("message");
-						senderId = poruka.getString("senderid");
+						senderId = poruka.getString("senderId");
 						timestamp = poruka.getString("timestamp");
 						flag = poruka.getInt("flag");
 						//ako sve ovo gore uspije i ako nejde u catch:
@@ -106,16 +105,16 @@ public class Conversation extends AsyncTask<Object, Void, String> {
     		
     	
     	else error_info="DB does not respond";
+		return null;
     	
     	
-     return null;
     }
 
     protected void onProgressUpdate(Integer... progress) {
         
     }
 
-    protected void onPostExecute() {
+    protected void onPostExecute(Void param) {
         sucelje.prenesi_conversation(messages, senderIds, timestamps, flags, br_poruka,  error_info);
     }
     

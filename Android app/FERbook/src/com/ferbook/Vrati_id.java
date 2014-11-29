@@ -1,28 +1,28 @@
 package com.ferbook;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+
+import android.app.Activity;
 
 
-//clasa koja vraća id korisnika
+//clasa koja vraca id korisnika
 public class Vrati_id {
 
-	public String vrati(){
+	public static String vrati(Activity ak){
 		
 		String id=null;
 		try {
-		BufferedReader in
-		   = new BufferedReader(new FileReader("id.txt"));
-			
-			id = in.readLine();
-			in.close();
+			BufferedReader bf = new BufferedReader(new InputStreamReader(ak.openFileInput("id.txt")));
+			id = bf.readLine();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		
 		return id;
 	}
 	
