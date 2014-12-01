@@ -2,9 +2,7 @@ package com.ferbook;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -123,7 +121,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 						postIds.add(postId);	
 						texts.add(text);		
 						urlovi_u_postu.add(url_u_postu);	
-						timestamps.add(toDate(timestamp));
+						timestamps.add(timestamp);
 						senderIds.add(senderId);
 						senderNames.add(senderName);
 						senderLastnames.add(senderLastname);
@@ -187,11 +185,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	return String.valueOf(time);
     }
     
-    private String toDate(String timestamp_in_string){
-    	long dv = Long.valueOf(timestamp_in_string)*1000;// its need to be in milisecond
-    	Date df = new java.util.Date(dv);
-    	return new SimpleDateFormat("MM dd, yyyy hh:mma").format(df);
-}
+    
 
 
 }

@@ -1,8 +1,7 @@
 package com.ferbook;
 
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -88,7 +87,7 @@ public class Conversation extends AsyncTask<Object, Void, Void> {
 						
 						messages.add(message);
 						senderIds.add(senderId);
-						timestamps.add(toDate(timestamp));
+						timestamps.add(timestamp);
 						flags.add(flag);						
 						
     					br_poruka++;
@@ -128,12 +127,7 @@ public class Conversation extends AsyncTask<Object, Void, Void> {
     	void prenesi_conversation(List<String> messages, List<String> SenderIds, List<String> timestamps, List<Integer> flags, int broj_poruka, String error);
     }
     
-    private String toDate(String timestamp_in_string){
-    	long dv = Long.valueOf(timestamp_in_string)*1000;// its need to be in milisecond
-    	Date df = new java.util.Date(dv);
-    	return new SimpleDateFormat("MM dd, yyyy hh:mma").format(df);
-}
-
+   
 
 
 }
