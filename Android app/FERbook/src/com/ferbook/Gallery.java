@@ -1,5 +1,7 @@
 package com.ferbook;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 
 public class Gallery extends AsyncTask<Object, Void, String> {
@@ -17,11 +20,11 @@ public class Gallery extends AsyncTask<Object, Void, String> {
 	int br_slika=0;
 	
 	List<String> postIds = new ArrayList<String>();
-	List<String> url_slika = new ArrayList<String>();
+	List<Drawable> slike = new ArrayList<Drawable>();
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/photos/galley/index.php";
+	private static String url = "http://vdl.hr/ferbook/photos/gallery/index.php";
 	
 	
     protected String doInBackground(Object... arg0) {
@@ -79,7 +82,7 @@ public class Gallery extends AsyncTask<Object, Void, String> {
 						//ako sve ovo gore uspije i ako nejde u catch:
 						
 						postIds.add(postId);
-						url_slika.add(url_slike);
+						slike.add(vrati_sliku(url_slike));
 						
     					br_slika++;
     					
@@ -107,7 +110,7 @@ public class Gallery extends AsyncTask<Object, Void, String> {
     }
 
     protected void onPostExecute() {
-        sucelje.prenesi_gallery(postIds, url_slika, br_slika,  error_info);
+        sucelje.prenesi_gallery(postIds, slike, br_slika,  error_info);
     }
     
     
@@ -115,9 +118,19 @@ public class Gallery extends AsyncTask<Object, Void, String> {
     
     
     public interface prenesi{
-    	void prenesi_gallery(List<String> postIds, List<String> url_slika, int broj_slika, String error);
+    	void prenesi_gallery(List<String> postIds, List<Drawable> slike, int broj_slika, String error);
     }
 
+    
+    public static Drawable vrati_sliku(String url) {				
+	    try {
+	        InputStream is = (InputStream) new URL(url).getContent();
+	        Drawable d = Drawable.createFromStream(is, "src name");//u ovom slucaju "src name" netrebam
+	        return d;
+	    } catch (Exception e) {
+	        return null;
+	    }
+	}
 
 
 }//kako ovo izvesti? :/

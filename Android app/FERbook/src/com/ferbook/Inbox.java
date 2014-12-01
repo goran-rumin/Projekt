@@ -1,6 +1,8 @@
 package com.ferbook;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -10,8 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
 
 public class Inbox extends AsyncTask<Object, Void, Void> {
 
@@ -40,7 +40,7 @@ public class Inbox extends AsyncTask<Object, Void, Void> {
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
-    	NameValuePair user=new BasicNameValuePair("userId1", (String) arg0[0]);    	
+    	NameValuePair user=new BasicNameValuePair("userId", (String) arg0[0]);    	
     	params.add(user);            	
     	
     	ServiceHandler sh = new ServiceHandler();    	
@@ -96,7 +96,7 @@ public class Inbox extends AsyncTask<Object, Void, Void> {
 						
 						messages.add(message);
 						senderIds.add(senderId);
-						timestamps.add(timestamp);
+						timestamps.add(toDate(timestamp));
 						flags.add(flag);						
 						
     					br_ljudi++;
@@ -128,6 +128,13 @@ public class Inbox extends AsyncTask<Object, Void, Void> {
     public interface prenesi{
     	void prenesi_inbox(List<String> userIds, List<String> names, List<String> lastnames, List<String> messages, List<String> SenderIds, List<String> timestamps, List<Integer> flags, int broj_ljudi, String error);
     }
+    
+    
+    private String toDate(String timestamp_in_string){
+    	long dv = Long.valueOf(timestamp_in_string)*1000;// its need to be in milisecond
+    	Date df = new java.util.Date(dv);
+    	return new SimpleDateFormat("MM dd, yyyy hh:mma").format(df);
+}
 
 
 
