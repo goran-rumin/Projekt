@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -16,11 +18,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 
+@SuppressLint("SimpleDateFormat")
 public class Newsfeed extends AsyncTask<Object, Void, Void> {
 
 	private String error_info=null;
@@ -59,8 +63,9 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	private static String url = "http://vdl.hr/ferbook/post/newsfeed/index.php";
 	
 	
-    protected Void doInBackground(Object... arg0) { //ne trebam ništa primati! id imam iz vrati_id, a timestamp iz prošlog timestampa
-    	sucelje = (prenesi) arg0[0];
+    protected Void doInBackground(Object... arg0) { //(int broj, this)   //1 na početku, a dalje se broj povecava, najbolje u activityu
+    	int broj=(Integer) arg0[0];				//1 za prvih 20 postova, 2 za drugih 20...
+    	sucelje = (prenesi) arg0[1];		//samo trebam this, tj, activity
     	
     	
     	
@@ -69,7 +74,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
     	NameValuePair user=new BasicNameValuePair("userId", Vrati_id.vrati(ak));    
-    	NameValuePair time=new BasicNameValuePair("timestamp", vrati_vrijeme(ak) );
+    	NameValuePair time=new BasicNameValuePair("broj", String.valueOf(broj) );	//TODO izmjeniti "broj" kako ce iti u bazi
     	params.add(user);     
     	params.add(time);
     	
@@ -102,6 +107,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     			
     		JSONObject post=new JSONObject();
     		
+    		String zadnje_vrijeme=null;
     		br_postova=0;
     			
     			while(true){
@@ -127,12 +133,17 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 						comments=post.getInt("comments");
 						likes=post.getInt("likes");
 						
-						if(br_postova==0) spremi_vrijeme(timestamp,ak);		//spremam vrijeme najnovijeg posta kojeg sam dobio
+						if(vrati_vrijeme(ak)!=null){
+							if(broj!=0 && Long.valueOf(timestamp)>Long.valueOf(vrati_vrijeme(ak))){//ako se ne refresha od pocetka
+								continue;														//brisi postove koje sam vec poslao u mainactivity
+						}}
+						
+						zadnje_vrijeme=timestamp;		//u zadnje_vrijeme je najstariji post kojeg sam dobio
 						
 						postIds.add(postId);	
 						texts.add(text);		
 						urlovi_u_postu.add(url_u_postu);	
-						timestamps.add(timestamp);
+						timestamps.add(pretvori_u_vrijeme(timestamp));    //pretvaram iz unix_vremena u čitljivo vrijeme
 						senderIds.add(senderId);
 						senderNames.add(senderName);
 						senderLastnames.add(senderLastname);
@@ -154,6 +165,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     					br_postova++;
     					
 					} catch (JSONException e) {
+						if(zadnje_vrijeme!=null) spremi_vrijeme(zadnje_vrijeme,ak);
 						break;
 					}
     				
@@ -193,7 +205,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     
 private static String vrati_vrijeme(Activity ak){
 		
-		String vrijeme="1990-01-01 10:44:57";		//neka davna godina ako do sad nisam osvjezavao newsfeed
+		String vrijeme=null;
 		try {
 			BufferedReader bf = new BufferedReader(new InputStreamReader(ak.openFileInput("timestamp.txt")));
 			vrijeme= bf.readLine();
@@ -215,7 +227,13 @@ private void spremi_vrijeme(String vrijeme, Activity kontekst){
 	}
 	
 }
-    
+
+private String pretvori_u_vrijeme(String unix_vrijeme){	//vraća čitljivo vrijeme iz unix vremena
+		long dv = Long.valueOf(unix_vrijeme)*1000;// it needs to be in miliseconds //unix vrijeme je broj sekundi od 1970.
+		Date df = new java.util.Date(dv);
+		String vv = new SimpleDateFormat("dd. M., yyyy HH:mm").format(df);
+		return vv;
+}
 
 
 }
