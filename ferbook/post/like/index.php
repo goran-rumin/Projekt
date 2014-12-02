@@ -3,8 +3,9 @@
  * Created by PhpStorm.
  * User: Vilim Stubičan
  * Date: 2.12.2014.
- * Time: 20:46
+ * Time: 21:16
  */
+
 
 include_once "../../constants.php";
 include_once "../../classes/Crypter.php";
@@ -14,7 +15,7 @@ $response = array("data"=>array(), "error" => array());
 
 // Check if the data is send in any way
 
-if( !isset($_POST['postId'])) {
+if( !isset($_POST['postId']) || !isset($_POST['userId'])) {
     $response["error"]=array(
         "errNum" => 1,
         "errInfo" => "Missing variable data."
@@ -27,11 +28,12 @@ if( !isset($_POST['postId'])) {
 
 // Fetch the data
 $postId = $_POST['postId'];
+$userId = $_POST['userId'];
 
 $db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";", SQL_USERNAME, SQL_PASSWORD);
 
 
-// Check if user exists
+// Check if post exists
 $query = $db->prepare("SELECT COUNT(*) as userExists FROM post WHERE id = ?");
 $query->bindParam(1, $postId);
 $query->setFetchMode(PDO::FETCH_OBJ);
@@ -59,37 +61,57 @@ if($row) {
     die();
 }
 
-// get all user friends
-$query = $db->prepare("SELECT * FROM `user`");
+
+// Check if user exists
+$query = $db->prepare("SELECT COUNT(*) as userExists FROM user WHERE id = ?");
+$query->bindParam(1, $userId);
 $query->setFetchMode(PDO::FETCH_OBJ);
 $query->execute();
 
-$users = array();
-foreach($query as $user) {
-    $users[$user->id]["username"] = $user->username;
-    $users[$user->id]["email"] = $user->mail;
-    $users[$user->id]["name"] = $user->name;
-    $users[$user->id]["lastname"] = $user->last_name;
-    $users[$user->id]["picture"] = $user->picture;
+$row = $query->fetch();
+if($row) {
+    $userCount = $row->userExists;
+    if($userCount != 1) {
+        $response["error"]=array(
+            "errNum" => 12,
+            "errInfo" => "Invalid user id."
+        );
+
+        echo json_encode($response);
+        die();
+    }
+} else {
+    $response["error"]=array(
+        "errNum" => 12,
+        "errInfo" => "Invalid user id."
+    );
+
+    echo json_encode($response);
+    die();
 }
 
-$likes = array();
 
-$query = $db->prepare("SELECT * FROM `like` WHERE postId = ?");
+$query = $db->prepare("SELECT COUNT(*) as nmbr FROM `like` WHERE postId = ? AND user = ?");
 $query->bindParam(1,$postId);
+$query->bindParam(2,$userId);
 $query->setFetchMode(PDO::FETCH_OBJ);
 $query->execute();
 
-foreach($query as $like) {
-    $likes[$like->id]["timestamp"] = $like->timestamp;
-    $likes[$like->id]["userId"] = $like->user;
-    $likes[$like->id]["username"] = $users[$like->user]["username"];
-    $likes[$like->id]["name"] = $users[$like->user]["name"];
-    $likes[$like->id]["lastname"] = $users[$like->user]["lastname"];
-    $likes[$like->id]["email"] = $users[$like->user]["email"];
-    $likes[$like->id]["picture"] = $users[$like->user]["picture"];
+$row = $query->fetch();
+
+if($row->nmbr == 1) {
+    $sql = "DELETE FROM `like` WHERE postId = ? AND user = ?";
+    $like = "unlike";
+} else {
+    $sql = "INSERT INTO `like`(postId, user) VALUES(?,?)";
+    $like = "like";
 }
 
-$response["data"] = $likes;
+$query = $db->prepare($sql);
+$query->bindParam(1, $postId);
+$query->bindParam(2, $userId);
+$query->execute();
+
+$response["data"]["action"] = $like;
 
 echo json_encode($response);
