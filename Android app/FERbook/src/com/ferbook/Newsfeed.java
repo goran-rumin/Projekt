@@ -159,14 +159,14 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     }
 
     protected void onPostExecute(Void param) {
-        sucelje.prenesi_getcomments(postIds,texts,urlovi_u_postu,timestamps,senderIds,senderNames,senderLastnames,senderPictures,senderUsernames, senderEmails,recipientIds,recipientNames,recipientLastnames,recipientPictures, recipientUsernames,recipientEmails,broj_komentara, broj_likeova,br_postova,error_info);
+        sucelje.prenesi_newsfeed(postIds,texts,urlovi_u_postu,timestamps,senderIds,senderNames,senderLastnames,senderPictures,senderUsernames, senderEmails,recipientIds,recipientNames,recipientLastnames,recipientPictures, recipientUsernames,recipientEmails,broj_komentara, broj_likeova,br_postova,error_info);
     }
     
     
        
     
     public interface prenesi{
-    	void prenesi_getcomments(List<String> postIds,List<String> texts,List<String> urlovi_u_postu,List<String> timestamps,List<String> senderIds,List<String> senderNames,List<String> senderLastnames,List<Drawable> senderPictures,List<String> senderUsernames, List<String> senderEmails,List<String> recipientIds,List<String> recipientNames,List<String> recipientLastnames,List<Drawable> recipientPictures,List<String>  recipientUsernames,List<String> recipientEmails,List<Integer> broj_komentara, List<Integer> broj_likeova, int br_postova,String error_info);
+    	void prenesi_newsfeed(List<String> postIds,List<String> texts,List<String> urlovi_u_postu,List<String> timestamps,List<String> senderIds,List<String> senderNames,List<String> senderLastnames,List<Drawable> senderPictures,List<String> senderUsernames, List<String> senderEmails,List<String> recipientIds,List<String> recipientNames,List<String> recipientLastnames,List<Drawable> recipientPictures,List<String>  recipientUsernames,List<String> recipientEmails,List<Integer> broj_komentara, List<Integer> broj_likeova, int br_postova,String error_info);
     }
 
     
@@ -180,8 +180,8 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	    }
 	}
     
-    private static String vrati_vrijeme(){
-    	long time= (System.currentTimeMillis() / 1000L);
+    private static String vrati_vrijeme(){						//TODO
+    	long time= (System.currentTimeMillis() / 1000L);		//ovo nije dobro. treba spremati timestamp najnovijeg posta kojeg sam dobio
     	return String.valueOf(time);
     }
     
