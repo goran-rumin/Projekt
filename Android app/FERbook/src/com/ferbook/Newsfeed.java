@@ -134,7 +134,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 						likes=post.getInt("likes");
 						
 						if(vrati_vrijeme(ak)!=null){
-							if(broj!=0 && Long.valueOf(timestamp)>Long.valueOf(vrati_vrijeme(ak))){//ako se ne refresha od pocetka
+							if(broj!=1 && Long.valueOf(timestamp)>Long.valueOf(vrati_vrijeme(ak))){//ako se ne refresha od pocetka
 								continue;														//brisi postove koje sam vec poslao u mainactivity
 						}}
 						
