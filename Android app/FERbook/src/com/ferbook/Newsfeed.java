@@ -1,6 +1,11 @@
 package com.ferbook;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 
@@ -52,14 +59,17 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	private static String url = "http://vdl.hr/ferbook/post/newsfeed/index.php";
 	
 	
-    protected Void doInBackground(Object... arg0) {
-    	String userId=(String) arg0[0];
-    	sucelje = (prenesi) arg0[1];
+    protected Void doInBackground(Object... arg0) { //ne trebam ništa primati! id imam iz vrati_id, a timestamp iz prošlog timestampa
+    	sucelje = (prenesi) arg0[0];
     	
+    	
+    	
+    	Activity ak=(MainActivity) arg0[0];			//MainActivity?
+    	    	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
-    	NameValuePair user=new BasicNameValuePair("userId", userId);    
-    	NameValuePair time=new BasicNameValuePair("timestamp", vrati_vrijeme() );
+    	NameValuePair user=new BasicNameValuePair("userId", Vrati_id.vrati(ak));    
+    	NameValuePair time=new BasicNameValuePair("timestamp", vrati_vrijeme(ak) );
     	params.add(user);     
     	params.add(time);
     	
@@ -117,6 +127,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 						comments=post.getInt("comments");
 						likes=post.getInt("likes");
 						
+						if(br_postova==0) spremi_vrijeme(timestamp,ak);		//spremam vrijeme najnovijeg posta kojeg sam dobio
 						
 						postIds.add(postId);	
 						texts.add(text);		
@@ -180,11 +191,30 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	    }
 	}
     
-    private static String vrati_vrijeme(){						//TODO
-    	long time= (System.currentTimeMillis() / 1000L);		//ovo nije dobro. treba spremati timestamp najnovijeg posta kojeg sam dobio
-    	return String.valueOf(time);
-    }
-    
+private static String vrati_vrijeme(Activity ak){
+		
+		String vrijeme="1990-01-01 10:44:57";		//neka davna godina ako do sad nisam osvjezavao newsfeed
+		try {
+			BufferedReader bf = new BufferedReader(new InputStreamReader(ak.openFileInput("timestamp.txt")));
+			vrijeme= bf.readLine();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return vrijeme;
+	}
+
+private void spremi_vrijeme(String vrijeme, Activity kontekst){
+	try {
+		OutputStreamWriter out = new OutputStreamWriter(kontekst.openFileOutput("timestamp.txt", Context.MODE_PRIVATE));
+		out.write(vrijeme);			//ovo ce prepisati staru vrijednost
+		out.close();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+	
+}
     
 
 
