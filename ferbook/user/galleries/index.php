@@ -22,7 +22,7 @@ if( !isset($_POST['userId'])) {
     die();
 };
 // Fetch the data
-$userId = $_POST['userId']);
+$userId = $_POST['userId'];
 $db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";", SQL_USERNAME, SQL_PASSWORD);
 $albums = $db->prepare("SELECT id, name FROM album WHERE creator = ? ORDER BY id DESC");
 $albums->bindParam(1, $userId);
