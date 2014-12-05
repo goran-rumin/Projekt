@@ -82,7 +82,8 @@ foreach($query as $user) {
 
 // get posts with comments
 $query = $db->prepare("
-    SELECT post.id as id, post.sender as sender, post.recipient as recipient, post.timestamp as timestamp, post.message as message, post.url as url, `like`.id as `like`
+    SELECT post.id as id, post.sender as sender, post.recipient as recipient, post.timestamp as timestamp, post.message as message, post.url as url, `like`.id as `like`,
+    (SELECT COUNT(*) FROM `like` WHERE postId = post.id) as likeNmbr
     FROM post
     LEFT JOIN (SELECT * FROM `like` WHERE user = ?) as `like`
     ON post.id = `like`.postId
@@ -109,6 +110,7 @@ foreach($query as $post) {
     $posts[$post->id]["url"] = $post->url;
     $posts[$post->id]["timestamp"] = $post->timestamp;
     $posts[$post->id]["liked"] = ($post->like == null) ? false : true;
+    $posts[$post->id]["likesNumber"] = $post->likeNmbr;
 
     $posts[$post->id]["senderId"] = $post->sender;
     $posts[$post->id]["senderUsername"] = $users[$post->sender]["username"];

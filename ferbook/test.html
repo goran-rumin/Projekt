@@ -10,10 +10,10 @@
         $(document).ready(function() {
 
             $.ajax({
-                url : "post/like/",
+                url : "search/",
                 type : "POST",
                 data: {
-                    postId : 5,
+                    query : "ili",
                     userId : 1
                 }
             }).success(function(msg){
