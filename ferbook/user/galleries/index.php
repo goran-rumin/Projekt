@@ -29,9 +29,18 @@ $albums->bindParam(1, $userId);
 $albums->setFetchMode(PDO::FETCH_OBJ);
 $albums->execute();
 foreach ($albums as $album) {
+    $postID = $db->prepare("SELECT idImage FROM albumhasimage WHERE idAlbum = ? ORDER BY idImage DESC");
+    $postID->bindParam(1, $album->id);
+    $postID->setFetchMode(PDO::FETCH_OBJ);
+    $postID->execute();
+    $lastimage = $db->prepare("SELECT url FROM post WHERE id = ?");
+    $lastimage->bindParam(1, $postID->fetch()->idImage);
+    $lastimage->setFetchMode(PDO::FETCH_OBJ);
+    $lastimage->execute();
     $albumdata = array (
         "albumId" => $album->id,
-        "name" => $album->name
+        "name" => $album->name,
+        "url" => $lastimage->fetch()->url
     );
     $allAlbums[] = $albumdata;
 }
