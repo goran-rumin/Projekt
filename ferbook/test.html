@@ -10,11 +10,11 @@
         $(document).ready(function() {
 
             $.ajax({
-                url : "search/",
+                url : "friends/confirm/",
                 type : "POST",
                 data: {
-                    query : "ili",
-                    userId : 1
+                    userId1 : 1,
+                    userId2 : 2
                 }
             }).success(function(msg){
                 console.log(msg);
