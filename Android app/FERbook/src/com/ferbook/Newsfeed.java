@@ -74,7 +74,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	
     	
     	
-    	Activity ak=(MainActivity) arg0[0];			//MainActivity?
+    	Activity ak=(MainActivity) arg0[3];			//MainActivity?
     	    	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	

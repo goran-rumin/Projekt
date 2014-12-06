@@ -7,6 +7,8 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
@@ -31,7 +34,7 @@ public class InboxFragment extends Fragment implements Inbox.prenesi{
 
 		static NavigationDrawerFragment ladica;
 		static ArrayList<HashMap<String,?>> data;
-		static SimpleAdapter adapter;
+		static InboxAdapter adapter;
 		static TextView nema_konv;
 		static ProgressBar progres;
 		
@@ -59,11 +62,12 @@ public class InboxFragment extends Fragment implements Inbox.prenesi{
 			progres = (ProgressBar) rootView.findViewById(R.id.inbox_progress);
 			
 			final FragmentManager fragmm = getFragmentManager();
-			adapter = new SimpleAdapter(getActivity(),
+			adapter = new InboxAdapter(getActivity(), data);
+			/*adapter = new SimpleAdapter(getActivity(),
 					data,
 					R.layout.inbox_layout,
 					new String[] {"inbox_item_sender","inbox_item_message","inbox_item_time"},
-					new int[] { R.id.inbox_item_sender, R.id.inbox_item_message,R.id.inbox_item_time});
+					new int[] { R.id.inbox_item_sender, R.id.inbox_item_message,R.id.inbox_item_time});*/
 			listview.setAdapter(adapter);
 			listview.setOnItemClickListener(new OnItemClickListener() {
 				@Override
@@ -120,8 +124,51 @@ public class InboxFragment extends Fragment implements Inbox.prenesi{
 				redak.put("inbox_item_message", messages.get(i));
 				redak.put("inbox_item_time", timestamps.get(i));
 				redak.put("inbox_userId", userIds.get(i));
+				redak.put("inbox_seen",flags.get(i).toString());
 				data.add(redak);
 			}
 			adapter.notifyDataSetChanged();
+		}
+		public class InboxAdapter extends BaseAdapter{
+			private Context context;
+			private ArrayList<HashMap<String,?>> lista;
+			public InboxAdapter(Context app, ArrayList<HashMap<String, ?>> data){
+				context=app;
+				lista=data;
+			}
+			@Override
+			public int getCount() {
+				return lista.size();
+			}
+
+			@Override
+			public Object getItem(int arg0) {
+				return lista.get(arg0);
+			}
+
+			@Override
+			public long getItemId(int arg0) {
+				return 0;
+			}
+
+			@Override
+			public View getView(int arg0, View arg1, ViewGroup arg2) {
+				LayoutInflater inflater = (LayoutInflater) context
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				View redak = inflater.inflate(R.layout.inbox_layout, arg2, false);
+				TextView user = (TextView) redak.findViewById(R.id.inbox_item_sender);
+				TextView zadnja_poruka = (TextView) redak.findViewById(R.id.inbox_item_message);
+				TextView vrijeme = (TextView) redak.findViewById(R.id.inbox_item_time);
+				user.setText(lista.get(arg0).get("inbox_item_sender").toString());
+				zadnja_poruka.setText(lista.get(arg0).get("inbox_item_message").toString());
+				vrijeme.setText(lista.get(arg0).get("inbox_item_time").toString());
+				if(lista.get(arg0).get("inbox_seen").equals("1")){
+					user.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+					zadnja_poruka.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+					vrijeme.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+				}
+				return redak;
+			}
+			
 		}
 }

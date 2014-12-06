@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,11 +57,17 @@ public class MainActivity extends Activity implements
 			.replace(R.id.container,
 					InboxFragment.newInstance(position + 1, mNavigationDrawerFragment)).commit();
 			break;
-		case 2:
+		case 0:
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.container,
-					WallFragment.newInstance(position + 1)).commit();
+					NewsfeedFragment.newInstance(position + 1)).commit();
+			break;
+		case 4:
+			fragmentManager
+			.beginTransaction()
+			.replace(R.id.container,
+					Gallery_fragment.newInstance(position + 1)).commit();
 			break;
 		default:
 			fragmentManager

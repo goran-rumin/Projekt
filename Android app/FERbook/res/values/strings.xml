@@ -10,9 +10,12 @@
         <item >News</item>
         <item >Messages</item>
         <item >Wall</item>
-        <item >Gallery</item>
+        <item>My Profile</item><item >Gallery</item>
+        
     </string-array>
     <string name="logout_text">Logout</string>
     <string name="inbox_refresh">Refresh</string>
+    <string name="search_opis">Search friends</string>
+    <string name="search_hint">Enter name</string>
 
 </resources>

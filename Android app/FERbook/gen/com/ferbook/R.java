@@ -9,12 +9,12 @@ package com.ferbook;
 
 public final class R {
     public static final class array {
-        public static final int navigacijska_ladica=0x7f060000;
+        public static final int navigacijska_ladica=0x7f070000;
     }
     public static final class attr {
     }
     public static final class color {
-        public static final int glavna_boja=0x7f080000;
+        public static final int glavna_boja=0x7f090000;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -24,14 +24,14 @@ public final class R {
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
     
          */
-        public static final int activity_horizontal_margin=0x7f040000;
-        public static final int activity_vertical_margin=0x7f040001;
+        public static final int activity_horizontal_margin=0x7f050000;
+        public static final int activity_vertical_margin=0x7f050001;
         /** 
          Per the design guidelines, navigation drawers should be between 240dp and 320dp:
          https://developer.android.com/design/patterns/navigation-drawer.html
     
          */
-        public static final int navigation_drawer_width=0x7f040002;
+        public static final int navigation_drawer_width=0x7f050002;
     }
     public static final class drawable {
         public static final int drawer_shadow=0x7f020000;
@@ -39,39 +39,48 @@ public final class R {
         public static final int ic_launcher=0x7f020002;
         public static final int pozadina_gradijent=0x7f020003;
         public static final int refresh=0x7f020004;
-        public static final int send=0x7f020005;
+        public static final int search=0x7f020005;
+        public static final int send=0x7f020006;
     }
     public static final class id {
-        public static final int action_example=0x7f0a001d;
-        public static final int action_logout=0x7f0a001b;
-        public static final int action_settings=0x7f0a001a;
-        public static final int container=0x7f0a0001;
-        public static final int drawer_layout=0x7f0a0000;
-        public static final int gridview=0x7f0a0004;
-        public static final int inbox_conversations=0x7f0a0007;
-        public static final int inbox_item_message=0x7f0a000b;
-        public static final int inbox_item_sender=0x7f0a0009;
-        public static final int inbox_item_time=0x7f0a000a;
-        public static final int inbox_list=0x7f0a0006;
-        public static final int inbox_progress=0x7f0a0008;
-        public static final int inbox_refresh=0x7f0a001c;
-        public static final int list_messages=0x7f0a0010;
-        public static final int list_wall=0x7f0a0019;
-        public static final int login=0x7f0a000e;
-        public static final int message_text=0x7f0a0012;
-        public static final int messages_text=0x7f0a0015;
-        public static final int messages_time=0x7f0a0014;
-        public static final int messages_user=0x7f0a000f;
-        public static final int navigation_drawer=0x7f0a0002;
-        public static final int news_item_pimage=0x7f0a0016;
-        public static final int news_item_ptext=0x7f0a0017;
-        public static final int news_item_text=0x7f0a0018;
-        public static final int password=0x7f0a000d;
-        public static final int picture=0x7f0a0005;
-        public static final int section_label=0x7f0a0003;
-        public static final int send=0x7f0a0013;
-        public static final int unos_poruke=0x7f0a0011;
-        public static final int username=0x7f0a000c;
+        public static final int action_example=0x7f0b0025;
+        public static final int action_logout=0x7f0b0023;
+        public static final int action_settings=0x7f0b0022;
+        public static final int container=0x7f0b0001;
+        public static final int drawer_layout=0x7f0b0000;
+        public static final int gridview=0x7f0b0004;
+        public static final int inbox_conversations=0x7f0b0007;
+        public static final int inbox_item_message=0x7f0b000b;
+        public static final int inbox_item_sender=0x7f0b0009;
+        public static final int inbox_item_time=0x7f0b000a;
+        public static final int inbox_list=0x7f0b0006;
+        public static final int inbox_progress=0x7f0b0008;
+        public static final int inbox_refresh=0x7f0b0024;
+        public static final int list_messages=0x7f0b0010;
+        public static final int list_wall=0x7f0b0021;
+        public static final int login=0x7f0b000e;
+        public static final int message_text=0x7f0b0012;
+        public static final int messages_text=0x7f0b0015;
+        public static final int messages_time=0x7f0b0014;
+        public static final int messages_user=0x7f0b000f;
+        public static final int navigation_drawer=0x7f0b0002;
+        public static final int news_item_comment=0x7f0b001d;
+        public static final int news_item_image=0x7f0b001a;
+        public static final int news_item_like=0x7f0b001c;
+        public static final int news_item_likesnum=0x7f0b001b;
+        public static final int news_item_p2image=0x7f0b001e;
+        public static final int news_item_p2text=0x7f0b001f;
+        public static final int news_item_pimage=0x7f0b0016;
+        public static final int news_item_ptext=0x7f0b0017;
+        public static final int news_item_strelica=0x7f0b0018;
+        public static final int news_item_text=0x7f0b0019;
+        public static final int news_item_timestamp=0x7f0b0020;
+        public static final int password=0x7f0b000d;
+        public static final int picture=0x7f0b0005;
+        public static final int section_label=0x7f0b0003;
+        public static final int send=0x7f0b0013;
+        public static final int unos_poruke=0x7f0b0011;
+        public static final int username=0x7f0b000c;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -88,18 +97,20 @@ public final class R {
         public static final int wall=0x7f03000b;
     }
     public static final class menu {
-        public static final int global=0x7f090000;
-        public static final int inbox=0x7f090001;
-        public static final int main=0x7f090002;
+        public static final int global=0x7f0a0000;
+        public static final int inbox=0x7f0a0001;
+        public static final int main=0x7f0a0002;
     }
     public static final class string {
-        public static final int action_example=0x7f050003;
-        public static final int action_settings=0x7f050004;
-        public static final int app_name=0x7f050000;
-        public static final int inbox_refresh=0x7f050006;
-        public static final int logout_text=0x7f050005;
-        public static final int navigation_drawer_close=0x7f050002;
-        public static final int navigation_drawer_open=0x7f050001;
+        public static final int action_example=0x7f060003;
+        public static final int action_settings=0x7f060004;
+        public static final int app_name=0x7f060000;
+        public static final int inbox_refresh=0x7f060006;
+        public static final int logout_text=0x7f060005;
+        public static final int navigation_drawer_close=0x7f060002;
+        public static final int navigation_drawer_open=0x7f060001;
+        public static final int search_hint=0x7f060008;
+        public static final int search_opis=0x7f060007;
     }
     public static final class style {
         /** 
@@ -123,10 +134,13 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f070000;
+        public static final int AppBaseTheme=0x7f080000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f070001;
+        public static final int AppTheme=0x7f080001;
+    }
+    public static final class xml {
+        public static final int searchable=0x7f040000;
     }
 }
