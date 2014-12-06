@@ -1,0 +1,85 @@
+#logo{
+    position: fixed;
+    margin-top: 25px;
+    margin-left: 45px;
+    width: 400px;
+    height:400px;
+}
+
+body{
+    background-color: firebrick;
+}
+
+#msg{
+    color: darkgrey;
+    margin-left: 600px;
+    font-size: 100px;
+    font-family: courier;
+}
+
+.container{
+    margin-left: 600px;
+    margin-top: auto;
+    width: 500px;
+    clear:both;
+}
+
+.container input{
+    width: 100%;
+    clear: both;
+}
+
+.button{
+    margin-right: 0px;
+    alignment: right;
+    border: 2px solid grey;
+    border-radius: 5px;
+    padding:5px;
+    text-align: left;
+    height: 30px;
+}
+
+.whatis{
+    margin-right: 50px;
+    color: darkgrey;
+    font-size: 30px;
+}
+
+#or{
+    margin-left: 760px;
+    color: darkgrey;
+    font-size: 50px;
+    font-family: courier;
+}
+
+.message{
+    font-size: 25px;
+    color:white;
+    margin-left:600px;
+
+}
+
+.register{
+    margin-left:650px;
+    height: 50px;
+    width: 350px;
+    background-color: darkgrey;
+    border-radius: 10px;
+    border: 4px solid grey;
+}
+
+.reg{
+    color: firebrick;
+    font-family: courier;
+    font-size:large;
+}
+
+#hidden{
+    display:none;
+}
+
+#submit, #msgR{
+    margin-left:50px;
+}
+
+
