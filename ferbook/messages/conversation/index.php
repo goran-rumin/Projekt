@@ -34,7 +34,7 @@ $messages->setFetchMode(PDO::FETCH_OBJ);
 $messages->execute();
 $numberOfMessages = $messages->fetch()->allMessages;
 if ( $numberOfMessages > 0 ) {
-    $messages = $db->prepare("SELECT message, timestamp, flag, sender FROM messages WHERE sender = ? AND recipient = ? OR sender = ? AND recipient = ?");
+    $messages = $db->prepare("SELECT id, message, timestamp, flag, sender FROM messages WHERE sender = ? AND recipient = ? OR sender = ? AND recipient = ?");
     $messages->bindParam(1, $userId1);
     $messages->bindParam(2, $userId2);
     $messages->bindParam(3, $userId2);
@@ -44,12 +44,27 @@ if ( $numberOfMessages > 0 ) {
     $output = array();
     for ($i = 0; $i < $numberOfMessages; $i++) {
         $onemessage = $messages->fetch();
-        $oneoutput = array(
-            "message" => $onemessage->message,
-            "senderId" => $onemessage->sender,
-            "timestamp" => $onemessage->timestamp,
-            "flag" => $onemessage->flag
-        );
+        if ( $onemessage->flag == 1 AND $onemessage->sender != $userId1 ) {
+            $flag = 2;
+            $read = $db->prepare("UPDATE messages SET flag = ? WHERE id = ?");
+            $read->bindParam(1, $flag);
+            $read->bindParam(2, $onemessage->id);
+            $read->setFetchMode(PDO::FETCH_OBJ);
+            $read->execute();
+            $oneoutput = array(
+                "message" => $onemessage->message,
+                "senderId" => $onemessage->sender,
+                "timestamp" => $onemessage->timestamp,
+                "flag" => $flag
+            );
+        } else {
+            $oneoutput = array(
+                "message" => $onemessage->message,
+                "senderId" => $onemessage->sender,
+                "timestamp" => $onemessage->timestamp,
+                "flag" => $onemessage->flag
+            );
+        }
         $output[] = $oneoutput;
     }
     $response["data"] = $output;
