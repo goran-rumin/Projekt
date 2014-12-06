@@ -27,6 +27,8 @@ import android.os.AsyncTask;
 @SuppressLint("SimpleDateFormat")
 public class Newsfeed extends AsyncTask<Object, Void, Void> {
 
+	public static int NEWS=0, WALL=1; 
+	
 	private String error_info=null;
 	
 	//int br_komentara=0;
@@ -34,6 +36,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	private String postId=null, text=null ,url_u_postu=null , timestamp=null ,senderId=null, senderName=null, senderLastname=null, 
 			senderPicture=null, senderUsername=null, senderEmail=null,  recipientId=null, recipientName=null ,recipientLastname=null, 
 			recipientPicture=null, recipientUsername=null, recipientEmail=null;
+	boolean liked;
 	int comments=0, likes=0;
 	
 	int br_postova;
@@ -57,6 +60,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	List<String>recipientEmails=new ArrayList<String>();
 	List<Integer>broj_komentara=new ArrayList<Integer>();
 	List<Integer>broj_likeova=new ArrayList<Integer>();
+	List<Boolean>liked_boolean=new ArrayList<Boolean>();
 	
 	private prenesi sucelje;
 	//Activity kontekst;
@@ -65,7 +69,8 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	
     protected Void doInBackground(Object... arg0) { //(int broj, this)   //1 na početku, a dalje se broj povecava, najbolje u activityu
     	int broj=(Integer) arg0[0];				//1 za prvih 20 postova, 2 za drugih 20...
-    	sucelje = (prenesi) arg0[1];		//samo trebam this, tj, activity
+    	int vrsta = (Integer) arg0[1];		//NEWS=0, WALL=1, imate i public static varijable koje mozete koristiti
+    	sucelje = (prenesi) arg0[2];		//samo trebam this, tj, activity
     	
     	
     	
@@ -74,7 +79,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
     	NameValuePair user=new BasicNameValuePair("userId", Vrati_id.vrati(ak));    
-    	NameValuePair time=new BasicNameValuePair("broj", String.valueOf(broj) );	//TODO izmjeniti "broj" kako ce iti u bazi
+    	NameValuePair time=new BasicNameValuePair("offset", String.valueOf(broj) );	//TODO izmjeniti "broj" kako ce iti u bazi
     	params.add(user);     
     	params.add(time);
     	
@@ -130,12 +135,16 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 						recipientPicture=post.getString("recipientPicture");
 						recipientUsername=post.getString("recipientUsername");
 						recipientEmail=post.getString("recipientEmail");
-						comments=post.getInt("comments");
-						likes=post.getInt("likes");
+						liked=post.getBoolean("liked");
+						likes=post.getInt("likesNumber");
+						
+						
 						
 						if(vrati_vrijeme(ak)!=null){
 							if(broj!=1 && Long.valueOf(timestamp)>Long.valueOf(vrati_vrijeme(ak))){//ako se ne refresha od pocetka
-								continue;														//brisi postove koje sam vec poslao u mainactivity
+								br_postova++;							//brisi postove koje sam vec poslao u mainactivity
+								continue;	
+																			
 						}}
 						
 						zadnje_vrijeme=timestamp;		//u zadnje_vrijeme je najstariji post kojeg sam dobio
@@ -156,7 +165,8 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 						recipientPictures.add(vrati_sliku(recipientPicture));
 						recipientUsernames.add(recipientUsername);
 						recipientEmails.add(recipientEmail);
-						broj_komentara.add(comments);
+						liked_boolean.add(liked);
+						//broj_komentara.add(comments);
 						broj_likeova.add(likes);
 						
 						
@@ -182,14 +192,14 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     }
 
     protected void onPostExecute(Void param) {
-        sucelje.prenesi_newsfeed(postIds,texts,urlovi_u_postu,timestamps,senderIds,senderNames,senderLastnames,senderPictures,senderUsernames, senderEmails,recipientIds,recipientNames,recipientLastnames,recipientPictures, recipientUsernames,recipientEmails,broj_komentara, broj_likeova,br_postova,error_info);
+        sucelje.prenesi_newsfeed(postIds,texts,urlovi_u_postu,timestamps,senderIds,senderNames,senderLastnames,senderPictures,senderUsernames, senderEmails,recipientIds,recipientNames,recipientLastnames,recipientPictures, recipientUsernames,recipientEmails, liked_boolean, broj_likeova,error_info);
     }
     
     
        
     
     public interface prenesi{
-    	void prenesi_newsfeed(List<String> postIds,List<String> texts,List<String> urlovi_u_postu,List<String> timestamps,List<String> senderIds,List<String> senderNames,List<String> senderLastnames,List<Drawable> senderPictures,List<String> senderUsernames, List<String> senderEmails,List<String> recipientIds,List<String> recipientNames,List<String> recipientLastnames,List<Drawable> recipientPictures,List<String>  recipientUsernames,List<String> recipientEmails,List<Integer> broj_komentara, List<Integer> broj_likeova, int br_postova,String error_info);
+    	void prenesi_newsfeed(List<String> postIds,List<String> texts,List<String> urlovi_u_postu,List<String> timestamps,List<String> senderIds,List<String> senderNames,List<String> senderLastnames,List<Drawable> senderPictures,List<String> senderUsernames, List<String> senderEmails,List<String> recipientIds,List<String> recipientNames,List<String> recipientLastnames,List<Drawable> recipientPictures,List<String>  recipientUsernames,List<String> recipientEmails,List<Boolean> liked_lista_boolean, List<Integer> broj_likeova,String error_info);
     }
 
     
