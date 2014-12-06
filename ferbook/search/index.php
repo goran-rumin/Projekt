@@ -104,9 +104,9 @@ if($userExists) {
     $query = $db->prepare("SELECT * FROM user WHERE ( ".$inUsernameField."  OR
                         ".$inNameField." OR ".$inLastnameField.")
                         AND id IN (
-                            SELECT sender as id FROM `friends` WHERE recipient = ?
+                            SELECT sender as id FROM `friends` WHERE recipient = ?  AND flag = 1
                             UNION
-                            SELECT recipient as id FROM friends WHERE sender = ?
+                            SELECT recipient as id FROM friends WHERE sender = ?  AND flag = 1
                         )
                          ORDER BY last_name, name, username
                          LIMIT 20");

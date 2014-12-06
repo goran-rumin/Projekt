@@ -89,9 +89,9 @@ $query = $db->prepare("
     ON post.id = `like`.postId
     WHERE post.parent IS NULL AND (
     post.recipient IN (
-        SELECT sender as id FROM `friends` WHERE recipient = ?
+        SELECT sender as id FROM `friends` WHERE recipient = ?  AND flag = 1
 		UNION
-		SELECT recipient as id FROM friends WHERE sender = ?
+		SELECT recipient as id FROM friends WHERE sender = ?  AND flag = 1
     ) )
     ORDER BY TIMESTAMP
     LIMIT ".$offset.",20
