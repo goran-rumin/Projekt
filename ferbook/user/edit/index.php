@@ -111,6 +111,17 @@ if(isset($_POST["name"]) && isset($_POST["lastname"]) && isset($_POST["password"
     die();
 }
 
+if(isset($_POST['pictureUrl'])) {
+    $query = $db->prepare("
+        UPDATE user
+        SET picture = ?
+        WHERE username = ?
+    ");
+    $query->bindParam(1, $_POST["pictureUrl"]);
+    $query->bindParam(2, $username);
+    $query->execute();
+}
+
 
 echo json_encode($response);
 

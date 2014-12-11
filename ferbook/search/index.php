@@ -27,16 +27,6 @@ if( !isset($_POST['query'])) {
 
 // Fetch the data
 $query = strtolower($_POST['query']);
-if(trim($query) == ""){
-    $response["error"]=array(
-        "errNum" => 16,
-        "errInfo" => "Empty query sent."
-    );
-
-    echo json_encode($response);
-    die();
-};
-
 if(isset($_POST['userId']))  { $userExists = true; }
     else { $userExists = false; }
 
@@ -71,38 +61,38 @@ if($userExists) {
         die();
     }
 }
-
-$tmpQueryData = explode(" ",$query);
-$queryData = array();
-foreach($tmpQueryData as $data) {
-    if($data != "") {
-        $queryData[] = $data;
+if($query != "") {
+    $tmpQueryData = explode(" ", $query);
+    $queryData = array();
+    foreach ($tmpQueryData as $data) {
+        if ($data != "") {
+            $queryData[] = $data;
+        }
     }
-}
 
-$dataNmbr = count($queryData);
+    $dataNmbr = count($queryData);
 
-$inUsernameField = "";
-for($i = 1; $i<=$dataNmbr; $i++) {
-    if($i>1) $inUsernameField.=" OR ";
-    $inUsernameField.="LOWER(username) LIKE ? ";
-}
+    $inUsernameField = "";
+    for ($i = 1; $i <= $dataNmbr; $i++) {
+        if ($i > 1) $inUsernameField .= " OR ";
+        $inUsernameField .= "LOWER(username) LIKE ? ";
+    }
 
-$inNameField = "";
-for($i = 1; $i<=$dataNmbr; $i++) {
-    if($i>1) $inNameField.=" OR ";
-    $inNameField.="LOWER(name) LIKE ? ";
-}
+    $inNameField = "";
+    for ($i = 1; $i <= $dataNmbr; $i++) {
+        if ($i > 1) $inNameField .= " OR ";
+        $inNameField .= "LOWER(name) LIKE ? ";
+    }
 
-$inLastnameField = "";
-for($i = 1; $i<=$dataNmbr; $i++) {
-    if($i>1) $inLastnameField.=" OR ";
-    $inLastnameField.="LOWER(name) LIKE ? ";
-}
+    $inLastnameField = "";
+    for ($i = 1; $i <= $dataNmbr; $i++) {
+        if ($i > 1) $inLastnameField .= " OR ";
+        $inLastnameField .= "LOWER(name) LIKE ? ";
+    }
 
-if($userExists) {
-    $query = $db->prepare("SELECT * FROM user WHERE ( ".$inUsernameField."  OR
-                        ".$inNameField." OR ".$inLastnameField.")
+    if ($userExists) {
+        $query = $db->prepare("SELECT * FROM user WHERE ( " . $inUsernameField . "  OR
+                        " . $inNameField . " OR " . $inLastnameField . ")
                         AND id IN (
                             SELECT sender as id FROM `friends` WHERE recipient = ?  AND flag = 1
                             UNION
@@ -111,47 +101,71 @@ if($userExists) {
                          ORDER BY last_name, name, username
                          LIMIT 20");
 
-    $offset = 3*$dataNmbr;
-    $query->bindParam($offset+1, $_POST['userId']);
-    $query->bindParam($offset+2, $_POST['userId']);
+        $offset = 3 * $dataNmbr;
+        $query->bindParam($offset + 1, $_POST['userId']);
+        $query->bindParam($offset + 2, $_POST['userId']);
 
-} else {
-    $query = $db->prepare("SELECT * FROM user WHERE ( ".$inUsernameField."  OR
-                        ".$inNameField." OR ".$inLastnameField.")
+    } else {
+        $query = $db->prepare("SELECT * FROM user WHERE ( " . $inUsernameField . "  OR
+                        " . $inNameField . " OR " . $inLastnameField . ")
                         ORDER BY last_name, name, username
                         LIMIT 20");
-}
+    }
 
-$offset = 0;
-for($i=1;$i<=$dataNmbr;$i++) {
-    $param = "%".($queryData[$i-1])."%";
-    $query->bindParam($offset+$i, $param);
-}
+    $offset = 0;
+    for ($i = 1; $i <= $dataNmbr; $i++) {
+        $param = "%" . ($queryData[$i - 1]) . "%";
+        $query->bindParam($offset + $i, $param);
+    }
 
-$offset = $dataNmbr;
-for($i=1;$i<=$dataNmbr;$i++) {
-    $param = "%".($queryData[$i-1])."%";
-    $query->bindParam($offset+$i, $param);
-}
+    $offset = $dataNmbr;
+    for ($i = 1; $i <= $dataNmbr; $i++) {
+        $param = "%" . ($queryData[$i - 1]) . "%";
+        $query->bindParam($offset + $i, $param);
+    }
 
-$offset = 2*$dataNmbr;
-for($i=1;$i<=$dataNmbr;$i++) {
-    $param = "%".($queryData[$i-1])."%";
-    $query->bindParam($offset+$i, $param);
-}
+    $offset = 2 * $dataNmbr;
+    for ($i = 1; $i <= $dataNmbr; $i++) {
+        $param = "%" . ($queryData[$i - 1]) . "%";
+        $query->bindParam($offset + $i, $param);
+    }
 
-$query->setFetchMode(PDO::FETCH_OBJ);
-$query->execute();
+    $query->setFetchMode(PDO::FETCH_OBJ);
+    $query->execute();
 
-foreach($query as $row ) {
-    $set = array();
-    $set["id"] = $row->id;
-    $set["username"] = $row->username;
-    $set["picture"] = $row->picture;
-    $set["name"] = $row->name;
-    $set["lastname"] = $row->last_name;
+    foreach ($query as $row) {
+        $set = array();
+        $set["id"] = $row->id;
+        $set["username"] = $row->username;
+        $set["picture"] = $row->picture;
+        $set["name"] = $row->name;
+        $set["lastname"] = $row->last_name;
 
-    $response["data"][] = $set;
+        $response["data"][] = $set;
+    }
+} else {
+    $query = $db->prepare("SELECT * FROM user WHERE id IN (
+                            SELECT sender as id FROM `friends` WHERE recipient = ?  AND flag = 1
+                            UNION
+                            SELECT recipient as id FROM friends WHERE sender = ?  AND flag = 1
+                        )
+                         ORDER BY last_name, name, username
+                         LIMIT 20");
+    $query->bindParam(1, $_POST["userId"]);
+    $query->bindParam(2, $_POST["userId"]);
+    $query->setFetchMode(PDO::FETCH_OBJ);
+    $query->execute();
+
+    foreach ($query as $row) {
+        $set = array();
+        $set["id"] = $row->id;
+        $set["username"] = $row->username;
+        $set["picture"] = $row->picture;
+        $set["name"] = $row->name;
+        $set["lastname"] = $row->last_name;
+
+        $response["data"][] = $set;
+    }
 }
 
 echo json_encode($response);

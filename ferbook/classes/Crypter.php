@@ -53,7 +53,6 @@ class Crypter {
     // Helper functions for encryption
     private static function getIv($num_bytes) {
         $rand = openssl_random_pseudo_bytes($num_bytes);
-        echo "<br><br>Get Iv: " . $rand;
         return $rand;
     }
 
@@ -68,7 +67,7 @@ class Crypter {
         if(strpos($LookAtMe, '-') === false){
         return $callback($LookAtMe, $run + 1);
         }else{
-            return moreHide($LookAtMe, $run + 1, $callback);
+            return Crypter::moreHide($LookAtMe, $run + 1, $callback);
 
         }
 

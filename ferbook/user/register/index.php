@@ -6,6 +6,7 @@
  * Time: 23:54
  */
 
+    session_start();
     include_once "../../constants.php";
     include_once "../../classes/Crypter.php";
 
@@ -119,8 +120,8 @@
  * WEB DATA STORAGE
  * - encrypt the data
  * - save into a $_SESSION['userId'] variable
- *
- * $_SESSION['userId'] = Crypter::encrypt($userId);
  */
+  $_SESSION['userId'] = Crypter::encrypt($userId);
+
 
 

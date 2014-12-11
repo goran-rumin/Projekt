@@ -10,11 +10,11 @@
         $(document).ready(function() {
 
             $.ajax({
-                url : "friends/confirm/",
+                url : "user/active/",
                 type : "POST",
                 data: {
-                    userId1 : 1,
-                    userId2 : 2
+                    username : "jewbre",
+                    password : "pass123"
                 }
             }).success(function(msg){
                 console.log(msg);
