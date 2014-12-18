@@ -34,7 +34,7 @@ $messages->setFetchMode(PDO::FETCH_OBJ);
 $messages->execute();
 $numberOfMessages = $messages->fetch()->allMessages;
 if ( $numberOfMessages > 0 ) {
-    $messages = $db->prepare("SELECT id, message, timestamp, flag, sender FROM messages WHERE sender = ? AND recipient = ? OR sender = ? AND recipient = ?");
+    $messages = $db->prepare("SELECT id, message, UNIX_TIMESTAMP(timestamp) as timestamp, flag, sender FROM messages WHERE sender = ? AND recipient = ? OR sender = ? AND recipient = ?");
     $messages->bindParam(1, $userId1);
     $messages->bindParam(2, $userId2);
     $messages->bindParam(3, $userId2);
