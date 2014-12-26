@@ -9,11 +9,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.util.Log;
+import android.view.View;
 
 public class Like extends AsyncTask<Object, Void, Void> {
 
 	private String action=null;
 	private String error_info=null;
+	private View v;   //prijenos reference na gumb za lajkanje, potrebno za osvjezavanje stanja, radi se na
+				      //ovaj nacin zbog ogranicenja castanja adaptera
 	
 	private prenesi sucelje;
 	//Activity kontekst;
@@ -25,7 +29,7 @@ public class Like extends AsyncTask<Object, Void, Void> {
     	String postId=(String) arg0[1];
     	
     	sucelje = (prenesi) arg0[2];
-    	
+    	v = (View) arg0[3];
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
@@ -78,7 +82,7 @@ public class Like extends AsyncTask<Object, Void, Void> {
     }
 
     protected void onPostExecute(Void param) {
-        sucelje.prenesi_like(action, error_info);
+        sucelje.prenesi_like(action, error_info, v);
     }
     
     
@@ -86,7 +90,7 @@ public class Like extends AsyncTask<Object, Void, Void> {
     
     
     public interface prenesi{
-    	void prenesi_like(String action, String error); //action je "like" ili "unlike"
+    	void prenesi_like(String action, String error, View v); //action je "like" ili "unlike"
     }
 
 

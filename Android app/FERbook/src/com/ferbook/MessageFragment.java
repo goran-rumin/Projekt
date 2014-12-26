@@ -1,16 +1,25 @@
 package com.ferbook;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+import de.tavendo.autobahn.WebSocketConnection;
+import de.tavendo.autobahn.WebSocket;
+import de.tavendo.autobahn.WebSocketException;
+import de.tavendo.autobahn.WebSocketConnectionHandler;
+
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.util.Log;
@@ -20,7 +29,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,6 +78,7 @@ public class MessageFragment extends Fragment implements Conversation.prenesi, V
 			TextView tv1 = (TextView) rootView.findViewById(R.id.messages_user);
 			tv1.setText(name);
 			poruka = (EditText) rootView.findViewById(R.id.message_text);
+			pokreni_websocket();
 			return rootView;
 		}
 
@@ -100,7 +109,7 @@ public class MessageFragment extends Fragment implements Conversation.prenesi, V
 			adapter.notifyDataSetChanged();
 			listview.setSelection(adapter.getCount() - 1);
 		}
-
+		HashMap<String,Object> redak;
 		@Override
 		public void onClick(View v) {
 			String tekst = poruka.getText().toString();
@@ -108,10 +117,22 @@ public class MessageFragment extends Fragment implements Conversation.prenesi, V
 			Time vrijeme = new Time();
 			vrijeme.setToNow();
 			new Send().execute(my_id, user_id, tekst, this);
-			HashMap<String,Object> redak = new HashMap<String,Object>();
+			redak = new HashMap<String,Object>();
 			redak.put("messages_text","Me: "+tekst);
 			redak.put("messages_time",vrijeme.format("%F %T"));
 			data.add(redak);
+			if(socket.isConnected()){
+				JSONObject objekt = new JSONObject();
+				try {
+					objekt.put("type", "message");
+					objekt.put("sender", my_id);
+					objekt.put("recipient", user_id);
+					objekt.put("message",tekst);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				socket.sendTextMessage(objekt.toString());
+			}
 			adapter.notifyDataSetChanged();
 			listview.setSelection(adapter.getCount() - 1);
 		}
@@ -121,4 +142,63 @@ public class MessageFragment extends Fragment implements Conversation.prenesi, V
 			if(error!=null)
 				Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
 		}
+		public final WebSocketConnection socket = new WebSocketConnection();
+		void pokreni_websocket(){
+			final String wsuri = "ws://192.168.1.221:9000";
+
+			   try {
+			      socket.connect(wsuri, new WebSocketConnectionHandler() {
+
+			         @Override
+			         public void onOpen() {
+			            Log.e("app", "Status: Connected to " + wsuri);
+			            JSONObject objekt = new JSONObject();
+			            try {
+			            	objekt.put("type", "welcome");
+							objekt.put("id", Vrati_id.vrati(getActivity()));
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+			            socket.sendTextMessage(objekt.toString());
+			         }
+
+			         @Override
+			         public void onTextMessage(String payload) {
+			            Log.e("app", "Received: " + payload);
+			            String posiljatelj,primatelj,poruka, vrijeme;
+			            try {
+							JSONObject objekt = new JSONObject(payload);
+							primatelj = objekt.getString("recipient");
+							posiljatelj = objekt.getString("sender");
+							poruka = objekt.getString("message");
+							vrijeme = objekt.getJSONObject("msg").getString("timestamp");
+							Date datum = new Date(Long.valueOf(vrijeme)*1000);
+							String form_vr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(datum);
+							if(!posiljatelj.equals(user_id)){
+								Toast.makeText(getActivity(), "New messages in other conversations", Toast.LENGTH_SHORT).show();
+							}
+							else{
+								HashMap<String,Object> redak = new HashMap<String,Object>();
+								redak.put("messages_text",name.split("\\ ")[0]+": "+poruka);
+								redak.put("messages_time",form_vr);
+								data.add(redak);
+								adapter.notifyDataSetChanged();
+								listview.setSelection(adapter.getCount() - 1);
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+			         }
+
+			         @Override
+			         public void onClose(int code, String reason) {
+			            Log.e("app", "Connection lost.");
+			         }
+			      });
+			   } catch (WebSocketException e) {
+
+			      Log.e("app", e.toString());
+			   }
+		}
 }
+

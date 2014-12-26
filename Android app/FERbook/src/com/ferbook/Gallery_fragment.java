@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,8 @@ public class Gallery_fragment extends Fragment {
 	public Gallery_fragment() {
 	}
 	
-	//private List<Integer> mThumbIds = new ArrayList<Integer>();
+	private List<Integer> mThumbIds = new ArrayList<Integer>();  //komentirano
+	ArrayList<Drawable> slike = new ArrayList<Drawable>();
 
 	
 	@Override
@@ -35,17 +37,21 @@ public class Gallery_fragment extends Fragment {
 		View view = inflater.inflate(R.layout.gallery, container, false);
 		GridView gridView = (GridView) view.findViewById(R.id.gridview);	
 		
-		/*
-		mThumbIds.add(R.drawable.sample_2);
-		mThumbIds.add(R.drawable.sample_3);
-		mThumbIds.add(R.drawable.sample_4);
+		
+		/*mThumbIds.add(R.drawable.ic_launcher);
+		mThumbIds.add(R.drawable.search);
+		mThumbIds.add(R.drawable.more);
 		mThumbIds.add(R.drawable.sample_5);
 		mThumbIds.add(R.drawable.sample_6);
-		mThumbIds.add(R.drawable.sample_7);
-		*/
+		mThumbIds.add(R.drawable.sample_7);*/
+		
+		slike.add(getResources().getDrawable(R.drawable.ic_launcher));
+		slike.add(getResources().getDrawable(R.drawable.search));
+		slike.add(getResources().getDrawable(R.drawable.more));
+		
 		
 		//predaje se lista slika
-		//gridView.setAdapter(new ImageAdapter(view.getContext(), slike));   
+		gridView.setAdapter(new ImageAdapter(view.getContext(), slike));   
 		
 		return view;
 	}

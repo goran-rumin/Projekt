@@ -124,6 +124,7 @@ public class InboxFragment extends Fragment implements Inbox.prenesi{
 				redak.put("inbox_item_message", messages.get(i));
 				redak.put("inbox_item_time", timestamps.get(i));
 				redak.put("inbox_userId", userIds.get(i));
+				redak.put("inbox_senderId", SenderIds.get(i));
 				redak.put("inbox_seen",flags.get(i).toString());
 				data.add(redak);
 			}
@@ -162,7 +163,9 @@ public class InboxFragment extends Fragment implements Inbox.prenesi{
 				user.setText(lista.get(arg0).get("inbox_item_sender").toString());
 				zadnja_poruka.setText(lista.get(arg0).get("inbox_item_message").toString());
 				vrijeme.setText(lista.get(arg0).get("inbox_item_time").toString());
-				if(lista.get(arg0).get("inbox_seen").equals("1")){
+				String moj_id = Vrati_id.vrati(getActivity());
+				String id = lista.get(arg0).get("inbox_senderId").toString();
+				if(lista.get(arg0).get("inbox_seen").equals("1") && !id.equals(moj_id)){
 					user.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
 					zadnja_poruka.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
 					vrijeme.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));

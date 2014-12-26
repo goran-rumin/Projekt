@@ -3,6 +3,8 @@ package com.ferbook;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -16,13 +18,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-	public class WallListAdapter extends BaseAdapter {
+	public class WallListAdapter extends BaseAdapter{
 		private final Context context;
+		private Fragment host;
 		private ArrayList<HashMap<String, Object>> values;
+		Button like;
 
-		public WallListAdapter(Context context, ArrayList<HashMap<String, Object>> data) {
+		public WallListAdapter(Context context, Fragment fr, ArrayList<HashMap<String, Object>> data) {
 			this.context = context;
 			this.values = data;
+			this.host = fr;
 		}
 
 		@Override
@@ -37,7 +42,7 @@ import android.widget.Toast;
 			TextView ime_korisnika2 = (TextView) rowView.findViewById(R.id.news_item_p2text);
 			TextView tekst = (TextView) rowView.findViewById(R.id.news_item_text);
 			ImageView slika = (ImageView) rowView.findViewById(R.id.news_item_image);
-			Button like = (Button) rowView.findViewById(R.id.news_item_like);
+			like = (Button) rowView.findViewById(R.id.news_item_like);
 			Button comment = (Button) rowView.findViewById(R.id.news_item_comment);
 			TextView broj_likeova = (TextView) rowView.findViewById(R.id.news_item_likesnum);
 			TextView timestamp = (TextView) rowView.findViewById(R.id.news_item_timestamp);
@@ -52,11 +57,26 @@ import android.widget.Toast;
 			timestamp.setText((String)redak.get("news_item_timestamp"));
 			ime_korisnika.setTag((String)redak.get("senderId"));
 			ime_korisnika2.setTag((String)redak.get("recipientId"));
+			comment.setTag(redak.get("news_item_pid"));
+			if((Boolean)redak.get("news_item_like").equals(true))
+				like.setText("  Liked  ");
+			like.setTag(redak.get("news_item_pid"));
 			ime_korisnika.setOnClickListener(new View.OnClickListener() {
-			
 				@Override
 				public void onClick(View v) {
 					Toast.makeText(context, "Kliknuto "+v.getTag(), Toast.LENGTH_SHORT).show();
+				}
+			});
+			comment.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(context, "Kliknuto "+v.getTag(), Toast.LENGTH_SHORT).show();
+				}
+			});
+			like.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					new Like().execute(Vrati_id.vrati((Activity) context),v.getTag(),host, v);
 				}
 			});
 			return rowView;

@@ -1,15 +1,15 @@
-/**
+﻿/**
  * Created by Vilim Stubičan on 3.12.2014..
  */
 var app = angular.module("chat",[]);
 
 
 app.controller("chatCtrl",function($scope, $filter){
-    var root = "http://localhost/projekt/projekt/ferbook/";
+    var root = "http://vdl.hr/ferbook/";
     var Server;
     $(document).ready(function() {
 
-        Server = new FancyWebSocket("ws://localhost:9000");
+        Server = new FancyWebSocket("ws://192.168.1.221:9000");
         console.log("connecting");
 
         Server.bind("open",function() {
@@ -34,7 +34,7 @@ app.controller("chatCtrl",function($scope, $filter){
 
             if(chatNotOpen) {
                 $.ajax({
-                    url : "http://localhost/projekt/projekt/ferbook/messages/conversation",
+                    url : "http://vdl.hr/ferbook/messages/conversation",
                     type : "POST",
                     data : {
                         userId1 : parseInt(newMsg["sender"]),
@@ -138,11 +138,11 @@ app.controller("chatCtrl",function($scope, $filter){
 
 
             $.ajax({
-                url : "http://localhost/projekt/projekt/ferbook/messages/send/",
+                url : "http://vdl.hr/ferbook/messages/send/",
                 type : "POST",
                 data : {
-                    userId1 : parseInt(index),
-                    userId2 : parseInt($scope.activeUser),
+                    userId1 : parseInt($scope.activeUser),
+                    userId2 : parseInt(index),
                     message : message
                 }
             })
@@ -157,11 +157,11 @@ app.controller("chatCtrl",function($scope, $filter){
     $scope.openConversation = function (elem) {
         if(angular.isUndefined($scope.conversations[parseInt(elem.friend.id)])) {
             $.ajax({
-                url : "http://localhost/projekt/projekt/ferbook/messages/conversation/",
+                url : "http://vdl.hr/ferbook/messages/conversation/",
                 type : "POST",
                 data : {
-                    userId1 : parseInt(elem.friend.id),
-                    userId2 : parseInt($scope.activeUser)
+                    userId1 : parseInt($scope.activeUser),
+                    userId2 : parseInt(elem.friend.id)
                 }
             }).success(function(msg){
                 console.log(msg);

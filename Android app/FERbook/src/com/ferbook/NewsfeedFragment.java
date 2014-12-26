@@ -12,11 +12,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-public class NewsfeedFragment extends Fragment implements Newsfeed.prenesi{
+public class NewsfeedFragment extends Fragment implements Newsfeed.prenesi, Like.prenesi{
 
 		private static final String ARG_SECTION_NUMBER = "section_number";   //redni broj fragmenta, zbog naslova ActionBara
 
@@ -43,7 +44,7 @@ public class NewsfeedFragment extends Fragment implements Newsfeed.prenesi{
 			View rootView = inflater.inflate(R.layout.wall, container,
 					false);
 			ListView listview = (ListView) rootView.findViewById(R.id.list_wall);
-			adapter = new WallListAdapter(getActivity(),data);
+			adapter = new WallListAdapter(getActivity(),(Fragment) this,data);
 			listview.setAdapter(adapter);
 			return rootView;
 		}
@@ -78,6 +79,7 @@ public class NewsfeedFragment extends Fragment implements Newsfeed.prenesi{
 				Toast.makeText(getActivity(), error_info, Toast.LENGTH_SHORT).show();
 			for(int i=0;i<postIds.size();i++){
 				HashMap<String,Object> redak = new HashMap<String,Object>();
+				redak.put("news_item_pid", postIds.get(i));
 				redak.put("news_item_pimage",senderPictures.get(i));
 				redak.put("news_item_p2image",recipientPictures.get(i));
 				redak.put("news_item_ptext",senderNames.get(i)+" "+senderLastnames.get(i));  //zavrsiti kad se zavrsi newsfeed do kraja
@@ -91,7 +93,47 @@ public class NewsfeedFragment extends Fragment implements Newsfeed.prenesi{
 				redak.put("recipientId", recipientIds.get(i));
 				data.add(redak);
 			}
+			HashMap<String,Object> redak = new HashMap<String,Object>();
+			redak.put("news_item_pid", "1");
+			redak.put("news_item_pimage",getResources().getDrawable(R.drawable.ic_launcher));
+			redak.put("news_item_p2image",getResources().getDrawable(R.drawable.ic_launcher));
+			redak.put("news_item_ptext","User1");  //zavrsiti kad se zavrsi newsfeed do kraja
+			redak.put("news_item_p2text","User2");
+			redak.put("news_item_text","Probni post");
+			redak.put("news_item_image",getResources().getDrawable(R.drawable.more));
+			redak.put("news_item_timestamp","2014-12-05 10:10:05");
+			redak.put("news_item_likesnum","Likes: 5");
+			redak.put("news_item_like",(Boolean) true);
+			redak.put("senderId", ""+1);
+			redak.put("recipientId", ""+3);
+			data.add(redak);
+			redak = new HashMap<String,Object>();
+			redak.put("news_item_pid", "5");
+			redak.put("news_item_pimage",getResources().getDrawable(R.drawable.ic_launcher));
+			redak.put("news_item_p2image",getResources().getDrawable(R.drawable.ic_launcher));
+			redak.put("news_item_ptext","User2");  //zavrsiti kad se zavrsi newsfeed do kraja
+			redak.put("news_item_p2text","User1");
+			redak.put("news_item_text","Probni post2");
+			redak.put("news_item_image",getResources().getDrawable(R.drawable.more));
+			redak.put("news_item_timestamp","2014-12-05 10:10:05");
+			redak.put("news_item_likesnum","Likes: 1");
+			redak.put("news_item_like",(Boolean) false);
+			redak.put("senderId", ""+3);
+			redak.put("recipientId", ""+1);
+			data.add(redak);
 			pd.dismiss();
 			adapter.notifyDataSetChanged();
+		}
+
+		@Override
+		public void prenesi_like(String action, String error, View v) {
+			if(error!=null)
+				Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+			else{
+				if(action.equals("like"))
+					((Button) v).setText("  Liked  ");
+				else
+					((Button) v).setText("  Like  ");
+			}
 		}
 }

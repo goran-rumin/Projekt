@@ -7,9 +7,11 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,6 +38,14 @@ public class MainActivity extends Activity implements
 		setContentView(R.layout.activity_main);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+		Intent pokretanje_iz_pretrage = getIntent();  //da li je pokrenuto nakon pretrage
+		if(pokretanje_iz_pretrage!=null)
+			if(pokretanje_iz_pretrage.getStringExtra("id_za_poruke")!=null)  //pocetak za poruke
+				Log.e("slanje",""+pokretanje_iz_pretrage.getStringExtra("id_za_poruke"));
+			else if(pokretanje_iz_pretrage.getStringExtra("id_za_profil")!=null)
+				Log.e("wall ",""+pokretanje_iz_pretrage.getStringExtra("id_za_profil"));
+		
+		
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
@@ -51,19 +61,25 @@ public class MainActivity extends Activity implements
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.popBackStack();
 		switch (position){
-		case 1:
-			fragmentManager
-			.beginTransaction()
-			.replace(R.id.container,
-					InboxFragment.newInstance(position + 1, mNavigationDrawerFragment)).commit();
-			break;
 		case 0:
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.container,
 					NewsfeedFragment.newInstance(position + 1)).commit();
 			break;
-		case 4:
+		case 1:
+			fragmentManager
+			.beginTransaction()
+			.replace(R.id.container,
+					InboxFragment.newInstance(position + 1, mNavigationDrawerFragment)).commit();
+			break;
+		case 2:
+			fragmentManager
+			.beginTransaction()
+			.replace(R.id.container,
+					ProfileFragment.newInstance(position + 1)).commit();
+			break;
+		case 3:
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.container,
@@ -110,6 +126,12 @@ public class MainActivity extends Activity implements
 			// if the drawer is not showing. Otherwise, let the drawer
 			// decide what to show in the action bar.
 			getMenuInflater().inflate(R.menu.main, menu);
+			SearchManager searchManager =
+			           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+			    SearchView searchView =
+			            (SearchView) menu.findItem(R.id.action_example).getActionView();
+			    searchView.setSearchableInfo(
+			            searchManager.getSearchableInfo(getComponentName()));
 			restoreActionBar();
 			return true;
 		}
@@ -136,6 +158,7 @@ public class MainActivity extends Activity implements
 		MessageFragment f = (MessageFragment)getFragmentManager().findFragmentByTag("MessageFragment");
 		if(f!=null && f.isVisible()){
 			getFragmentManager().popBackStack();
+			f.socket.disconnect();
 		}
 		else
 			super.onBackPressed();

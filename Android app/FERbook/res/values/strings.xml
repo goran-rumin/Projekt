@@ -9,13 +9,14 @@
     <string-array name="navigacijska_ladica">
         <item >News</item>
         <item >Messages</item>
-        <item >Wall</item>
-        <item>My Profile</item><item >Gallery</item>
+        <item >Profile</item><item >Gallery</item>
         
     </string-array>
     <string name="logout_text">Logout</string>
     <string name="inbox_refresh">Refresh</string>
     <string name="search_opis">Search friends</string>
     <string name="search_hint">Enter name</string>
+     <drawable name="not_pressed">#444444</drawable>
+	<drawable name="pressed">#303030</drawable>
 
 </resources>

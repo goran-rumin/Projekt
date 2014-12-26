@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <ProgressBar
+        android:id="@+id/info_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/info_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/info_username"
+        android:layout_below="@+id/info_username"
+        android:layout_marginTop="20dp"
+        android:text="Name:" />
+
+    <TextView
+        android:id="@+id/info_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Username:" />
+
+    <TextView
+        android:id="@+id/info_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/info_lastname"
+        android:layout_below="@+id/info_lastname"
+        android:layout_marginTop="20dp"
+        android:text="E-mail:" />
+
+    <TextView
+        android:id="@+id/info_lastname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/info_name"
+        android:layout_below="@+id/info_name"
+        android:layout_marginTop="21dp"
+        android:text="Lastname:" />
+
+    <ImageView
+        android:id="@+id/info_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/info_username"
+        android:layout_marginRight="20dp"
+        android:adjustViewBounds="true"
+        android:maxHeight="140dp"
+        android:maxWidth="140dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher" />
+
+</RelativeLayout>

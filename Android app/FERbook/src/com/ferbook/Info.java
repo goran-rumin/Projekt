@@ -10,15 +10,16 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 
-public class Info extends AsyncTask<String, Void, Void> {
+public class Info extends AsyncTask<Object, Void, Void> {
 	private prenesi sucelje;
 	private static String url="http://vdl.hr/ferbook/user/info/index.php";
 	private String userId=null, username=null , name=null, lastName=null, email=null, error_info=null;
 	
 
 	@Override
-	protected Void doInBackground(String... arg0) {
-		NameValuePair user=new BasicNameValuePair("userId", arg0[0]);
+	protected Void doInBackground(Object... arg0) {
+		NameValuePair user=new BasicNameValuePair("userId", (String) arg0[0]);
+		sucelje = (prenesi) arg0[1];
 		List<NameValuePair> params= new ArrayList<NameValuePair>();
 		params.add(user);
 		
@@ -33,10 +34,10 @@ public class Info extends AsyncTask<String, Void, Void> {
     			JSONObject data = jsonObj.getJSONObject("data");
     			//JSONArray data = jsonObj.getJSONArray("data");
     			
-    			userId = data.getString("userId");
+    			//userId = data.getString("userId");
     			username=data.getString("username");
     			name=data.getString("name");
-    			lastName=data.getString("lastName");
+    			lastName=data.getString("lastname");
     			email=data.getString("email");
     		
     		
@@ -63,7 +64,7 @@ public class Info extends AsyncTask<String, Void, Void> {
 		return null;
 	}
 	
-	protected void onPostExecute() {
+	protected void onPostExecute(Void params) {
 	        sucelje.prenesi_info(userId,username,name,lastName,email,error_info);	//{ "data" : ["userId" : id,  "username":username, "name" : name, "lastName" : lastname, "email" : email] , "error" : [] }
 	    }
 	

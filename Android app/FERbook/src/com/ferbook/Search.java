@@ -30,14 +30,14 @@ public class Search extends AsyncTask<Object, Void, Void> {
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/messages/conversation/index.php";
+	private static String url = "http://vdl.hr/ferbook/search/index.php";
 	
 	
     protected Void doInBackground(Object... arg0) {
     	String query=(String) arg0[0];
-    	sucelje = (prenesi) arg0[2];
+    	sucelje = (prenesi) arg0[1];
     	
-    	Activity ak=(MainActivity) arg0[2];
+    	Activity ak=(SearchActivity) arg0[1];
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
     	NameValuePair user1=new BasicNameValuePair("userId", Vrati_id.vrati(ak));
@@ -82,10 +82,10 @@ public class Search extends AsyncTask<Object, Void, Void> {
     				try {
 						covjek = data.getJSONObject(br_ljudi);
     			 
-						userId = covjek.getString("userId");
+						userId = covjek.getString("id");
 						name = covjek.getString("name");
 						lastname = covjek.getString("lastname");
-						profilePicture = covjek.getString("profilePicture");
+						profilePicture = covjek.getString("picture");
 						username= covjek.getString("username");
 						//ako sve ovo gore uspije i ako nejde u catch:
 						

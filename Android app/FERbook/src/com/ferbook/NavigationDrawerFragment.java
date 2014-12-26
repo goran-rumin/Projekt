@@ -273,6 +273,7 @@ public class NavigationDrawerFragment extends Fragment {
 			Toast.makeText(getActivity(), "Odlogirano / file izbrisan", Toast.LENGTH_SHORT)
 					.show();
 			Intent prebaci = new Intent(getActivity().getBaseContext(), LoginActivity.class);
+			prebaci.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(prebaci);
 			getActivity().finish();
 			return true;
@@ -305,5 +306,8 @@ public class NavigationDrawerFragment extends Fragment {
 		 * Called when an item in the navigation drawer is selected.
 		 */
 		void onNavigationDrawerItemSelected(int position);
+	}
+	public void prebaci_fragment(int pozicija){  //za programsko prebacivanje izmedju fragmenata ladice kroz mehanizme za sucelje
+		selectItem(pozicija);
 	}
 }
