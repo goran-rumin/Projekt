@@ -24,7 +24,7 @@ function update() {
     else if (name != '' && lastName != '' && password != '' && password == passwordConfirm) {
         $("#disclaimer").hide();
         $.ajax({
-            url: "../../user/edit/index.php",
+            url: "../ferbook/user/edit/index.php",
             type: "POST",
             data: {
                 username: username,
@@ -41,7 +41,7 @@ function update() {
     if (password == passwordConfirm && password != '' && passwordConfirm != ''){
         $("#disclaimer").hide();
         $.ajax({
-            url: "../../user/edit/index.php",
+            url: "../ferbook/user/edit/index.php",
             type: "POST",
             data: {
                 username: username,
@@ -56,7 +56,7 @@ function update() {
     if (name != '' && lastName != ''){
         $("#disclaimer").hide();
         $.ajax({
-            url: "../../user/edit/index.php",
+            url: "../ferbook/user/edit/index.php",
             type: "POST",
             data: {
                 username: username,
