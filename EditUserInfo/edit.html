@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <script type="text/javascript" src="angular.js" ></script>
+
+    <script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+    <link rel="stylesheet" href="stylesheet.css" type="text/css" />
+</head>
+<body>
+
+<div id="naslov">
+    <div id='top'>
+        <div id="logo">
+            <img src="fer_logo3.png"  alt="FERbook" >
+        </div>
+    </div>
+    <div id='topnav'>
+        <div id='topnavTut' class='notranslate'>
+
+            <div>
+                <a class='topnav' target='_self' id="newsfeedLink" href=''>NEWSFEED</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class='topnav' target='_self'  id="wallLink" href=''> WALL</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class='topnav' target='_self' id="galleryLink"  href=''> GALLERY</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class='topnav' target='_self' id="friendsLink" href=''> FRIENDS</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class='topnav' target='_self' id="messagesLink" href=''> MESSAGES</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id='belowTop'>
+    <div id='page'>
+
+        <p id = "disclaimer"></p>
+        <p>Enter your username again:</p> <input type="text" placeholder="New name" id="username" class="button form-control" ng-model="newAlbum">
+        <p id = "description">Please enter the new details below:</p>
+        <p>Profile picture - will be updated soon:</p><img src="http://placehold.it/200x200&text=Profile+Picture" /><p></p>
+        <span class="btn btn-default" id="upload">Upload Image</span>
+        <p>Name:</p> <input type="text" placeholder="New name" id="name" class="button form-control" ng-model="newAlbum">
+        <p>Last name:</p> <input type="text" placeholder="New last name" id="lastName" class="button form-control" ng-model="newAlbum">
+        <p>Password:</p> <input type="password" placeholder="New password" id="password" class="button form-control"  ng-model="newAlbum">
+        <p>Confirm password:</p> <input type="password" placeholder="Confirm new password" id="passwordConfirm" class="button form-control" ng-model="newAlbum">
+        <p></p>
+        <span class="btn btn-default" id="submit" ng-click="update()">SUBMIT</span>
+    </div>
+</div>
+
+
+
+</body>
+</html>
