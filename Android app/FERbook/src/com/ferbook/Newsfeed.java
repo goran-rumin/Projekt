@@ -64,24 +64,31 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/post/newsfeed/index.php";
+	private String url;
 	
 	
     protected Void doInBackground(Object... arg0) { //(int broj, this)   //1 na početku, a dalje se broj povecava, najbolje u activityu
-    	int broj=(Integer) arg0[0];				//1 za prvih 20 postova, 2 za drugih 20...
-    	int vrsta = (Integer) arg0[1];		//NEWS=0, WALL=1, imate i public static varijable koje mozete koristiti
-    	sucelje = (prenesi) arg0[2];		//samo trebam this, tj, activity
+    	String userId=(String) arg0[0];
+    	int broj=(Integer) arg0[1];				//1 za prvih 20 postova, 2 za drugih 20...
+    	int vrsta = (Integer) arg0[2];		//NEWS=0, WALL=1, imate i public static varijable koje mozete koristiti
+    	sucelje = (prenesi) arg0[3];		//samo trebam this, tj, activity
+    	  	
     	
-    	
-    	
-    	Activity ak=(MainActivity) arg0[3];			//MainActivity?
+    	Activity ak=(MainActivity) arg0[4];			//MainActivity?
     	    	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
-    	NameValuePair user=new BasicNameValuePair("userId", Vrati_id.vrati(ak));    
-    	NameValuePair time=new BasicNameValuePair("offset", String.valueOf(broj) );	//TODO izmjeniti "broj" kako ce iti u bazi
+    	NameValuePair user=new BasicNameValuePair("userId", userId);    
+    	NameValuePair time=new BasicNameValuePair("offset", String.valueOf(broj) );	
     	params.add(user);     
     	params.add(time);
+    	
+    	if(vrsta==NEWS) url = "http://vdl.hr/ferbook/post/newsfeed/index.php";
+    	else if (vrsta==WALL) url = "http://vdl.hr/ferbook/post/wall/index.php";
+    	else {
+    		error_info="Kriva vrsta";
+    		return null;
+    	}
     	
     	ServiceHandler sh = new ServiceHandler();    	
     	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, params);
