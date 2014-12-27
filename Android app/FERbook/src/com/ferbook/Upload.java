@@ -23,16 +23,19 @@ public class Upload extends AsyncTask<Object, Void, String> {
 	protected String doInBackground(Object... arg0) {
 		String userId= (String) arg0[0];
 		image=(Bitmap) arg0[1];
-		sucelje = (prenesi) arg0[2];
+		String albumId= (String) arg0[2];	//OPTIONAL inače null
+		sucelje = (prenesi) arg0[3];
 		
 		String imageStream=encodeTobase64(image);
 		
 		NameValuePair prvi=new BasicNameValuePair("userId", userId);
-		NameValuePair drugi=new BasicNameValuePair("imageStream", imageStream);
+		NameValuePair drugi=new BasicNameValuePair("url", imageStream);
 		
 		List<NameValuePair> params= new ArrayList<NameValuePair>();
 		params.add(prvi);
 		params.add(drugi);
+		
+		if(albumId!=null) params.add(new BasicNameValuePair("albumId", albumId));
 		
 		ServiceHandler sh = new ServiceHandler();
     	
