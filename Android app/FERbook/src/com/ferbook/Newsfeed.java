@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 @SuppressLint("SimpleDateFormat")
 public class Newsfeed extends AsyncTask<Object, Void, Void> {
@@ -92,6 +93,8 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	
     	ServiceHandler sh = new ServiceHandler();    	
     	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, params);
+    	
+    	Toast.makeText(ak,jsonStr , Toast.LENGTH_SHORT).show();
     	
     	JSONArray data=new JSONArray();
     	
