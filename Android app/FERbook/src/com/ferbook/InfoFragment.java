@@ -9,6 +9,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -69,8 +70,7 @@ public class InfoFragment extends Fragment implements Info.prenesi{
 		}
 
 		@Override
-		public void prenesi_info(String userId, String username, String name,
-				String lastName, String email, String error) {
+		public void prenesi_info(String username,String name, String lastName, String email, Drawable pic, String error) {
 			progres.setVisibility(View.INVISIBLE);
 			if(error!=null)
 				Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();

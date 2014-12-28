@@ -53,7 +53,7 @@ public class NewsfeedFragment extends Fragment implements Newsfeed.prenesi, Like
 		public void onStart(){
 			super.onStart();
 			pd = ProgressDialog.show(getActivity(), "", "Please wait...", true, true);
-			new Newsfeed().execute((Integer) 1, (Integer) Newsfeed.NEWS, this, getActivity());
+			new Newsfeed().execute("1", 1, (Integer) Newsfeed.NEWS, this, getActivity()); //userId je String
 		}
 		
 		@Override

@@ -7,10 +7,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -23,6 +27,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 @SuppressLint("SimpleDateFormat")
@@ -94,15 +99,27 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	ServiceHandler sh = new ServiceHandler();    	
     	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, params);
     	
-    	Toast.makeText(ak,jsonStr , Toast.LENGTH_SHORT).show();
+    	Log.e("JSONERROR", jsonStr);
     	
-    	JSONArray data=new JSONArray();
+    	JSONObject data=new JSONObject();
+    	JSONArray imena=new JSONArray();
     	
     	if(jsonStr != null){
     		try{
     			JSONObject jsonObj = new JSONObject(jsonStr);
-    			data = jsonObj.getJSONArray("data");
-    			data.get(0); //ako je data prazan ide se na catch i parsiranje errora
+    			data = jsonObj.getJSONObject("data");
+    			
+    			imena=data.names(); //JSONArray
+    			//int i;
+    			//String najveci=imena.getString(0);
+    			//for(i=0;i<imena.length();i++){			/poredam od najnovijih prema starijima
+    				
+    				
+    			//}
+    			
+    			Log.e("JSONIMENA", imena.toString());
+    			
+    			data.get(imena.getString(0)); //ako je data prazan ide se na catch i parsiranje errora
     			
     		}catch(JSONException e){
     			//if the mapping doesn't exist, tj, ako je data prazan pa data ne postoji:
@@ -127,12 +144,12 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     			
     			while(true){
     				try {
-						post = data.getJSONObject(br_postova);
+						post = data.getJSONObject(imena.getString(br_postova));
 						
 						postId=post.getString("postId");
 						text=post.getString("text");
 						url_u_postu=post.getString("url");
-						timestamp=post.getString("timestamp");
+						timestamp=post.getString("timestamp");  //"2014-12-06 23:09:57"
 						senderId=post.getString("senderId");
 						senderName=post.getString("senderName");
 						senderLastname=post.getString("senderLastname");
@@ -151,7 +168,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 						
 						
 						if(vrati_vrijeme(ak)!=null){
-							if(broj!=1 && Long.valueOf(timestamp)>Long.valueOf(vrati_vrijeme(ak))){//ako se ne refresha od pocetka
+							if(broj!=1 && timeConversion(timestamp)>=timeConversion(vrati_vrijeme(ak))){//ako se ne refresha od pocetka
 								br_postova++;							//brisi postove koje sam vec poslao u mainactivity
 								continue;	
 																			
@@ -162,7 +179,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 						postIds.add(postId);	
 						texts.add(text);		
 						urlovi_u_postu.add(url_u_postu);	
-						timestamps.add(pretvori_u_vrijeme(timestamp));    //pretvaram iz unix_vremena u čitljivo vrijeme
+						timestamps.add(timestamp);  
 						senderIds.add(senderId);
 						senderNames.add(senderName);
 						senderLastnames.add(senderLastname);
@@ -230,6 +247,7 @@ private static String vrati_vrijeme(Activity ak){
 			BufferedReader bf = new BufferedReader(new InputStreamReader(ak.openFileInput("timestamp.txt")));
 			vrijeme= bf.readLine();
 		} catch (FileNotFoundException e) {
+			
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -253,6 +271,29 @@ private String pretvori_u_vrijeme(String unix_vrijeme){	//vraća čitljivo vrije
 		Date df = new java.util.Date(dv);
 		String vv = new SimpleDateFormat("dd. M., yyyy HH:mm").format(df);
 		return vv;
+}
+
+
+
+
+
+public long timeConversion(String time){
+	DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  //"2014-12-06 23:09:57"
+
+	long unixtime=-1;
+	
+    dfm.setTimeZone(TimeZone.getTimeZone("GMT+1:00"));//Specify your timezone 
+    try
+    {
+    	unixtime = dfm.parse(time).getTime();  
+    	unixtime=unixtime/1000;
+    } 
+    catch (ParseException e) 
+	{
+    e.printStackTrace();
+	}
+    
+    return unixtime;
 }
 
 
