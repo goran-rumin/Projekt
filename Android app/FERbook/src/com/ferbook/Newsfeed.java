@@ -11,8 +11,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -28,7 +27,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 @SuppressLint("SimpleDateFormat")
 public class Newsfeed extends AsyncTask<Object, Void, Void> {
@@ -50,7 +48,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 		
 	List<String> postIds = new ArrayList<String>();
 	List<String> texts = new ArrayList<String>();
-	List<String> urlovi_u_postu = new ArrayList<String>();
+	List<Drawable> urlovi_u_postu = new ArrayList<Drawable>();
 	List<String> timestamps = new ArrayList<String>();
 	List<String> senderIds=new ArrayList<String>();
 	List<String> senderNames= new ArrayList<String>();
@@ -71,6 +69,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	private prenesi sucelje;
 	//Activity kontekst;
 	private String url;
+	static Activity ak;
 	
 	
     protected Void doInBackground(Object... arg0) { //(int broj, this)   //1 na početku, a dalje se broj povecava, najbolje u activityu
@@ -80,7 +79,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	sucelje = (prenesi) arg0[3];		//samo trebam this, tj, activity
     	  	
     	
-    	Activity ak=(MainActivity) arg0[4];			//MainActivity?
+    	ak=(MainActivity) arg0[4];			//MainActivity?
     	    	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
@@ -104,18 +103,31 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	JSONObject data=new JSONObject();
     	JSONArray imena=new JSONArray();
     	
+    	
     	if(jsonStr != null){
     		try{
     			JSONObject jsonObj = new JSONObject(jsonStr);
     			data = jsonObj.getJSONObject("data");
     			
     			imena=data.names(); //JSONArray
-    			//int i;
-    			//String najveci=imena.getString(0);
-    			//for(i=0;i<imena.length();i++){			/poredam od najnovijih prema starijima
+    	
+    			int i;
+    			List<String> jsonValues = new ArrayList<String>();
+    			
+    			for (i = 0; i < imena.length(); i++)		//trebam poredati od novijih prema starijima (od vecih prema manjima)
+    			   jsonValues.add(imena.getString(i));
+    			
+    			Collections.sort(jsonValues);				//ovo je ascending, tj od manjih prema vecima
+    			Collections.reverse(jsonValues);
+    			
+    			JSONArray sortedJsonArray = new JSONArray();
+    			
+    			for(i=0;i<jsonValues.size();i++)
+    				sortedJsonArray.put(jsonValues.get(i));
     				
-    				
-    			//}
+    			imena=sortedJsonArray;				//konacno
+    			
+    			
     			
     			Log.e("JSONIMENA", imena.toString());
     			
@@ -178,7 +190,10 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 						
 						postIds.add(postId);	
 						texts.add(text);		
-						urlovi_u_postu.add(url_u_postu);	
+						
+						if(url_u_postu.equals(""))urlovi_u_postu.add(null);
+						else urlovi_u_postu.add(vrati_sliku(url_u_postu));	
+						
 						timestamps.add(timestamp);  
 						senderIds.add(senderId);
 						senderNames.add(senderName);
@@ -226,7 +241,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
        
     
     public interface prenesi{
-    	void prenesi_newsfeed(List<String> postIds,List<String> texts,List<String> urlovi_u_postu,List<String> timestamps,List<String> senderIds,List<String> senderNames,List<String> senderLastnames,List<Drawable> senderPictures,List<String> senderUsernames, List<String> senderEmails,List<String> recipientIds,List<String> recipientNames,List<String> recipientLastnames,List<Drawable> recipientPictures,List<String>  recipientUsernames,List<String> recipientEmails,List<Boolean> liked_lista_boolean, List<Integer> broj_likeova,String error_info);
+    	void prenesi_newsfeed(List<String> postIds,List<String> texts,List<Drawable> urlovi_u_postu,List<String> timestamps,List<String> senderIds,List<String> senderNames,List<String> senderLastnames,List<Drawable> senderPictures,List<String> senderUsernames, List<String> senderEmails,List<String> recipientIds,List<String> recipientNames,List<String> recipientLastnames,List<Drawable> recipientPictures,List<String>  recipientUsernames,List<String> recipientEmails,List<Boolean> liked_lista_boolean, List<Integer> broj_likeova,String error_info);
     }
 
     
@@ -236,7 +251,8 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	        Drawable d = Drawable.createFromStream(is, "src name");
 	        return d;
 	    } catch (Exception e) {
-	        return null;
+	    	Drawable d = ak.getResources().getDrawable( R.drawable.ferbook );
+	    	return d;
 	    }
 	}
     
@@ -266,12 +282,12 @@ private void spremi_vrijeme(String vrijeme, Activity kontekst){
 	
 }
 
-private String pretvori_u_vrijeme(String unix_vrijeme){	//vraća čitljivo vrijeme iz unix vremena
-		long dv = Long.valueOf(unix_vrijeme)*1000;// it needs to be in miliseconds //unix vrijeme je broj sekundi od 1970.
-		Date df = new java.util.Date(dv);
-		String vv = new SimpleDateFormat("dd. M., yyyy HH:mm").format(df);
-		return vv;
-}
+//private String pretvori_u_vrijeme(String unix_vrijeme){	//vraća čitljivo vrijeme iz unix vremena
+	//	long dv = Long.valueOf(unix_vrijeme)*1000;// it needs to be in miliseconds //unix vrijeme je broj sekundi od 1970.
+		//Date df = new java.util.Date(dv);
+	//	String vv = new SimpleDateFormat("dd. M., yyyy HH:mm").format(df);
+	//	return vv;
+//}
 
 
 
