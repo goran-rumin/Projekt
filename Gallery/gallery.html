@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html ng-app="gallery">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="angular.js" ></script>
+
+    <script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="angular-animate.js" ></script>
+    <script type="text/javascript" src="angular-touch.js" ></script>
+    <script type="text/javascript" src="ng-flow-standalone.js" ></script>
+    <script type="text/javascript" src="script.js"></script>
+
+    <link rel="stylesheet" href="css/stylesheet.css" type="text/css" />
+</head>
+<body>
+
+<div id="naslov">
+    <div id='top'>
+        <div id="logo">
+            <img src="fer_logo3.png"  alt="FERbook" >
+        </div>
+    </div>
+    <div id='topnav'>
+        <div id='topnavTut' class='notranslate'>
+
+            <div>
+                <a class='topnav' target='_self' id="newsfeedLink" href=''>NEWSFEED</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class='topnav' target='_self'  id="wallLink" href=''> WALL</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class='topnav' target='_self' id="galleryLink"  href=''> GALLERY</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class='topnav' target='_self' id="friendsLink" href=''> FRIENDS</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class='topnav' target='_self' id="messagesLink" href=''> MESSAGES</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id='belowTop' ng-controller="albumCtrl" ng-init="add('4')">
+    <div id='page'>
+
+
+            <span class="allAlbums"><select ng-model="myAlbum"
+                                            ng-options="a.name for a in albumList">
+                <option value="">Choose album:</option>
+            </select></span>
+
+            <button ng-click="showImages(myAlbum.albumId)">Click</button>
+
+        <div>
+            <ul class="nav">
+                <li ng-repeat="a in images" ng-class="{'active':isActive($index)}">
+                    <img src="{{a.url}}" ng-click="showPhoto($index);" />
+                </li>
+            </ul>
+        </div><div class="container slider">
+        <img ng-repeat="a in images" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{a.url}}" />
+
+        <a class="arrow prev" href="#" ng-click="showPrev()"></a>
+        <a class="arrow next" href="#" ng-click="showNext()"></a>
+    </div>
+</div>
+    <div class="footer" flow-init
+         flow-files-submitted="$flow.upload()"
+         flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]">
+        <div class="drop" flow-drop ng-class="dropClass">
+            <span class="btn btn-default" flow-btn>Upload Image</span>
+            <span class="btn btn-default" flow-btn flow-directory ng-show="$flow.supportDirectory">Upload Folder of Images</span>
+            <b>OR</b>
+            Drag And Drop your images here
+            </div>
+    </div>
+</div>
+
+
+
+
+
+</body>
+</html>
