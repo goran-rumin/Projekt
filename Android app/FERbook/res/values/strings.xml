@@ -15,7 +15,7 @@
     <string name="logout_text">Logout</string>
     <string name="inbox_refresh">Refresh</string>
     <string name="search_opis">Search friends</string>
-    <string name="search_hint">Enter name</string>
+    <string name="search_hint">Enter friend\'s name or \&quot;All\&quot;</string>
      <drawable name="not_pressed">#444444</drawable>
 	<drawable name="pressed">#303030</drawable>
 

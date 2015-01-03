@@ -98,7 +98,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	ServiceHandler sh = new ServiceHandler();    	
     	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, params);
     	
-    	Log.e("JSONERROR", jsonStr);
+    	Log.e("JSONERROR", ""+jsonStr);
     	
     	JSONObject data=new JSONObject();
     	JSONArray imena=new JSONArray();
@@ -137,7 +137,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     			//if the mapping doesn't exist, tj, ako je data prazan pa data ne postoji:
     			e.printStackTrace();
     			try{
-    				error_info="No posts";		//ako je data s razlogom prazan
+    				error_info="No more posts";		//ako je data s razlogom prazan
     				JSONObject jsonObj = new JSONObject(jsonStr);
     				JSONObject error = jsonObj.getJSONObject("error");
     				error_info=error.getString("errInfo");

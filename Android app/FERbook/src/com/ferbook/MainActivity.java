@@ -31,23 +31,34 @@ public class MainActivity extends Activity implements
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 
 	private CharSequence mTitle;
+	String user_id,user_id_poruke=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-		Intent pokretanje_iz_pretrage = getIntent();  //da li je pokrenuto nakon pretrage
-		if(pokretanje_iz_pretrage!=null)
-			if(pokretanje_iz_pretrage.getStringExtra("id_za_poruke")!=null)  //pocetak za poruke
-				Log.e("slanje",""+pokretanje_iz_pretrage.getStringExtra("id_za_poruke"));
-			else if(pokretanje_iz_pretrage.getStringExtra("id_za_profil")!=null)
-				Log.e("wall ",""+pokretanje_iz_pretrage.getStringExtra("id_za_profil"));
-		
+		user_id = Vrati_id.vrati(this);
 		
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
+		
+		
+		Intent pokretanje_iz_pretrage = getIntent();  //da li je pokrenuto nakon pretrage
+		if(pokretanje_iz_pretrage!=null)
+			if(pokretanje_iz_pretrage.getStringExtra("id_za_poruke")!=null){  //pocetak za poruke
+				final FragmentManager fragmm = getFragmentManager();
+				user_id_poruke=pokretanje_iz_pretrage.getStringExtra("id_za_poruke");
+				String ime_poruke=pokretanje_iz_pretrage.getStringExtra("ime_za_poruke");
+				Log.e("poruke",user_id_poruke+"+"+ime_poruke);
+				fragmm.beginTransaction().replace(R.id.container, 
+						MessageFragment.newInstance(2, user_id_poruke, ime_poruke), "MessageFragment").addToBackStack("prebacivanje").commit();
+			}
+			else if(pokretanje_iz_pretrage.getStringExtra("id_za_profil")!=null){
+				user_id=pokretanje_iz_pretrage.getStringExtra("id_za_profil");
+				mNavigationDrawerFragment.prebaci_fragment(2);
+			}
+		
 		mTitle = getTitle();
 		Toast.makeText(this, getIntent().getStringExtra("id"), Toast.LENGTH_SHORT).show();
 		// Set up the drawer.
@@ -62,12 +73,14 @@ public class MainActivity extends Activity implements
 		fragmentManager.popBackStack();
 		switch (position){
 		case 0:
+			user_id=Vrati_id.vrati(this);
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.container,
 					NewsfeedFragment.newInstance(position + 1)).commit();
 			break;
 		case 1:
+			user_id=Vrati_id.vrati(this);
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.container,
@@ -77,9 +90,10 @@ public class MainActivity extends Activity implements
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.container,
-					ProfileFragment.newInstance(position + 1)).commit();
+					ProfileFragment.newInstance(position + 1, user_id)).commit();
 			break;
 		case 3:
+			user_id=Vrati_id.vrati(this);
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.container,
@@ -159,6 +173,14 @@ public class MainActivity extends Activity implements
 		if(f!=null && f.isVisible()){
 			getFragmentManager().popBackStack();
 			f.socket.disconnect();
+			mNavigationDrawerFragment.prebaci_fragment(1);
+		}
+		else if(!user_id.equals(Vrati_id.vrati(this))){
+			user_id=Vrati_id.vrati(this);
+			mNavigationDrawerFragment.prebaci_fragment(0);
+			/*Intent prebaci = new Intent(getBaseContext(), MainActivity.class);
+			prebaci.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(prebaci);*/
 		}
 		else
 			super.onBackPressed();

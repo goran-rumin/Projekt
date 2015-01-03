@@ -88,6 +88,12 @@ public class MessageFragment extends Fragment implements Conversation.prenesi, V
 			((MainActivity) activity).onSectionAttached(getArguments().getInt(
 					ARG_SECTION_NUMBER));
 		}
+		
+		@Override
+		public void onPause(){
+			data.clear();
+			super.onPause();
+		}
 
 		@Override
 		public void prenesi_conversation(List<String> messages,

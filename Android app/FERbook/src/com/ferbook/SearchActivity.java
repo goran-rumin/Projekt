@@ -36,7 +36,7 @@ public class SearchActivity extends Activity implements Search.prenesi{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    setContentView(R.layout.wall);
+	    setContentView(R.layout.newsfeed);
 	    data = new ArrayList<HashMap<String,?>>();
 	   	Intent pozivajuca = getIntent();
 	   	if(!Intent.ACTION_SEARCH.equals(pozivajuca.getAction())){
@@ -59,7 +59,10 @@ public class SearchActivity extends Activity implements Search.prenesi{
 					finish();
             	}
 			});	
-	   		new Search().execute(upit,this);
+			if(upit.equals("All"))
+				new Search().execute("",this);
+			else
+				new Search().execute(upit,this);
 	   	}
 	}
 
@@ -125,13 +128,16 @@ public class SearchActivity extends Activity implements Search.prenesi{
 			if(lista.get(arg0).get("picture")!=null)
 				slika.setImageDrawable((Drawable)lista.get(arg0).get("picture"));
 			redak.setTag(lista.get(arg0).get("user_id").toString());
-			poruka.setTag(lista.get(arg0).get("user_id").toString());
+			poruka.setTag(lista.get(arg0).get("user_id").toString()+"|"+lista.get(arg0).get("name").toString());
 			poruka.setOnClickListener(new OnClickListener(){
 				@Override
 				public void onClick(View arg0) {
 					String user_id = (String) arg0.getTag();
 					Intent prebaci = new Intent(getBaseContext(), MainActivity.class);
-					prebaci.putExtra("id_za_poruke", user_id);
+					String a[] = user_id.split("\\|");
+					Log.e("search",a[0]+" "+a[1]);
+					prebaci.putExtra("id_za_poruke", a[0]);
+					prebaci.putExtra("ime_za_poruke", a[1]);
 					prebaci.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(prebaci);
 					finish();

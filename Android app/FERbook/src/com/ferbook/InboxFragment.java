@@ -100,6 +100,12 @@ public class InboxFragment extends Fragment implements Inbox.prenesi{
 		}
 		
 		@Override
+		public void onPause(){
+			data.clear();
+			super.onPause();
+		}
+		
+		@Override
 		public void onAttach(Activity activity) {
 			super.onAttach(activity);
 			((MainActivity) activity).onSectionAttached(getArguments().getInt(

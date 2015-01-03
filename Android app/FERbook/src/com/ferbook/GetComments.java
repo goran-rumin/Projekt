@@ -35,7 +35,7 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/post/getcomments/index.php";
+	private static String url = "http://vdl.hr/ferbook/post/getComments/index.php";
 	
 	
     protected Void doInBackground(Object... arg0) {

@@ -38,6 +38,7 @@ public class InfoFragment extends Fragment implements Info.prenesi{
 		static ArrayList<HashMap<String,?>> data;
 		static TextView nema_konv;
 		static ProgressBar progres;
+		String user_id;
 		View rootView;
 		
 		public static InfoFragment newInstance(int sectionNumber) {
@@ -58,7 +59,8 @@ public class InfoFragment extends Fragment implements Info.prenesi{
 			rootView = inflater.inflate(R.layout.info, container,
 					false);
 			progres = (ProgressBar) rootView.findViewById(R.id.info_progress);
-			new Info().execute(Vrati_id.vrati(getActivity()), this);
+			user_id=getArguments().getString("userid");
+			new Info().execute(user_id, this);
 			return rootView;
 		}
 		
@@ -83,5 +85,6 @@ public class InfoFragment extends Fragment implements Info.prenesi{
 			nm.setText("Name: "+name);
 			lstnm.setText("Lastname: "+lastName);
 			mail.setText("E-mail: "+email);
+			pict.setImageDrawable(pic);
 		}
 }

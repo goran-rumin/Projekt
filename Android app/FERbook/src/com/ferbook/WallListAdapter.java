@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,11 +56,14 @@ import android.widget.Toast;
 			slika.setImageDrawable((Drawable)redak.get("news_item_image"));  //asynctask vraca urlove
 			broj_likeova.setText((String)redak.get("news_item_likesnum"));
 			timestamp.setText((String)redak.get("news_item_timestamp"));
+			
 			ime_korisnika.setTag((String)redak.get("senderId"));
 			ime_korisnika2.setTag((String)redak.get("recipientId"));
+			broj_likeova.setTag(redak.get("news_item_pid"));
 			comment.setTag(redak.get("news_item_pid"));
+			
 			if((Boolean)redak.get("news_item_like").equals(true))
-				like.setText("  Liked  ");
+				like.setText("   Liked    ");
 			like.setTag(redak.get("news_item_pid"));
 			ime_korisnika.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -67,9 +71,19 @@ import android.widget.Toast;
 					Toast.makeText(context, "Kliknuto "+v.getTag(), Toast.LENGTH_SHORT).show();
 				}
 			});
+			broj_likeova.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					CommentDialog dialog = new CommentDialog(context,CommentDialog.TYPE_SHOW_LIKES, (String) v.getTag());
+					dialog.show();
+					Toast.makeText(context, "Kliknuto "+v.getTag(), Toast.LENGTH_SHORT).show();
+				}
+			});
 			comment.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					CommentDialog dialog = new CommentDialog(context,CommentDialog.TYPE_COMMENT, (String) v.getTag());
+					dialog.show();
 					Toast.makeText(context, "Kliknuto "+v.getTag(), Toast.LENGTH_SHORT).show();
 				}
 			});
@@ -78,6 +92,7 @@ import android.widget.Toast;
 				public void onClick(View v) {
 					new Like().execute(Vrati_id.vrati((Activity) context),v.getTag(),host, v);
 				}
+				
 			});
 			return rowView;
 		}

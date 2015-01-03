@@ -1,7 +1,43 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
+    <RelativeLayout
+        android:id="@+id/unos_posta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <EditText
+            android:id="@+id/post_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/post_upload"
+            android:ems="10"
+            android:hint="Post..." />
+
+        <Button
+            android:id="@+id/post_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/send"
+            android:minWidth="48dip" />
+
+        <Button
+            android:id="@+id/post_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/post_send"
+            android:background="@drawable/upload_pic"
+            android:minWidth="48dip" />
+
+    </RelativeLayout>
     <ListView
         android:id="@+id/list_wall"
         android:layout_width="match_parent"
@@ -10,4 +46,4 @@
 
     </ListView>
 
-</RelativeLayout>
+</LinearLayout>

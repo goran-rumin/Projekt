@@ -4,39 +4,39 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/messages_user"
+        android:id="@+id/comments_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:gravity="center"
-        android:text="TextView"
+        android:text="No comments"
         android:textSize="20sp" />
 
     <ListView
-        android:id="@+id/list_messages"
+        android:id="@+id/list_comments"
         android:layout_width="match_parent"
         android:layout_height="279dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/messages_user"
+        android:layout_below="@+id/comments_text"
         android:layout_marginTop="5dp"
         android:layout_weight="0.94" >
     </ListView>
 
     <RelativeLayout
-        android:id="@+id/unos_poruke"
+        android:id="@+id/unos_komentara"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" >
 
         <EditText
-            android:id="@+id/message_text"
+            android:id="@+id/comment_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/send"
             android:ems="10"
-            android:hint="Message..." />
+            android:hint="Comment..." />
 
         <Button
             android:id="@+id/send"

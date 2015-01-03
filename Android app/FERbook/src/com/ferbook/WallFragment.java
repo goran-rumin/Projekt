@@ -1,5 +1,8 @@
 package com.ferbook;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,22 +13,44 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class WallFragment extends Fragment implements Newsfeed.prenesi{
+public class WallFragment extends Fragment implements Newsfeed.prenesi, OnScrollListener, OnClickListener, Upload.prenesi, Publish.prenesi, Like.prenesi{
 
 		private static final String ARG_SECTION_NUMBER = "section_number";   //redni broj fragmenta, zbog naslova ActionBara
-
+		final int ACTIVITY_CHOOSE_FILE = 1;
+		
 		static ArrayList<HashMap<String,Object>> data;
 		WallListAdapter adapter;
 		ProgressDialog pd;
+		ListView listview;
+		View footer;
+		String user_id;
+		EditText post_text;
+		Button post_send, post_upload;
+		String slika_url = null;
+		boolean smije_objaviti=true;
+		int trenutacni_index=1;
 		
 		public static WallFragment newInstance(int sectionNumber) {
 			WallFragment fragment = new WallFragment();
@@ -47,17 +72,47 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi{
 			View rootView = inflater.inflate(R.layout.wall, container,
 					false);
 			data = new ArrayList<HashMap<String,Object>>();
-			ListView listview = (ListView) rootView.findViewById(R.id.list_wall);
+			listview = (ListView) rootView.findViewById(R.id.list_wall);
 			adapter = new WallListAdapter(getActivity(),(Fragment) this,data);
+			footer = getActivity().getLayoutInflater().inflate(R.layout.footer, null);
+			listview.addFooterView(footer);
 			listview.setAdapter(adapter);
+			listview.setOnScrollListener(this);
+			user_id=getArguments().getString("userid");
+			post_text = (EditText) rootView.findViewById(R.id.post_text);
+			post_send = (Button) rootView.findViewById(R.id.post_send);
+			post_send.setOnClickListener(this);
+			post_upload = (Button) rootView.findViewById(R.id.post_upload);
+			post_upload.setOnClickListener(new OnClickListener(){
+				
+				@Override
+				public void onClick(View v) {
+					if(!smije_objaviti)
+						Toast.makeText(getActivity(), "Picture is uploading. Please wait...", Toast.LENGTH_SHORT).show();
+					else{
+						Intent chooseFile;
+						Intent intent;
+						chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+						chooseFile.setType("image/jpeg");
+						intent = Intent.createChooser(chooseFile, "Choose a picture");
+						startActivityForResult(intent, ACTIVITY_CHOOSE_FILE);
+					}
+				}});
 			return rootView;
 		}
 
 		@Override
-		public void onStart(){
-			super.onStart();
+		public void onResume(){
+			super.onResume();
 			pd = ProgressDialog.show(getActivity(), "", "Please wait...", true, true);
-			new Newsfeed().execute((Integer) 1, (Integer) Newsfeed.NEWS, this, getActivity());
+			new Newsfeed().execute(user_id, trenutacni_index, (Integer) Newsfeed.WALL, this, getActivity());
+		}
+		
+		@Override
+		public void onPause(){
+			data.clear();
+			trenutacni_index=1;
+			super.onPause();
 		}
 		
 		@Override
@@ -69,7 +124,7 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi{
 
 		@Override
 		public void prenesi_newsfeed(List<String> postIds, List<String> texts,
-				List<String> urlovi_u_postu, List<String> timestamps,
+				List<Drawable> urlovi_u_postu, List<String> timestamps,
 				List<String> senderIds, List<String> senderNames,
 				List<String> senderLastnames, List<Drawable> senderPictures,
 				List<String> senderUsernames, List<String> senderEmails,
@@ -79,10 +134,13 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi{
 				List<String> recipientUsernames, List<String> recipientEmails,
 				List<Boolean> liked_lista_boolean, List<Integer> broj_likeova,
 				String error_info) {
-			if(error_info!=null)
+			if(error_info!=null){
 				Toast.makeText(getActivity(), error_info, Toast.LENGTH_SHORT).show();
+				listview.removeFooterView(footer);
+			}
 			for(int i=0;i<postIds.size();i++){
 				HashMap<String,Object> redak = new HashMap<String,Object>();
+				redak.put("news_item_pid", postIds.get(i));
 				redak.put("news_item_pimage",senderPictures.get(i));
 				redak.put("news_item_p2image",recipientPictures.get(i));
 				redak.put("news_item_ptext",senderNames.get(i)+" "+senderLastnames.get(i));  //zavrsiti kad se zavrsi newsfeed do kraja
@@ -90,7 +148,7 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi{
 				redak.put("news_item_text",texts.get(i));
 				redak.put("news_item_image",urlovi_u_postu.get(i));
 				redak.put("news_item_timestamp",timestamps.get(i));
-				redak.put("news_item_likesnum",broj_likeova.get(i).toString());
+				redak.put("news_item_likesnum","Likes: "+broj_likeova.get(i).toString());
 				redak.put("news_item_like",liked_lista_boolean.get(i));
 				redak.put("senderId", senderIds.get(i));
 				redak.put("recipientId", recipientIds.get(i));
@@ -98,5 +156,112 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi{
 			}
 			pd.dismiss();
 			adapter.notifyDataSetChanged();
+			trenutacni_index+=1;
+		}
+		
+		int prosli_zadnji=0;
+		@Override
+		public void onScroll(AbsListView view, int firstVisibleItem,
+				int visibleItemCount, int totalItemCount) {
+				int zadnji = firstVisibleItem + visibleItemCount;
+				if(zadnji == totalItemCount) {
+					if(prosli_zadnji!=zadnji && trenutacni_index>1){
+						new Newsfeed().execute(user_id, trenutacni_index, (Integer) Newsfeed.WALL, this, getActivity());
+						prosli_zadnji = zadnji;
+					}
+				}	
+		}
+
+		@Override
+		public void onScrollStateChanged(AbsListView view, int scrollState) {
+			
+		}
+
+		@Override
+		public void onClick(View arg0) {
+			String post = post_text.getText().toString();
+			if(!smije_objaviti)
+				Toast.makeText(getActivity(), "Picture is uploading. Please wait...", Toast.LENGTH_SHORT).show();
+			else{
+				new Publish().execute(Vrati_id.vrati(getActivity()), user_id, post, slika_url, this);
+				post_text.setText("");
+			}
+		}
+		
+		@Override
+		public void onActivityResult(int requestCode, int resultCode, Intent data) {
+			switch(requestCode) {
+				case ACTIVITY_CHOOSE_FILE:
+					if (resultCode == Activity.RESULT_OK){
+						smije_objaviti=false;
+						Uri uri = data.getData();
+						Bitmap slika = null;
+						try {
+							slika = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+							float velicina = (float) slika.getByteCount()/(1024*1024);
+							if(velicina<40){
+								Toast.makeText(getActivity(), "Picture selected. Starting upload...", Toast.LENGTH_SHORT).show();
+								//new Upload().execute(user_id,slika,null,this);   //odkomentirati kad sve bude na serveru rijeseno
+							}
+							else
+								Toast.makeText(getActivity(), "Picture is too large", Toast.LENGTH_SHORT).show();
+						} catch (FileNotFoundException e) {
+							Toast.makeText(getActivity(), "File name error. Try using gallery for selection", Toast.LENGTH_SHORT).show();
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					break;
+				default:
+					Toast.makeText(getActivity(), "File error", Toast.LENGTH_SHORT).show();
+			}
+		}
+
+		@Override
+		public void prenesi_upload(String url_slike, String error) {
+			Toast.makeText(getActivity(), "Upload finished", Toast.LENGTH_SHORT).show();
+			smije_objaviti=true;
+			if(error!=null)
+				Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+			slika_url=url_slike;
+		}
+
+		@Override
+		public void prenesi_publish(String postId, String error) {
+			if(error!=null)
+				Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+			else{
+				data.clear();
+				trenutacni_index=1;
+				new Newsfeed().execute(user_id, trenutacni_index, (Integer) Newsfeed.WALL, this, getActivity());
+			}
+		}
+
+		@Override
+		public void prenesi_like(String action, String error, View v) {
+			if(error!=null)
+				Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+			else{
+				RelativeLayout roditelj = (RelativeLayout) v.getParent();
+				TextView likeovi = null;
+				int trenutacni_broj=0;
+				int djeca = roditelj.getChildCount();
+				for(int i=0;i<djeca;i++){
+					if(roditelj.getChildAt(i).getId()==R.id.news_item_likesnum){
+						likeovi = (TextView) roditelj.getChildAt(i);
+						trenutacni_broj = Integer.parseInt(likeovi.getText().toString().split("\\ ")[1]);
+						break;
+					}
+				}
+				if(action.equals("like")){
+					((Button) v).setText("   Liked    ");
+					likeovi.setText("Likes: "+(trenutacni_broj+1));
+				}
+				else{
+					((Button) v).setText("    Like    ");
+					likeovi.setText("Likes: "+(trenutacni_broj-1));
+				}
+			}
 		}
 }
