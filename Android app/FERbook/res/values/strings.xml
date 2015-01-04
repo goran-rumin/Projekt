@@ -18,5 +18,7 @@
     <string name="search_hint">Enter friend\'s name or \&quot;All\&quot;</string>
      <drawable name="not_pressed">#444444</drawable>
 	<drawable name="pressed">#303030</drawable>
+	<drawable name="boja">#B22222</drawable>
+	<drawable name="boja2">#AAFF2929</drawable>
 
 </resources>

@@ -66,6 +66,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="28dp"
         android:text="TextView"
+        android:textColor="@color/glavna_boja"
         android:textSize="10sp" />
 
     <Button
@@ -139,7 +140,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/news_item_like"
         android:layout_below="@+id/news_item_like"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp"
+        android:textSize="1sp" />
 
 </RelativeLayout>
 </LinearLayout>

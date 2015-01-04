@@ -248,18 +248,24 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi, OnScroll
 				int trenutacni_broj=0;
 				int djeca = roditelj.getChildCount();
 				for(int i=0;i<djeca;i++){
-					if(roditelj.getChildAt(i).getId()==R.id.news_item_likesnum){
+					if(roditelj.getChildAt(i).getId()==R.id.news_item_likesnum || roditelj.getChildAt(i).getId()==R.id.comment_likes){
 						likeovi = (TextView) roditelj.getChildAt(i);
 						trenutacni_broj = Integer.parseInt(likeovi.getText().toString().split("\\ ")[1]);
 						break;
 					}
 				}
 				if(action.equals("like")){
-					((Button) v).setText("   Liked    ");
+					if(((Button) v).getId()==R.id.comment_likes)
+						((Button) v).setText("Liked");
+					else
+						((Button) v).setText("   Liked    ");
 					likeovi.setText("Likes: "+(trenutacni_broj+1));
 				}
 				else{
-					((Button) v).setText("    Like    ");
+					if(((Button) v).getId()==R.id.comment_likes)
+						((Button) v).setText("Like");
+					else
+						((Button) v).setText("    Like    ");
 					likeovi.setText("Likes: "+(trenutacni_broj-1));
 				}
 			}

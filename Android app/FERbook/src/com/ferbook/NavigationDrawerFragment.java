@@ -106,8 +106,8 @@ public class NavigationDrawerFragment extends Fragment {
 					}
 				});
 		mDrawerListView.setAdapter(new ArrayAdapter<String>(getActionBar()
-				.getThemedContext(),
-				android.R.layout.simple_list_item_activated_1,
+				.getThemedContext(), //simple_list_item_activated_1
+				R.layout.navditem,
 				android.R.id.text1, getActivity().getResources().getStringArray(R.array.navigacijska_ladica)));
 		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 		return mDrawerListView;

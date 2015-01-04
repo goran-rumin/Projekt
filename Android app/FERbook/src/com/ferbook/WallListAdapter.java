@@ -6,6 +6,8 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -58,35 +60,38 @@ import android.widget.Toast;
 			timestamp.setText((String)redak.get("news_item_timestamp"));
 			
 			ime_korisnika.setTag((String)redak.get("senderId"));
+			profilna.setTag((String)redak.get("senderId"));
 			ime_korisnika2.setTag((String)redak.get("recipientId"));
+			profilna2.setTag((String)redak.get("recipientId"));
 			broj_likeova.setTag(redak.get("news_item_pid"));
 			comment.setTag(redak.get("news_item_pid"));
 			
 			if((Boolean)redak.get("news_item_like").equals(true))
 				like.setText("   Liked    ");
 			like.setTag(redak.get("news_item_pid"));
-			ime_korisnika.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Toast.makeText(context, "Kliknuto "+v.getTag(), Toast.LENGTH_SHORT).show();
-				}
-			});
+			ime_korisnika.setOnClickListener(listener);
+			profilna.setOnClickListener(listener);
+			ime_korisnika2.setOnClickListener(listener);
+			profilna2.setOnClickListener(listener);
+			
 			broj_likeova.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					CommentDialog dialog = new CommentDialog(context,CommentDialog.TYPE_SHOW_LIKES, (String) v.getTag());
+					CommentDialog dialog = new CommentDialog(context,CommentDialog.TYPE_SHOW_LIKES, (String) v.getTag(), host);
 					dialog.show();
 					Toast.makeText(context, "Kliknuto "+v.getTag(), Toast.LENGTH_SHORT).show();
 				}
 			});
+			
 			comment.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					CommentDialog dialog = new CommentDialog(context,CommentDialog.TYPE_COMMENT, (String) v.getTag());
+					CommentDialog dialog = new CommentDialog(context,CommentDialog.TYPE_COMMENT, (String) v.getTag(), host);
 					dialog.show();
 					Toast.makeText(context, "Kliknuto "+v.getTag(), Toast.LENGTH_SHORT).show();
 				}
 			});
+			
 			like.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -111,4 +116,13 @@ import android.widget.Toast;
 		public long getItemId(int arg0) {
 			return arg0;
 		}
+		View.OnClickListener listener = new View.OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				Intent prebaci = new Intent(((Activity) context).getBaseContext(), MainActivity.class);
+				prebaci.putExtra("id_za_profil", (String) v.getTag());
+				prebaci.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				((Activity) context).startActivity(prebaci);
+			}
+		};
 	} 

@@ -12,9 +12,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ferbook"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/Theme.Ferbook" >
         <meta-data android:name="android.app.default_searchable" android:value=".SearchActivity" />
         <activity
             android:name="MainActivity" android:noHistory="false">
