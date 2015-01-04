@@ -98,7 +98,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	ServiceHandler sh = new ServiceHandler();    	
     	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, params);
     	
-    	Log.e("JSONERROR", ""+jsonStr);
+    	//Log.e("JSONERROR", ""+jsonStr);
     	
     	JSONObject data=new JSONObject();
     	JSONArray imena=new JSONArray();
@@ -129,7 +129,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     			
     			
     			
-    			Log.e("JSONIMENA", imena.toString());
+    			//Log.e("JSONIMENA", imena.toString());
     			
     			data.get(imena.getString(0)); //ako je data prazan ide se na catch i parsiranje errora
     			

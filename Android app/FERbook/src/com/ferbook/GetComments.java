@@ -3,6 +3,7 @@ package com.ferbook;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -13,6 +14,7 @@ import org.json.JSONObject;
 
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class GetComments extends AsyncTask<Object, Void, Void> {
 
@@ -51,18 +53,47 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     	ServiceHandler sh = new ServiceHandler();    	
     	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, params);
     	
-    	JSONArray data=new JSONArray();
+    	Log.e("GETCjson", jsonStr);
+    	
+    	JSONObject data=new JSONObject();
+    	JSONArray imena=new JSONArray();
     	
     	if(jsonStr != null){
     		try{
     			JSONObject jsonObj = new JSONObject(jsonStr);
-    			data = jsonObj.getJSONArray("data");
-    			data.get(0); //ako je data prazan ide se na catch i parsiranje errora
+    			data = jsonObj.getJSONObject("data");
+    			
+    			imena=data.names(); //JSONArray
+    	    	
+    			int i;
+    			List<String> jsonValues = new ArrayList<String>();
+    			
+    			for (i = 0; i < imena.length(); i++)		//trebam od starijih prema novijima, to ima logike za komentare, znaci od manjih prema vecim idjevima
+    			   jsonValues.add(imena.getString(i));
+    			
+    			Collections.sort(jsonValues);				//ovo je ascending, tj od manjih prema vecima
+    			//Collections.reverse(jsonValues);
+    			
+    			JSONArray sortedJsonArray = new JSONArray();
+    			
+    			for(i=0;i<jsonValues.size();i++)
+    				sortedJsonArray.put(jsonValues.get(i));
+    				
+    			imena=sortedJsonArray;				//konacno
+    			
+    			
+    			
+    			//Log.e("JSONIMENA", imena.toString());
+    			
+    			data.get(imena.getString(0)); //ako je data prazan ide se na catch i parsiranje errora
+    			
+    			
+    			
     		}catch(JSONException e){
     			//if the mapping doesn't exist, tj, ako je data prazan pa data ne postoji:
     			e.printStackTrace();
     			try{
-    				error_info="No messages";		//ako je data s razlogom prazan
+    				error_info="No comments";		//ako je data s razlogom prazan
     				JSONObject jsonObj = new JSONObject(jsonStr);
     				JSONObject error = jsonObj.getJSONObject("error");
     				error_info=error.getString("errInfo");
@@ -80,7 +111,7 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     			
     			while(true){
     				try {
-						komentar = data.getJSONObject(br_komentara);
+						komentar = data.getJSONObject(imena.getString(br_komentara));
 						
 						postId=komentar.getString("postId");
 						message=komentar.getString("message");
