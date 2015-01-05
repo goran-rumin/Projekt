@@ -1,27 +1,25 @@
 package com.ferbook;
 
-import android.app.Activity;
-
 import android.app.ActionBar;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements
@@ -182,8 +180,19 @@ public class MainActivity extends Activity implements
 			prebaci.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(prebaci);*/
 		}
-		else
-			super.onBackPressed();
+		else {
+			new AlertDialog.Builder(this)
+	        .setTitle("Izlaz?")
+	        .setMessage("Jeste li sigurni da zelite izaci?")
+	        .setNegativeButton("Odustani", null)
+	        .setPositiveButton("Da", new OnClickListener() {
+
+	            public void onClick(DialogInterface arg0, int arg1) {
+	                MainActivity.super.onBackPressed();
+	            }
+	        }).create().show();
+		}
+			
 	}
 
 	/**
