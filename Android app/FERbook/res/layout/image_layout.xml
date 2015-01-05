@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Ovo je layout za item koji ce biti u fragment_gallery.
+	 Sluzi za prikaz itema koji predstavlja jednu sliku u galeriji
+	  -->
+
+<FrameLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <!-- Da samo koristili ImageView onda bi tu umjesto tog retka
+    	pisali smo ImageView -->
+    <com.ferbook.SquareImageView
+        android:id="@+id/picture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+     />
+  
+</FrameLayout>

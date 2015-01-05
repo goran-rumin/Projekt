@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- Ovaj layout koristi se za fragment_galleries i activity_gallery -->
+
 <FrameLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-	<GridView 
+
+	<GridView
 	    android:id="@+id/gridview"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-	    android:columnWidth="150dp"
-	    android:numColumns="2"
-	    android:verticalSpacing="0dp"
-	    android:horizontalSpacing="0dp"
-	    android:stretchMode="columnWidth"
 	    android:gravity="center"
-	/>
+	    android:horizontalSpacing="0dp"
+	    android:numColumns="2"
+	    android:stretchMode="columnWidth"
+	    android:verticalSpacing="0dp"/>
+
+	<TextView
+	    android:id="@+id/noAlbumMessage"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="Ne postoji niti jedan album."
+	    android:textAppearance="?android:attr/textAppearanceMedium"
+	    android:layout_gravity="center"
+	    android:visibility="invisible" />
+
 </FrameLayout>

@@ -97,7 +97,7 @@ public class MainActivity extends Activity implements
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.container,
-					Gallery_fragment.newInstance(position + 1)).commit();
+					fragment_galleries.newInstance(position + 1)).commit();
 			break;
 		default:
 			fragmentManager
