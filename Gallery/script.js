@@ -39,6 +39,23 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
             })
     };
 
+    $scope.addNewAlbum = function(name) {
+        var ime = name;
+        $http({
+            method: 'POST',
+            url: '../ferbook/user/addGallery/inbox.php',
+            data: $.param({'userId' : '4', 'name' : ime}),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            cache: $templateCache
+        })
+            .success(function(response) {
+                $scope.albumList.push(ime);
+                console.log(ime);
+                console.log(name);
+                console.log(response);
+            })
+    };
+
     $scope._Index = 0;
 
     $scope.isActive = function (index) {

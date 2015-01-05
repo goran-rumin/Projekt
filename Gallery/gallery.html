@@ -49,6 +49,13 @@
 
             <button ng-click="showImages(myAlbum.albumId)">Click</button>
 
+        <form novalidate ng-controller="albumCtrl" name="newAlbum">
+            Write new album title: <input type="text" ng-model="name" />
+            <input type="submit" ng-click="addNewAlbum(name)" value="Save" />
+        </form>
+
+        <!--<button ng-click="addNewAlbum(name)">Save</button>-->
+
         <div>
             <ul class="nav">
                 <li ng-repeat="a in images" ng-class="{'active':isActive($index)}">
