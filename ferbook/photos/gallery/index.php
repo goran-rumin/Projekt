@@ -28,6 +28,7 @@ $album = $db->prepare("SELECT idImage FROM albumhasimage WHERE idAlbum = ? ORDER
 $album->bindParam(1, $albumId);
 $album->setFetchMode(PDO::FETCH_OBJ);
 $album->execute();
+$allImages = array();
 foreach ($album as $imageId) {
     $image = $db->prepare("SELECT url FROM post WHERE id = ?");
     $image->bindParam(1, $imageId->idImage);
