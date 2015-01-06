@@ -87,7 +87,7 @@ if($query != "") {
     $inLastnameField = "";
     for ($i = 1; $i <= $dataNmbr; $i++) {
         if ($i > 1) $inLastnameField .= " OR ";
-        $inLastnameField .= "LOWER(name) LIKE ? ";
+        $inLastnameField .= "LOWER(last_name) LIKE ? ";
     }
 
     if ($userExists) {

@@ -12,15 +12,15 @@ include_once "../../classes/Crypter.php";
 $response = array("data"=>array(), "error" => array());
 
 // Fetch the data
-$username = $_POST['username'];
+$userId = $_POST['userId'];
 
 
 
 // Check the input information
 
 $db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";", SQL_USERNAME, SQL_PASSWORD);
-$checkUser = $db->prepare("SELECT username FROM user WHERE username = ?");
-$checkUser->bindParam(1,$username);
+$checkUser = $db->prepare("SELECT * FROM user WHERE id = ?");
+$checkUser->bindParam(1,$userId);
 $checkUser->setFetchMode(PDO::FETCH_OBJ);
 $checkUser->execute();
 
@@ -56,12 +56,12 @@ if(isset($_POST["name"]) && isset($_POST["lastname"]) && isset($_POST["password"
     $query = $db->prepare("
         UPDATE user
         SET pass = ?, name = ?, last_name = ?
-        WHERE username = ?
+        WHERE id = ?
         ");
     $query->bindParam(1,$password);
     $query->bindParam(2,$name);
     $query->bindParam(3,$lastname);
-    $query->bindParam(4,$username);
+    $query->bindParam(4,$userId);
 
     $query->execute();
 
@@ -72,11 +72,11 @@ if(isset($_POST["name"]) && isset($_POST["lastname"]) && isset($_POST["password"
     $query = $db->prepare("
         UPDATE user
         SET name = ?, last_name = ?
-        WHERE username = ?
+        WHERE id = ?
         ");
     $query->bindParam(1,$name);
     $query->bindParam(2,$lastname);
-    $query->bindParam(3,$username);
+    $query->bindParam(3,$userId);
 
     $query->execute();
 } else if(isset($_POST["password"])){
@@ -95,10 +95,10 @@ if(isset($_POST["name"]) && isset($_POST["lastname"]) && isset($_POST["password"
     $query = $db->prepare("
         UPDATE user
         SET pass = ?
-        WHERE username = ?
+        WHERE id = ?
         ");
     $query->bindParam(1,$password);
-    $query->bindParam(2,$username);
+    $query->bindParam(2,$userId);
 
     $query->execute();
 } else {
@@ -115,10 +115,10 @@ if(isset($_POST['pictureUrl'])) {
     $query = $db->prepare("
         UPDATE user
         SET picture = ?
-        WHERE username = ?
+        WHERE id = ?
     ");
     $query->bindParam(1, $_POST["pictureUrl"]);
-    $query->bindParam(2, $username);
+    $query->bindParam(2, $userId);
     $query->execute();
 }
 

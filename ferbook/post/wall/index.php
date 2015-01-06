@@ -88,17 +88,12 @@ $query = $db->prepare("
     LEFT JOIN (SELECT * FROM `like` WHERE user = ?) as `like`
     ON post.id = `like`.postId
     WHERE post.parent IS NULL AND (
-    post.recipient IN (
-        SELECT sender as id FROM `friends` WHERE recipient = ?  AND flag = 1
-		UNION
-		SELECT recipient as id FROM friends WHERE sender = ?  AND flag = 1
-    ) )
-    ORDER BY TIMESTAMP
+    post.recipient = ? )
+    ORDER BY TIMESTAMP DESC
     LIMIT ".$offset.",20
 ");
 $query->bindParam(1, $userId);
 $query->bindParam(2, $userId);
-$query->bindParam(3, $userId);
 $query->setFetchMode(PDO::FETCH_OBJ);
 $query->execute();
 

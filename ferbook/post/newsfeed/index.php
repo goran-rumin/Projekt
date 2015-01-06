@@ -97,7 +97,7 @@ $query = $db->prepare("
 		UNION
 		SELECT recipient as id FROM friends WHERE sender = ?  AND flag = 1
     ) )
-    ORDER BY TIMESTAMP
+    ORDER BY TIMESTAMP DESC
     LIMIT ".$offset.",20
 ");
 $query->bindParam(1, $userId);
