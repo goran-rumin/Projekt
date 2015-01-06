@@ -22,6 +22,9 @@ if( !isset($_POST['albumId'])) {
     die();
 };
 // Fetch the data
+if( isset($_POST['userId'])) {
+    $userId = $_POST['userId'];
+} else $userId = 0;
 $albumId = $_POST['albumId'];
 $db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";", SQL_USERNAME, SQL_PASSWORD);
 $album = $db->prepare("SELECT idImage FROM albumhasimage WHERE idAlbum = ? ORDER BY idImage DESC");
@@ -30,15 +33,30 @@ $album->setFetchMode(PDO::FETCH_OBJ);
 $album->execute();
 $allImages = array();
 foreach ($album as $imageId) {
-    $image = $db->prepare("SELECT url FROM post WHERE id = ?");
-    $image->bindParam(1, $imageId->idImage);
-    $image->setFetchMode(PDO::FETCH_OBJ);
-    $image->execute();
-    $imagedata = array (
-        "postId" => $imageId->idImage,
-        "url" => $image->fetch()->url
-    );
-    $allImages[] = $imagedata;
+    if ( $userId > 0 ) {
+        $image = $db->prepare("SELECT url FROM post WHERE id = ? AND sender = ?");
+        $image->bindParam(1, $imageId->idImage);
+        $image->bindParam(2, $userId);
+        $image->setFetchMode(PDO::FETCH_OBJ);
+        $image->execute();
+        foreach ( $image as $userimage ) {
+            $imagedata = array(
+                "postId" => $imageId->idImage,
+                "url" => $userimage->url
+            );
+            $allImages[] = $imagedata;
+        }
+    } else {
+        $image = $db->prepare("SELECT url FROM post WHERE id = ?");
+        $image->bindParam(1, $imageId->idImage);
+        $image->setFetchMode(PDO::FETCH_OBJ);
+        $image->execute();
+        $imagedata = array(
+            "postId" => $imageId->idImage,
+            "url" => $image->fetch()->url
+        );
+        $allImages[] = $imagedata;
+    }
 }
 
 $response["data"] = $allImages;
