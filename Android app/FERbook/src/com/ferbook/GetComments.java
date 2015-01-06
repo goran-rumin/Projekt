@@ -83,7 +83,7 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     			
     			
     			
-    			//Log.e("JSONIMENA", imena.toString());
+    			Log.e("JSONIMENAcomments", imena.toString());
     			
     			data.get(imena.getString(0)); //ako je data prazan ide se na catch i parsiranje errora
     			
@@ -113,7 +113,7 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     				try {
 						komentar = data.getJSONObject(imena.getString(br_komentara));
 						
-						postId=komentar.getString("postId");
+						postId=komentar.getString("id");
 						message=komentar.getString("message");
 						url_u_poruci=komentar.getString("url");
 						timestamp=komentar.getString("timestamp");

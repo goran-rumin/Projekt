@@ -246,7 +246,17 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 
     
     private static Drawable vrati_sliku(String url) {
+    	Log.e("URLprijeParsinga", url);
+    	if(url==null){
+    		Drawable d = ak.getResources().getDrawable( R.drawable.ferbook );
+	    	return d;
+    	}	
+    	
 	    try {
+	    	url = url.substring(0, url.length()-4);
+    		url= url + "thm.jpg";
+	    	
+    		Log.e("URLposlijeParsinga", url);
 	        InputStream is = (InputStream) new URL(url).getContent();
 	        Drawable d = Drawable.createFromStream(is, "src name");
 	        return d;
