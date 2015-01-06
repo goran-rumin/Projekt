@@ -30,7 +30,7 @@ $data = base64_decode($_POST['url']);
 $im = imagecreatefromstring($data);
 $width = imagesx( $im );
 $height = imagesy( $im );
-$photoname = time();
+$photoname = $userId . time();
 $thumbname = $photoname."thm";
 imagejpeg($im, "data/".$photoname.".jpeg");
 $tmp_img = imagecreatetruecolor( 75, 75 );
