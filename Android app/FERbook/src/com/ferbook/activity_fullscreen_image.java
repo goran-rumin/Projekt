@@ -27,7 +27,7 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
 	private ImageView imageView;
 	private Button mButtonLike;
 	private String postId;
-	private Boolean mIsLiked;
+	private String mUserId;
 	private int mNumberOfLikes;
 	
     @Override
@@ -39,13 +39,11 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
         imageView = (ImageView)findViewById(R.id.imgDisplay); 
         mButtonLike = (Button)findViewById(R.id.btnLike);
         
-        
         postId =  (String)getIntent().getStringExtra(EXTRA_POST_ID);
+        mUserId = Vrati_id.vrati(this);
         
-        
-        //new Image().execute(postId);
-        //new Like().execute(Vrati_id.vrati(this), postId, this, R.layout.activity_fullscreenpicture); 
-        //new GetLikes().execute(postId, this);
+        new Image().execute(postId); //prikazi sliku ili ispisi pogresku
+        new GetLikes().execute(postId, this); //dohvati broj lajkova i postavi tekst u buttonu
         
         /*
          * Za simulaciju.
@@ -66,7 +64,7 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
 		mButtonLike.setOnClickListener(new View.OnClickListener() {		
 			@Override
 			public void onClick(View v) {
-				//Dodaj sto treba dodati
+				new Like().execute(mUserId, postId, getCallingActivity(), R.layout.activity_fullscreenpicture);
 			}
 		});
 
@@ -82,16 +80,19 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
     	}
     }
     
-
-    /*
-     * GetLikes
-     * Koristim za dohvacanje broja likeova
-     * */
     @Override
     public void prenesi_getlikes(List<String> likeIds, List<String> timestamps, List<String> userIds, 
     		List<String> names, List<String> lastNames, List<Drawable> pictures, List<String> usernames, List<String> emails, int broj_likeova, String error) {
     	if (error == null) {
+    		
     		mNumberOfLikes = broj_likeova;
+    		
+    		//Provjera za pocetno postavljanje teksta u buttonu
+    		if (likeIds.contains(mUserId)){ //ako je korisnik prije lajkao
+    			mButtonLike.setText("Liked (" + mNumberOfLikes + ")");
+    		} else {	//korisnik jos nije lajkao
+    			mButtonLike.setText("Like (" + mNumberOfLikes + ")");
+    		}
     	} else {
     		Toast.makeText(this, "Greska kod likeova1", Toast.LENGTH_SHORT).show();
     		mButtonLike.setText("Like (" + "-1" + ")");
@@ -99,20 +100,19 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
     	
     }
     
-    /*
-     * Like
-     * Provjera je li korisnik lajkao
-     * */
     @Override
     public void prenesi_like(String action, String error, View v) {
-    	if (error == null) {
-    		if (action.equals("like")){
-    			mButtonLike.setText("Liked (" + mNumberOfLikes + 1 + ")");
+    	if (error == null) { //ako nema pogreske
+    		if (action.equals("like")){ //korisnik je lajkao
+    			mNumberOfLikes = mNumberOfLikes + 1;
+    			mButtonLike.setText("Liked (" + mNumberOfLikes + ")");
     		} else {
+    			mNumberOfLikes = mNumberOfLikes - 1;
     			mButtonLike.setText("Like (" + mNumberOfLikes + ")");
     		}
     	} else {
     		Toast.makeText(this, "Greska kod likeova2", Toast.LENGTH_SHORT).show();
+    		mButtonLike.setText("Like (" + "-1" + ")");
     	}
     }
 }
