@@ -14,6 +14,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -195,28 +196,59 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi, OnScroll
 					if (resultCode == Activity.RESULT_OK){
 						smije_objaviti=false;
 						Uri uri = data.getData();
+						String put = "";
 						Bitmap slika = null;
 						try {
-							slika = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-							float velicina = (float) slika.getByteCount()/(1024*1024);
-							if(velicina<40){
-								Toast.makeText(getActivity(), "Picture selected. Starting upload...", Toast.LENGTH_SHORT).show();
-								//new Upload().execute(user_id,slika,null,this);   //odkomentirati kad sve bude na serveru rijeseno
+							if(!uri.getPath().endsWith(".jpg") && !uri.getPath().endsWith(".jpeg")){
+								put = getRealPathFromURI(uri);
 							}
-							else
+							if(!put.endsWith(".jpg") && !put.endsWith(".jpeg")){
+								Toast.makeText(getActivity(), "Supported format is JPG", Toast.LENGTH_SHORT).show();
+								smije_objaviti=true;
+								break;
+							}
+							File file = new File(put);
+							float velicina = file.length();
+							if(velicina<1024*2014){
+								slika = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+								Toast.makeText(getActivity(), "Picture selected. Starting upload...", Toast.LENGTH_SHORT).show();
+								new Upload().execute(Vrati_id.vrati(getActivity()),slika,null,this);   //odkomentirati kad sve bude na serveru rijeseno
+							}
+							else{
 								Toast.makeText(getActivity(), "Picture is too large", Toast.LENGTH_SHORT).show();
+								smije_objaviti=true;
+							}
 						} catch (FileNotFoundException e) {
 							Toast.makeText(getActivity(), "File name error. Try using gallery for selection", Toast.LENGTH_SHORT).show();
-							e.printStackTrace();
+							smije_objaviti=true;
 						} catch (IOException e) {
-							e.printStackTrace();
+							Toast.makeText(getActivity(), "Supported format is JPG", Toast.LENGTH_SHORT).show();
+							smije_objaviti=true;
+						} catch (Exception e) {
+							Toast.makeText(getActivity(), "Supported format is JPG", Toast.LENGTH_SHORT).show();
+							smije_objaviti=true;
 						}
 					}
+					
 					break;
 				default:
 					Toast.makeText(getActivity(), "File error", Toast.LENGTH_SHORT).show();
 			}
 		}
+		
+		public String getRealPathFromURI(Uri contentUri) throws Exception{
+
+	        String [] proj={MediaStore.Images.Media.DATA};
+	        Cursor cursor = getActivity().getContentResolver().query( contentUri,
+	                        proj,
+	                        null,   
+	                        null,    
+	                        null);
+	        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+	        cursor.moveToFirst();
+
+	        return cursor.getString(column_index);
+	}
 
 		@Override
 		public void prenesi_upload(String url_slike, String error) {

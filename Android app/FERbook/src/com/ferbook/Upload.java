@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Base64;
+import android.util.Log;
 
 public class Upload extends AsyncTask<Object, Void, String> {
 	private prenesi sucelje;
@@ -40,7 +41,6 @@ public class Upload extends AsyncTask<Object, Void, String> {
 		ServiceHandler sh = new ServiceHandler();
     	
     	String jsonStr =sh.makeServiceCall(url,  ServiceHandler.POST, params);
-    	
     	
     	if(jsonStr != null){
     		try{

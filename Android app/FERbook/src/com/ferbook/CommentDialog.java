@@ -96,16 +96,9 @@ public class CommentDialog extends Dialog implements GetComments.prenesi, GetLik
 			redak.put("comment",messages.get(i));
 			redak.put("name",names.get(i)+" "+lastnames.get(i));
 			redak.put("timestamp",timestamps.get(i));
+			redak.put("likes","Likes: "+0);
 			data.add(redak);
 		}
-		HashMap<String,Object> redak = new HashMap<String,Object>();
-		redak.put("post_id", "2");
-		redak.put("picture",kontekst.getResources().getDrawable(R.drawable.ferbook));
-		redak.put("comment","proba aaaaaaaaaa aaaaaaaa fhfddf gdfg fg g fgf gf gf gf gf gfg f fffffffffffffffffff fff ff f f f f f f f f ffffffffff ffff ff ffdafdf f ffd fd dfd fd fddfdf");
-		redak.put("name","dugodddddddddddddd imeeeeeeeee");
-		redak.put("timestamp","23-23-2345 23:23:23");
-		redak.put("likes","Likes: 0");
-		data.add(redak);
 		adapter.notifyDataSetChanged();
 	}
 	
@@ -193,19 +186,12 @@ public class CommentDialog extends Dialog implements GetComments.prenesi, GetLik
 			List<String> emails, int broj_likeova, String error) {
 		if(error!=null)
 			Toast.makeText(kontekst, error, Toast.LENGTH_SHORT).show();
-		else
-			naslov.setVisibility(View.GONE);
 		for(int i=0;i<likeIds.size();i++){
 			HashMap<String,Object> redak = new HashMap<String,Object>();
 			redak.put("slika",pictures.get(i));
 			redak.put("ime",names.get(i)+" "+lastNames.get(i));
 			data.add(redak);
 		}
-		HashMap<String,Object> redak = new HashMap<String,Object>();
-		redak.put("slika",kontekst.getResources().getDrawable(R.drawable.ic_launcher));
-		redak.put("ime","dugodddddddddddddd imeeeeeeeee");
-		data.add(redak);
-		Log.e("slika",""+redak.get("slika"));
 		if(data.isEmpty()){
 			TextView tv1 = new TextView(kontekst);
 			tv1.setGravity(Gravity.CENTER_HORIZONTAL);
