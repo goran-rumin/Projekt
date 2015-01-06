@@ -1,20 +1,17 @@
 package com.ferbook;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v13.app.FragmentTabHost;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 //import android.support.v4.app.Fragment;
-import android.widget.Toast;
 
 public class ProfileFragment extends Fragment{
 
@@ -23,6 +20,7 @@ public class ProfileFragment extends Fragment{
 		private FragmentTabHost host;
 		static String user_id;
 		public static ProfileFragment newInstance(int sectionNumber, String user) {
+			Log.d("denis", "aa");
 			ProfileFragment fragment = new ProfileFragment();
 			Bundle args = new Bundle();
 			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
