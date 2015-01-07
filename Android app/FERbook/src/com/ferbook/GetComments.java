@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -34,7 +35,7 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
 	List<Drawable> pictures=new ArrayList<Drawable>();
 	List<String> usernames=new ArrayList<String>();
 	
-	
+	static Activity ak;
 	private prenesi sucelje;
 	//Activity kontekst;
 	private static String url = "http://vdl.hr/ferbook/post/getComments/index.php";
@@ -44,6 +45,7 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     	//String postId=(String) arg0[0];
 
     	sucelje = (prenesi) arg0[1];
+    	ak= (MainActivity) arg0[1];
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
@@ -166,13 +168,24 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     }
 
     
-    public static Drawable vrati_sliku(String url) {
+    private static Drawable vrati_sliku(String url) {
+    	Log.e("URLprijeParsinga", url);
+    	if(url==null){
+    		Drawable d = ak.getResources().getDrawable( R.drawable.ferbook );
+	    	return d;
+    	}	
+    	
 	    try {
+	    	url = url.substring(0, url.length()-4);
+    		url= url + "thm.jpg";
+	    	
+    		Log.e("URLposlijeParsinga", url);
 	        InputStream is = (InputStream) new URL(url).getContent();
 	        Drawable d = Drawable.createFromStream(is, "src name");
 	        return d;
 	    } catch (Exception e) {
-	        return null;
+	    	Drawable d = ak.getResources().getDrawable( R.drawable.ferbook );
+	    	return d;
 	    }
 	}
 

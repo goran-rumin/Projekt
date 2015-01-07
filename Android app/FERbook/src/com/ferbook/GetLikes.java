@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -24,7 +25,7 @@ public class GetLikes extends AsyncTask<Object, Void, Void> {//{ "data" : [{"lik
 	private int br_likeova=0;
 	
 		
-	List<String> likeIds = new ArrayList<String>();
+	//List<String> likeIds = new ArrayList<String>();
 	List<String> timestamps = new ArrayList<String>();
 	List<String> userIds = new ArrayList<String>();
 	List<String> names = new ArrayList<String>();
@@ -33,7 +34,7 @@ public class GetLikes extends AsyncTask<Object, Void, Void> {//{ "data" : [{"lik
 	List<String> usernames=new ArrayList<String>();
 	List<String> emails=new ArrayList<String>();
 	
-	
+	static Activity ak;
 	private prenesi sucelje;
 	//Activity kontekst;
 	private static String url = "http://vdl.hr/ferbook/post/getLikes/index.php";
@@ -43,6 +44,7 @@ public class GetLikes extends AsyncTask<Object, Void, Void> {//{ "data" : [{"lik
     	//String postId=(String) arg0[0];
 
     	sucelje = (prenesi) arg0[1];
+    	ak= (MainActivity) arg0[1];
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
@@ -112,7 +114,7 @@ public class GetLikes extends AsyncTask<Object, Void, Void> {//{ "data" : [{"lik
     				try {
 						like = data.getJSONObject(imena.getString(br_likeova));
 						
-						likeId=like.getString("likeId");
+						//likeId=like.getString("likeId");
 						timestamp=like.getString("timestamp");
 						userId=like.getString("userId");
 						name=like.getString("name");
@@ -123,7 +125,7 @@ public class GetLikes extends AsyncTask<Object, Void, Void> {//{ "data" : [{"lik
 						
 						//ako sve ovo gore uspije i ako nejde u catch:
 						
-						likeIds.add(likeId);
+						//likeIds.add(likeId);
 						timestamps.add(timestamp);
 						userIds.add(userId);
 						names.add(name);
@@ -153,24 +155,35 @@ public class GetLikes extends AsyncTask<Object, Void, Void> {//{ "data" : [{"lik
     }
 
     protected void onPostExecute(Void param) {
-        sucelje.prenesi_getlikes(likeIds, timestamps, userIds, names, lastNames, pictures, usernames, emails, br_likeova,error_info);
+        sucelje.prenesi_getlikes(timestamps, userIds, names, lastNames, pictures, usernames, emails, br_likeova,error_info);
     }
     
     
        
     
     public interface prenesi{
-    	void prenesi_getlikes(List<String> likeIds, List<String> timestamps, List<String> userIds, List<String> names, List<String> lastNames, List<Drawable> pictures, List<String> usernames, List<String> emails, int broj_likeova, String error);
+    	void prenesi_getlikes(List<String> timestamps, List<String> userIds, List<String> names, List<String> lastNames, List<Drawable> pictures, List<String> usernames, List<String> emails, int broj_likeova, String error);
     }
 
     
-    public static Drawable vrati_sliku(String url) {
+    private static Drawable vrati_sliku(String url) {
+    	Log.e("URLprijeParsinga", url);
+    	if(url==null){
+    		Drawable d = ak.getResources().getDrawable( R.drawable.ferbook );
+	    	return d;
+    	}	
+    	
 	    try {
+	    	url = url.substring(0, url.length()-4);
+    		url= url + "thm.jpg";
+	    	
+    		Log.e("URLposlijeParsinga", url);
 	        InputStream is = (InputStream) new URL(url).getContent();
 	        Drawable d = Drawable.createFromStream(is, "src name");
 	        return d;
 	    } catch (Exception e) {
-	        return null;
+	    	Drawable d = ak.getResources().getDrawable( R.drawable.ferbook );
+	    	return d;
 	    }
 	}
 

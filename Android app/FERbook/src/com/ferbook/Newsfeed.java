@@ -192,7 +192,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 						texts.add(text);		
 						
 						if(url_u_postu.equals(""))urlovi_u_postu.add(null);
-						else urlovi_u_postu.add(vrati_sliku(url_u_postu));	
+						else urlovi_u_postu.add(Image.vrati_sliku(url_u_postu));	
 						
 						timestamps.add(timestamp);  
 						senderIds.add(senderId);
