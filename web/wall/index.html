@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>FERbook</title>
+
+    <script type="text/javascript" src="../angular/angular.min.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="../css/wallStyle.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/template.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/newsfeedStyle.css"/>
+
+    <script type="text/javascript" src="../script/wall.js"></script>
+    <script type="text/javascript" src="../script/links.js"></script>
+    <script type="text/javascript" src="../script/root.js"></script>
+
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+    <script src="../chat/fancywebsocket.js"></script>
+    <script src="../chat/chat.js" type="text/javascript"></script>
+    <link href="../chat/chat.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+<body ng-app="Wall" ng-controller="wallController" >
+<div id="header" >
+    <div id="top">
+        <div id="logo">
+            <img src="../images/fer_logo3.png"  alt="FERbook" >
+        </div>
+    </div>
+    <div id="topNav">
+        <div id="topNavLinks">
+
+            <div>
+                <a class="topnav" target='_self' id="newsfeedLink"  >NEWSFEED</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class="topnav" target='_self'  id="wallLink" > WALL</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class="topnav" target='_self' id="galleryLink"> GALLERY</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class="topnav" target='_self' id="messagesLink"> MESSAGES</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="belowTop">
+    <div id="page">
+        <div id="userLinks">
+            <div id="title">
+                <span class="titleText" ng-bind="userData.data.name + ' ' + userData.data.lastname"></span>
+            </div>
+            <div id="largeProfilePicture">
+                <img ng-src="{{profilePicture}}">
+            </div>
+            <div class="tabs">
+                <ul class="tabLinks">
+                    <li class="active"><a href="#postsContainer">Wall</a></li>
+                    <li><a href="#userInfoContainer">About</a></li>
+                    <li><a href="#friendsContainer" id="friends">Friends</a></li>
+                    <li><a id="openGal">Gallery</a></li>
+                </ul>
+                <div class="tabContent">
+
+                    <div id="postsContainer" class="tab active">
+                        <div class="userNewPost">
+                            <div class="newPost">
+                                <form id="newPostForm">
+                                    <input type="text" placeholder="What's on your mind..." id="newPostData"/>
+                                </form>
+                                <button class="button" id="postPicButton" ng-click="postPicture()">Post picture</button>
+                                <button class="button" id="submitNewPost" ng-click="newPost()">Send</button>
+                                <p class="errorMsg" id="newPostMsg"></p>
+                            </div>
+
+                        </div>
+                        <div class="loadMore">
+                            <button class="button" id="load" ng-click="loadPosts()">Load more posts</button>
+
+                        </div>
+                    </div>
+
+                    <div id="userInfoContainer" class="tab">
+                        <div class="userDetails">
+                            <div class="detailsContainer">
+                                <span class="textForm">First Name: </span>
+                                <span class="textData" ng-bind="userData.data.name"></span>
+                            </div>
+                            <div class="detailsContainer">
+                                <span class="textForm">Last Name: </span>
+                                <span class="textData" ng-bind="userData.data.lastname"></span>
+                            </div>
+                            <div class="detailsContainer">
+                                <span class="textForm">Username: </span>
+                                <span class="textData" ng-bind="userData.data.username"></span>
+                            </div>
+                            <div class="detailsContainer">
+                                <span class="textForm">email: </span>
+                                <span class="textData" ng-bind="userData.data.email"></span>
+                            </div>
+                        </div>
+                        <div id="editInfo">
+                            <button class="button">Edit user info</button>
+                        </div>
+                    </div>
+
+                    <div id="friendsContainer" class ="tab">
+                        <div class="search">
+                            <form id="searchFriends">
+                                <input type="text" placeholder="Search for friends..." id="searchQuery"/>
+                            </form>
+                            <button class="button"  ng-click="friendsSearch()">Search</button>
+                            <div class="placeholder" id="searchMsg"></div>
+                        </div>
+                        <div class="pending">
+                            <button class="button" id="pending">Friend requests</button>
+                            <div class="placeholder" id="pendingMsg"></div>
+                        </div>
+                        <ul></ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="chat-wrapper" ng-app="chat" ng-controller="chatCtrl">
+    <div class="chat-users">
+        <div class="chatTabHead" onclick="toggleUsersVisibility(this,1)"></div>
+        <div ng-repeat="(index,friend) in friends | filter:friendsFilter | orderBy:'lastname'" ng-click="openConversation(this)" class="userTag">
+            {{ friend.name }} {{ friend.lastname }}
+        </div>
+        <div>
+            <input type="text" ng-model="friendsFilter" placeholder="Quick search">
+        </div>
+    </div>
+    <div ng-repeat="(index, chatTab) in conversations" class="chatTab">
+        <div class="chatTabHead" onclick="toggleVisibility(this,1)">
+            <span ng-click="closeConversation(index)">x</span>
+            {{ getFriendsName(index,2) }}
+        </div>
+        <div class="chatTabBody" ng-class="{'mes{{index}}':true}">
+            <div ng-repeat="message in chatTab" class="message" ng-class="{'me':getClass(message.senderId,'me'), 'other':getClass(message.senderId,'other')}">
+                <div class="sender">
+                    {{ getFriendsName(message.senderId, 1) }}, {{ message.timestamp*1000 | date:'yyyy-MM-dd HH:mm' }}
+                </div>
+                <div class="text">
+                    {{ message.message }}
+                </div>
+            </div>
+        </div>
+        <div class="chatInputHolder">
+            <textarea class="chatInput" ng-keyup="sendMsg($event, chatTab, index)" placeholder="Enter message"></textarea>
+        </div>
+    </div>
+</div>
+</body>
+</html>

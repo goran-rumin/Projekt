@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>FERbook</title>
+
+
+
+    <script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="../script/editinfo.js"></script>
+    <script type="text/javascript" src="../script/links.js"></script>
+    <script type="text/javascript" src="../script/root.js"></script>
+
+    <link rel="stylesheet" href="../css/editinfo.css" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="../css/template.css"/>
+
+
+</head>
+<body >
+<div id="header">
+    <div id="top">
+        <div id="logo">
+            <img src="../images/fer_logo3.png"  alt="FERbook" >
+        </div>
+    </div>
+    <div id="topNav">
+        <div id="topNavLinks">
+
+            <div>
+                <a class="topnav" target='_self' id="newsfeedLink" >NEWSFEED</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class="topnav" target='_self'  id="wallLink"> WALL</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class="topnav" target='_self' id="galleryLink"> GALLERY</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class="topnav" target='_self' id="messagesLink"> MESSAGES</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="belowTop">
+    <div id="page">
+
+        <p id = "disclaimer" class="disclaimer"></p>
+        <p id = "description">Please enter the new details below:</p>
+        <p>Profile picture - will be updated soon:</p><img src="http://www.wiganlatics.co.uk/images/common/bg_player_profile_default_big.png" /><p></p>
+        <span class="btn btn-default" id="upload">Upload Image</span>
+        <p>Name:</p> <input type="text" placeholder="New name" id="name" class="button form-control" ng-model="newAlbum">
+        <p>Last name:</p> <input type="text" placeholder="New last name" id="lastName" class="button form-control" ng-model="newAlbum">
+        <p>Password:</p> <input type="password" placeholder="New password" id="password" class="button form-control"  ng-model="newAlbum">
+        <p>Confirm password:</p> <input type="password" placeholder="Confirm new password" id="passwordConfirm" class="button form-control" ng-model="newAlbum">
+        <p></p>
+        <p id="bottomDisc" class="disclaimer"></p>
+        <span class="btn btn-default" id="submit" onclick="update()">SUBMIT</span>
+
+    </div>
+</div>
+
+
+
+</body>
+</html>

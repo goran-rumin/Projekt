@@ -1,0 +1,80 @@
+html {overflow-y:scroll;
+}
+
+body {
+    min-width: 700px;
+    font-size:14px;
+    color:#404040;
+    background-color: #f1f1f1;
+    margin:0px;
+    text-align: center;
+
+}
+
+body,p,h1,h2,h3,h4,table,td,th,ul,ol,textarea,input {
+    font-family:verdana,helvetica,arial,sans-serif;
+}
+#header {
+    position: fixed;
+    width: 100%;
+    z-index: 30;
+
+}
+#top {
+    text-align: center;
+    width: 1024px;
+    margin: 0 auto;
+    height: 80px;
+    background-color: #8c8c8c;
+    position: relative;
+    z-index: 20;
+    box-shadow: 0px 0px 20px 3px #c9c9c9;
+}
+.logo{
+    text-align: center;
+    position: absolute;
+}
+#topNav {
+
+    width: 1024px;
+    margin:auto;
+    background-color: #790316;
+    color: whitesmoke;
+    position: relative;
+    z-index: 10;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    box-shadow: 0px 0px 20px 3px #c9c9c9;
+    cursor: pointer;
+}
+
+#topNavLinks {
+    text-align: center;
+    height:35px;
+    margin:auto;
+    word-spacing:20px;
+    font-size:15px;
+    padding-top: 15px;
+}
+
+a.topNav:hover{
+    color: #8c8c8c;
+}
+
+#belowTop {
+    position: relative;
+    width:1024px;
+    margin:auto;
+    top: 150px;
+}
+#page {
+    position: relative;
+    z-index: 0;
+    margin-top: 0px;
+    margin-bottom: 30px;
+    padding: 50px 5%;
+    box-shadow: 0px 0px 20px 3px #c9c9c9;
+    background-color: #ffffff;
+    overflow: auto;
+
+}

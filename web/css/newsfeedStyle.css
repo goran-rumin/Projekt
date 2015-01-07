@@ -1,0 +1,241 @@
+.userNewPost{
+    min-height: 200px;
+    overflow: auto;
+}
+
+.newPost {
+    position: relative;
+    width: 60%;
+    float:left;
+    padding: 10px;
+}
+
+.userInfo{
+    float: right;
+    position: relative;
+    max-width: 29%;
+    overflow: auto;
+}
+.textUser {
+    text-align: left;
+}
+
+.newPost, .userInfo {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.newPost, .userInfo,.post, .comments, .likesShow {
+    border: solid #bdbdbd 1px;
+    position: relative;
+    z-index: 30;
+    box-shadow: 0px 0px 10px 2px #c9c9c9;
+    background: #ffffff;
+    margin: 15px;
+}
+
+.postsContainer {
+    text-align: center;
+    padding-top: 25px;
+    min-height: 100px;
+    overflow: auto;
+    margin-bottom: 20px;
+}
+.postsContainer, .userNewPost {
+    position: relative;
+    z-index: 10;
+}
+.post {
+
+    min-width: 40%;
+    max-width: 80%;
+    overflow: auto;
+}
+
+
+#newPostData{
+    width: 90%;
+    margin:10px;
+    padding:5px;
+    min-height: 50px;
+    letter-spacing: normal;
+    word-spacing: normal;
+    display: inline-block;
+    text-align: start;
+    font-size: 16px;
+    overflow: auto;
+
+}
+.button, .buttonComment {
+    padding:5px;
+    margin-bottom: 10px;
+    color: #790316;
+    background: #d9d9d9;
+    border: solid 1px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+button:hover, .buttonComment:hover{
+    background-color: #ffffff;
+}
+
+#postPicButton {
+    float:left;
+    margin-left: 5%;
+}
+
+.postPicture {
+    margin:10px;
+    max-width: 96%;
+    height:auto;
+}
+
+#submitNewPost {
+    margin-right: 5%;
+    float: right;
+}
+
+.profilePic {
+    height: 60px;
+    width: 60px;
+    float: left;
+    margin: 10px;
+    cursor: pointer;
+}
+
+#signout, .textUser {
+    display: block;
+
+    margin:10px;
+}
+
+#userProfilePicture, #userContainer {
+    display: inline-block;
+}
+
+
+.profilePicPost, .infoPoster, .cInfoPoster {
+
+    cursor: pointer;
+}
+.infoPoster{
+    float: left;
+    width: 80%;
+    margin: 10px;
+    text-align: left;
+    font-size: 18px;
+}
+.userInfoPost{
+    margin: 10px;
+    overflow: auto;
+}
+.timestampContainer {
+     margin: 10px;
+    float: left;
+ }
+.timestampContainer, .infoPoster {
+    display: block;
+}
+.content {
+
+    margin: 20px 40px;
+    text-align: left;
+}
+.textPostContainer, .pictureContainer {
+    padding-bottom: 2px;
+    border-bottom: solid 2px #c9c9c9;
+}
+.textPost{
+    margin:5px;
+    font-size: 18px;
+
+}
+
+
+.likeComments {
+    margin-top: 10px;
+    padding-bottom: 5px;
+
+}
+.like{
+    float:right;
+    width: 20%;
+}
+.like1{
+    float:right;
+    width:20%;
+    padding-left: 5px;
+    padding-bottom: 5px;
+}
+.commentsInit {
+    float:right;
+    margin-right: 5px;
+}
+.commentsShow:hover, .likeText:hover {
+    text-decoration: underline;
+}
+
+.commentsShow, .likePic, .likeText {
+    cursor: pointer;
+}
+.like, .commentsInit {
+    display: inline-block;
+}
+.commentsContainer {
+
+    z-index: 10;
+}
+
+.commentsShow, .likesShow, .commentsError {
+    margin-left: 10px;
+}
+
+.comments{
+    margin:5px;
+    overflow-y:auto;
+}
+
+#commentsContainer,.comments {
+    position: relative;
+
+}
+.commentPosterPic {
+    height: 40px;
+    width: 40px;
+    float: left;
+    margin: 5px;
+    cursor: pointer;
+}
+.cInfoPoster{
+    float: left;
+    width: 85%;
+    margin: 5px;
+    text-align: left;
+    font-size: 14px;
+}
+.commentText {
+    font-size: 14px;
+    padding-left: 10%;
+    padding-right: 10%;
+    margin-bottom: 5px;
+}
+.commentPoster {
+    margin:5px;
+    overflow: auto;
+}
+.commentInput {
+    margin:5px;
+    width:88%;
+    padding: 3px;
+}
+.buttonComment {
+    margin:5px;
+
+}
+
+
+
+

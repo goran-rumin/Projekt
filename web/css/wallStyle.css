@@ -1,0 +1,184 @@
+#title {
+    padding: 5px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-left: 40px;
+    width: 60%;
+    border-bottom: solid 2px #5d5d5d;;
+    display: inline-block;
+    float:left;
+}
+#title span {
+    font-size: 32px;
+    font-weight: bold;
+    float:left;
+}
+
+#largeProfilePicture {
+    float:right;
+    margin-right: 40px;
+    display: inline-block;
+
+
+}
+
+#largeProfilePicture img{
+    width:180px;
+    height: 180px;
+    border: solid 10px #efefef;
+    box-shadow: 0px 0px 10px 2px #c9c9c9;
+}
+
+.tabs {
+    width:100%;
+    display:inline-block;
+}
+
+/*----- Tab Links -----*/
+/* Clearfix */
+.tabLinks:after {
+    display:block;
+    clear:both;
+    content:'';
+}
+.tabLinks {
+    width:70%
+}
+.tabLinks li {
+    margin:0px 15px;
+    float:left;
+    list-style:none;
+}
+
+.tabLinks a {
+    padding:9px 30px;
+    display:inline-block;
+    border-radius:3px 3px 0px 0px;
+    background:#ffffff;
+    font-size:16px;
+    font-weight:600;
+    color:#4c4c4c;
+    transition:all linear 0.15s;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.tabLinks a:hover {
+    background:#c9c9c9;
+    text-decoration: underline;
+}
+
+li.active a, li.active a:hover {
+    background:#c9c9c9;
+    color:#790316;
+}
+
+
+.tab {
+    display:none;
+}
+
+.tab.active {
+    display:block;
+}
+
+.userDetails {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.detailsContainer {
+    margin: 20px 50px;
+    height: 50px;
+    border-bottom: solid 2px #c9c9c9;
+}
+
+.textForm {
+    float:left;
+    font-size: 24px;
+}
+
+.textData {
+    float:left;
+    font-size: 24px;
+    margin-left: 10px;
+}
+
+.textForm, .textData {
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+#editInfo {
+    float: left;
+    margin-left: 45px;
+}
+
+/*----Friends-----*/
+
+#friendsContainer {
+    margin:20px;
+}
+
+.friendsList {
+    border: 1px solid #e9eaed;
+    display: inline-block;
+    margin: 0 0 13px 13px;
+    padding: 0 10px 0 0;
+    position: relative;
+    vertical-align: top;
+    width: 350px;
+}
+
+.linkPicture {
+    width: 150px;
+    height:150px;
+    float:left;
+}
+.linkText {
+    display: inline-block;
+    cursor: pointer;
+}
+.linkPicture, .infoAdd {
+    display: inline-block;
+    vertical-align: middle;
+}
+.infoAdd {
+    width: 190px;
+    float: left;
+    margin-top: 60px;
+}
+.nameContainer span{
+    cursor: pointer;
+}
+.infoAdd span {
+    margin-bottom:10px;
+}
+.infoAdd button {
+    margin-top:10px;
+}
+.pending{
+    height: 50px;
+}
+#pending {
+    float:left;
+    margin-left: 40px;
+}
+.placeholder {
+    width:80%;
+    padding: 5px;
+}
+.search{
+    width:50%;
+    margin-left:50%;
+}
+
+#searchFriends input {
+    width: 250px;
+    float: left;
+    padding:5px;
+}
+
+.nameContainer span:hover{
+    text-decoration: underline;
+}
