@@ -1,0 +1,85 @@
+
+#newMessage{
+    box-shadow: 0px 0px 20px 3px #c9c9c9;
+    width: 150px;
+    height: 50px;
+    background-color: #d1d1d1;
+    text-align: center;
+    margin:0px 100px 0px 600px;
+
+}
+button:hover, .messageBox:hover {
+    cursor: pointer;
+    cursor: hand;
+}
+
+#newMessageB{
+    color:firebrick;
+    font-family:courier;
+    fonz-size:larger;
+}
+
+.messageBox{
+    min-width: 100%;
+    align-self: center;
+    border: solid 2px grey;
+    background-color: #ededed;
+    height:90px;
+    display: inline-block;
+}
+
+.seen{
+    width:30px;
+    height: 30px;
+    position: relative;
+    float:right;
+}
+
+.clearFix{
+    clear:both;
+}
+
+.profilePic{
+    min-height: 74px;
+    min-width:74px;
+    margin-top:8px;
+    margin-bottom: 8px;
+    float:left;
+    z-index: 1000;
+    position: relative;
+}
+
+#lastMessage{
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis; /* will make [...] at the end */
+    position: relative;
+    z-index: 10;
+    top:40px;
+    right:125px;
+    text-align: left;
+    font-size: 15px;
+    color: #ec8269;
+
+}
+
+#name{
+    float:left;
+    position: relative;
+    z-index: 100;
+    top:10px;
+    left:10px;
+    font-size: 20px;
+    color:firebrick;
+}
+
+#time{
+    float:right;
+    top:10px;
+    font-size: 20px;
+    color: firebrick;
+    position: relative;
+    z-index: 100;
+    right: 10px;
+}
+
