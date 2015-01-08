@@ -3,7 +3,6 @@
  */
 'use strict';
 
-var root= "../../";
 var gallery = angular.module('gallery', ['ngAnimate', 'ngTouch', 'flow']);
 gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function ($scope, $http, $templateCache) {
     $scope.images = [];
