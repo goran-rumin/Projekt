@@ -39,7 +39,6 @@ function update(userID) {
     var lastName = $("#lastName").val();
     var password = $("#password").val();
     var passwordConfirm = $("#passwordConfirm").val();
-    var root= "../../";
 
     if(password != passwordConfirm) {
         $("#bottomDisc").show();
