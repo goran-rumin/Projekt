@@ -67,8 +67,8 @@
         </div><div class="container slider">
         <img ng-repeat="a in images" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{a.url}}" />
 
-        <a class="arrow prev" href="#" ng-click="showPrev()" ng-hide="images.length <= 0"></a>
-        <a class="arrow next" href="#" ng-click="showNext()" ng-hide="images.length <= 0"></a>
+        <a class="arrow prev" href="" ng-click="showPrev()" ng-hide="images.length <= 0"></a>
+        <a class="arrow next" href="" ng-click="showNext()" ng-hide="images.length <= 0"></a>
     </div>
 </div>
     <div class="footer" flow-init
