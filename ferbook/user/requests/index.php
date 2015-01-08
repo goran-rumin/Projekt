@@ -10,8 +10,9 @@ include_once "../../constants.php";
 include_once "../../classes/Crypter.php";
 
 // Define response array
-$response = array("data"=>[], "error" => []);
+$response = array("data"=>array(), "error" => array());
 
+header("Access-Control-Allow-Origin: *");
 // Check if the data is send in any way
 if( !isset($_POST['userId'])) {
     $response["error"]=array(
@@ -25,7 +26,7 @@ if( !isset($_POST['userId'])) {
 // Fetch the data
 $userId = $_POST['userId'];
 $flag = 0;
-$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";", SQL_USERNAME, SQL_PASSWORD);
+$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 $requests = $db->prepare("SELECT sender FROM friends WHERE recipient = ? AND flag = ?");
 $requests->bindParam(1, $userId);
 $requests->bindParam(2, $flag);
@@ -50,4 +51,4 @@ foreach ( $requests as $request ) {
 
 $allRequests = array_reverse($allRequests);
 $response["data"] = $allRequests;
-echo json_encode($response);
+echo json_encode($response, JSON_UNESCAPED_UNICODE);

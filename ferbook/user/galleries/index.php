@@ -9,6 +9,7 @@
 include_once "../../constants.php";
 include_once "../../classes/Crypter.php";
 
+header("Access-Control-Allow-Origin: *");
 // Define response array
 $response = array("data"=>[], "error" => []);
 
@@ -23,7 +24,7 @@ if( !isset($_POST['userId'])) {
 };
 // Fetch the data
 $userId = $_POST['userId'];
-$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";", SQL_USERNAME, SQL_PASSWORD);
+$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 $albums = $db->prepare("SELECT id, name FROM album WHERE creator = ? ORDER BY id DESC");
 $albums->bindParam(1, $userId);
 $albums->setFetchMode(PDO::FETCH_OBJ);
@@ -59,4 +60,4 @@ foreach ($albums as $album) {
 }
 
 $response["data"] = $allAlbums;
-echo json_encode($response);
+echo json_encode($response, JSON_UNESCAPED_UNICODE);

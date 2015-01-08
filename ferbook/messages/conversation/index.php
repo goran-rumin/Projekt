@@ -9,8 +9,10 @@
 include_once "../../constants.php";
 include_once "../../classes/Crypter.php";
 
+
+header("Access-Control-Allow-Origin: *");
 // Define response array
-$response = array("data"=>[], "error" => []);
+$response = array("data"=>array(), "error" => array());
 
 // Check if the data is send in any way
 if( !isset($_POST['userId1']) || !isset($_POST['userId2'])) {
@@ -24,7 +26,7 @@ if( !isset($_POST['userId1']) || !isset($_POST['userId2'])) {
 // Fetch the data
 $userId1 = $_POST['userId1'];
 $userId2 = $_POST['userId2'];
-$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";", SQL_USERNAME, SQL_PASSWORD);
+$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 $messages = $db->prepare("SELECT COUNT(*) as allMessages FROM messages WHERE sender = ? AND recipient = ? OR sender = ? AND recipient = ?");
 $messages->bindParam(1, $userId1);
 $messages->bindParam(2, $userId2);
@@ -69,4 +71,4 @@ if ( $numberOfMessages > 0 ) {
     }
     $response["data"] = $output;
 }
-echo json_encode($response);
+echo json_encode($response, JSON_UNESCAPED_UNICODE);

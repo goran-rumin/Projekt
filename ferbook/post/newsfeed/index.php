@@ -10,6 +10,8 @@
 include_once "../../constants.php";
 include_once "../../classes/Crypter.php";
 
+
+header("Access-Control-Allow-Origin: *");
 // Define response array
 $response = array("data"=>array(), "error" => array());
 
@@ -31,7 +33,7 @@ $userId = $_POST['userId'];
 $offset = isset($_POST["offset"]) ? ($_POST["offset"] - 1 ) * 20 : 0;
 if(!is_int($offset) || $offset < 0) $offset = 0;
 
-$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";", SQL_USERNAME, SQL_PASSWORD);
+$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 
 
 // Check if user exists
@@ -137,4 +139,4 @@ foreach($query as $post) {
 
 $response["data"] = $posts;
 
-echo json_encode($response);
+echo json_encode($response, JSON_UNESCAPED_UNICODE);

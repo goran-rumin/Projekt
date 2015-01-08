@@ -10,8 +10,9 @@ include_once "../../constants.php";
 include_once "../../classes/Crypter.php";
 
 // Define response array
-$response = array("data"=>[], "error" => []);
+$response = array("data"=>array(), "error" => array());
 
+header("Access-Control-Allow-Origin: *");
 // Check if the data is send in any way
 if( !isset($_POST['userId1'])) {
     $response["error"]=array(
@@ -23,7 +24,7 @@ if( !isset($_POST['userId1'])) {
 };
 // Fetch the data
 $userId = $_POST['userId1'];
-$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";", SQL_USERNAME, SQL_PASSWORD);
+$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 $inbox = $db->prepare("SELECT message, timestamp, flag, sender, recipient FROM messages WHERE sender = ? OR recipient = ?");
 $inbox->bindParam(1, $userId);
 $inbox->bindParam(2, $userId);
@@ -104,4 +105,4 @@ foreach ( $inbox as $oneMessage) {
     }
 }
 $response["data"] = $friendInformations;
-echo json_encode($response);
+echo json_encode($response, JSON_UNESCAPED_UNICODE);

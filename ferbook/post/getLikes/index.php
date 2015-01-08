@@ -12,6 +12,8 @@ include_once "../../classes/Crypter.php";
 // Define response array
 $response = array("data"=>array(), "error" => array());
 
+
+header("Access-Control-Allow-Origin: *");
 // Check if the data is send in any way
 
 if( !isset($_POST['postId'])) {
@@ -28,7 +30,7 @@ if( !isset($_POST['postId'])) {
 // Fetch the data
 $postId = $_POST['postId'];
 
-$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";", SQL_USERNAME, SQL_PASSWORD);
+$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 
 
 // Check if user exists

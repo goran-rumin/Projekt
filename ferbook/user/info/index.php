@@ -8,6 +8,7 @@
 include_once "../../constants.php";
 include_once "../../classes/Crypter.php";
 
+header("Access-Control-Allow-Origin: *");
 // Define response array
 $response = array("data"=>array(), "error" => array());
 
@@ -28,7 +29,7 @@ if( !isset($_POST['userId'])) {
 $userId = $_POST['userId'];
 
 
-$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";", SQL_USERNAME, SQL_PASSWORD);
+$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 
 $checkLogin = $db->prepare("SELECT * FROM user WHERE id = ?");
 $checkLogin->bindParam(1, $userId);
@@ -53,5 +54,5 @@ if($row) {
         "errInfo" => "No existing user with that id."
     );
 
-    echo json_encode($response);
+    echo json_encode($response, JSON_UNESCAPED_UNICODE);
 }

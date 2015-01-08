@@ -10,15 +10,16 @@
         $(document).ready(function() {
 
             $.ajax({
-                url : "user/login/",
+                url : "post/getComments/",
                 type : "POST",
                 data: {
-                    username : "jewbre",
-                    password : "pass123"
+                    userId : 1,
+                    postId : 6
                 }
             }).success(function(msg){
                 console.log(msg);
                 var json = JSON.parse(msg);
+                $("#test").html(msg);
             })
 
 
@@ -28,6 +29,6 @@
     </script>
 </head>
 <body>
-
+<p id="test">asd</p>
 </body>
 </html>

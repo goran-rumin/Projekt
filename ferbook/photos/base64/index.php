@@ -9,6 +9,9 @@
 include_once "../../constants.php";
 include_once "../../classes/Crypter.php";
 
+header("Access-Control-Allow-Origin: *");
+
+
 if(!$_FILES['photo']['error']) {
     $new_file_name = "upload.jpg"; //strtolower($_FILES['photo']['tmp_name']).; //rename file
 
@@ -26,6 +29,6 @@ $data = file_get_contents($path);
 $base64 = base64_encode($data);
 
 // Define response array
-$response = array("data"=>[], "error" => []);
+$response = array("data"=>array(), "error" => array());
 $response["data"] = $base64;
 echo json_encode($response);

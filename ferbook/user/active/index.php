@@ -9,6 +9,7 @@
     include_once "../../constants.php";
     include_once "../../classes/Crypter.php";
 
+header("Access-Control-Allow-Origin: *");
     // Define response array
     $response = array("data"=>array(), "error" => array());
 
@@ -18,4 +19,4 @@
         $response["data"]["id"] = -1;
     }
 
-    echo json_encode($response);
+    echo json_encode($response, JSON_UNESCAPED_UNICODE);

@@ -11,11 +11,13 @@ include_once "../../constants.php";
 include_once "../../classes/Crypter.php";
 
 // Define response array
-$response = array("data"=>array(), "error" => array());
+$response = array("data"=>array(), "error" => array() );
 
+
+header("Access-Control-Allow-Origin: *");
 // Check if the data is send in any way
 
-if( !isset($_POST['postId'])) {
+if( !isset($_POST['postId']) || !isset($_POST['userId'])) {
     $response["error"]=array(
         "errNum" => 1,
         "errInfo" => "Missing variable data."
@@ -28,8 +30,9 @@ if( !isset($_POST['postId'])) {
 
 // Fetch the data
 $postId = $_POST['postId'];
+$userId = $_POST['userId'];
 
-$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";", SQL_USERNAME, SQL_PASSWORD);
+$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 
 
 // Check if user exists
@@ -76,8 +79,17 @@ foreach($query as $user) {
 
 $comments = array();
 
-$query = $db->prepare("SELECT * FROM post WHERE parent = ?");
-$query->bindParam(1,$postId);
+//$query = $db->prepare("SELECT * FROM post WHERE parent = ?");
+$query = $db->prepare("
+    SELECT post.id as id, post.sender as sender, post.recipient as recipient, post.timestamp as timestamp, post.message as message, post.url as url, `like`.id as `like`,
+    (SELECT COUNT(*) FROM `like` WHERE postId = post.id) as likeNmbr
+    FROM post
+    LEFT JOIN (SELECT * FROM `like` WHERE user = ?) as `like`
+    ON post.id = `like`.postId
+    WHERE post.parent = ?
+");
+$query->bindParam(1,$userId);
+$query->bindParam(2,$postId);
 $query->setFetchMode(PDO::FETCH_OBJ);
 $query->execute();
 
@@ -92,8 +104,10 @@ foreach($query as $comment) {
     $comments[$comment->id]["lastname"] = $users[$comment->sender]["lastname"];
     $comments[$comment->id]["email"] = $users[$comment->sender]["email"];
     $comments[$comment->id]["picture"] = $users[$comment->sender]["picture"];
+    $comments[$comment->id]["liked"] = ($comment->like == null) ? false : true;
+    $comments[$comment->id]["likesNumber"] = $comment->likeNmbr;
 }
 
 $response["data"] = $comments;
 
-echo json_encode($response);
+echo json_encode($response, JSON_UNESCAPED_UNICODE);

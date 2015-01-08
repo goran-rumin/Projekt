@@ -11,6 +11,8 @@
 include_once "../../constants.php";
 include_once "../../classes/Crypter.php";
 
+
+header("Access-Control-Allow-Origin: *");
 // Define response array
 $response = array("data"=>array(), "error" => array());
 
@@ -32,7 +34,7 @@ $userId1 = $_POST['userId1'];
 $userId2 = $_POST['userId2'];
 
 
-$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";", SQL_USERNAME, SQL_PASSWORD);
+$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 
 $query = $db->prepare("SELECT COUNT(*) as nmbr FROM friends WHERE sender = ? AND recipient = ? OR sender = ? AND recipient = ?");
 $query->bindParam(1, $userId1);
@@ -62,4 +64,4 @@ $query->execute();
 
 
 $response["data"]["success"] = true;
-echo json_encode($response);
+echo json_encode($response, JSON_UNESCAPED_UNICODE);
