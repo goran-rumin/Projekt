@@ -8,7 +8,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
     $scope.images = [];
 
     var userID = location.search.split('userId=')[1];
-
+	$("#noPics").hide();
 
     $.ajax({
         url: root+"user/active/",
@@ -18,7 +18,11 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
         var json = JSON.parse(msg);
         $scope.activeUserID = parseInt(json.data.id);
         if ($scope.activeUser == -1) $scope.activeUser=location.search.split('userId=')[1];
-        console.log(userID);
+        if(userID != $scope.activeUserID) {
+		    $("#albumAdder").hide();
+            $("#upload").hide();
+		}
+		console.log(userID);
     });
         $scope.add = function () {
 
@@ -53,6 +57,8 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
                     $scope.images = response.data;
                     console.log("Sad slike:");
                     console.log($scope.images);
+					if($scope.images.length <= 0 &&  albumId != undefined) $("#noPics").show();
+                    else $("#noPics").hide(); 
                 })
         };
 
