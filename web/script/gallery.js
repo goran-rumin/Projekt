@@ -24,7 +24,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
 
             $http({
                 method: 'POST',
-                url: '../../user/galleries/index.php',
+                url: root+'user/galleries/index.php',
                 data: $.param({'userId': userID}),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 cache: $templateCache
