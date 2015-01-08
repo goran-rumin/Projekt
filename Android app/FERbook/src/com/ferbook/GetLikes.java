@@ -118,7 +118,7 @@ public class GetLikes extends AsyncTask<Object, Void, Void> {//{ "data" : [{"lik
 						timestamp=like.getString("timestamp");
 						userId=like.getString("userId");
 						name=like.getString("name");
-						lastName=like.getString("lastName");
+						lastName=like.getString("lastname");
 						picture=like.getString("picture");
 						username=like.getString("username");
 						email=like.getString("email");
