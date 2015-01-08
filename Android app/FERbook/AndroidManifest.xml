@@ -38,6 +38,8 @@
         <activity android:name=".activity_fullscreen_image">
         </activity>
         <activity  android:name=".activity_gallery"></activity>
+        <activity  android:name=".activity_newAlbum"></activity>
+        <activity  android:name=".activity_addPicturesToAlbum"></activity>
     </application>
 
 </manifest>

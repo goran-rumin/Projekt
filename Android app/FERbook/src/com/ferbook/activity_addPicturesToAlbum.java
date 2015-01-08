@@ -15,91 +15,76 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 /*
- * Ova aktivnost sluzi za odabir novih slika i kreiranje albuma
- * koji ce se uploadati
+ * Ova aktivnost sluzi za dodavanje slika u postojeci album
  * */
-
-public class activity_newAlbum extends Activity {
-		
-	private ArrayList<Bitmap> mPictures = new ArrayList<Bitmap>();
-	private ArrayList<String> mPicturePaths = new ArrayList<String>();
-	private GridView mGridView;
-	private Boolean smije_objaviti = true;
-	private EditText editText_imeAlbuma;
-	
-	private ArrayList<String> putevi = new ArrayList<String>();
+public class activity_addPicturesToAlbum extends Activity {
 	
 	final int ACTIVITY_CHOOSE_FILE = 1;
+	public static final String EXTRA_GALLERY_ID = "com.ferbook.image_position";
+		
+	private String mGalleryId;
+	private GridView mGridView;
+	private Boolean smije_objaviti = true;
+	private ArrayList<String> mPicturePaths = new ArrayList<String>();
+	private ArrayList<Bitmap> mPictures = new ArrayList<Bitmap>();	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.new_album);	//Edittext i gridView
+		setContentView(R.layout.gallery); //samo nam treba GridView	
 
+		mGalleryId = getIntent().getStringExtra(EXTRA_GALLERY_ID);
+		
 		mGridView = (GridView)findViewById(R.id.gridview);
-		editText_imeAlbuma = (EditText)findViewById(R.id.album_title);	
 	}
 	
+	
 	/*
-	 * MENU
+	 * MENU OPTIONS
 	 * */
 	@Override
-	   	public boolean onCreateOptionsMenu(Menu menu) {
-	       	getMenuInflater().inflate(R.menu.galleries_add_pictures, menu);
-	       	return true;
-	   	}
+   	public boolean onCreateOptionsMenu(Menu menu) {
+       	getMenuInflater().inflate(R.menu.galleries_add_pictures, menu); //button za dodavanje slike i upload
+       	return true;
+   	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.menu_item_new_album:
+			case R.id.menu_item_new_album: //dodaj novu sliku
 				Intent chooseFile;
 				Intent intent;
 				chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
 				chooseFile.setType("image/jpeg");
 				intent = Intent.createChooser(chooseFile, "Choose a picture");
 				startActivityForResult(intent, ACTIVITY_CHOOSE_FILE);
-				
 				return true;
 				
 			case R.id.menu_item_upload:
-				if (smije_objaviti) {
-					if (mPictures.size() > 0) {
-						if (editText_imeAlbuma.getText().toString() != "") {
-							smije_objaviti=false;
-							Toast.makeText(this, "Starting upload..." , Toast.LENGTH_SHORT).show();
-							
-							Log.d("denis", "" + mPicturePaths.size());
-							/*Kako dobijem id za novi album*/
-							for (int i = 0; i < mPicturePaths.size(); i++){
-								Bitmap slika = BitmapFactory.decodeFile(mPicturePaths.get(i));
-								//new Upload().execute(Vrati_id.vrati(this), slika, mGalleryId, this); 
-							}
-							
-							
-							Toast.makeText(this, "Upload finished." , Toast.LENGTH_SHORT).show();
-							smije_objaviti=true;
-							mPictures.clear();
-							editText_imeAlbuma.setText("");
-							return true;
-						} else {
-							Toast.makeText(this, "Niste upisali ime albuma." , Toast.LENGTH_SHORT).show();
-						}		
-					} else {
-						Toast.makeText(this, "Niste odabrali niti jednu sliku." , Toast.LENGTH_SHORT).show();
-					}	
+				
+				if (mPicturePaths.size() == 0 && smije_objaviti){
+					Toast.makeText(this, "Niste odabrali niti jednu sliku." , Toast.LENGTH_SHORT).show();
+				} else if (smije_objaviti){
+					smije_objaviti = false;
+					Toast.makeText(this, "Starting upload..." , Toast.LENGTH_SHORT).show();
+					for (int i = 0; i < mPicturePaths.size(); i++){
+						Bitmap slika = BitmapFactory.decodeFile(mPicturePaths.get(i));
+						new Upload().execute(Vrati_id.vrati(this), slika, mGalleryId, this); 
+					}
+					Toast.makeText(this, "Upload finished." , Toast.LENGTH_SHORT).show();
+					smije_objaviti=true;
+					mPicturePaths.clear();
+					return true;
 				} else {
 					Toast.makeText(this, "Pictures are uploading..." , Toast.LENGTH_SHORT).show();
 				}
@@ -107,6 +92,8 @@ public class activity_newAlbum extends Activity {
 				return super.onOptionsItemSelected(item);
 		}
 	}
+	
+	
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -164,7 +151,7 @@ public class activity_newAlbum extends Activity {
 	
 	
 	/*
-	 * Vrati Bitmap sliku, zeljene velicine
+	 * Vrati Bitmap iz puta, zeljene velicine
 	 * */
 	public static Bitmap decodeSampledBitmapFromResource(String put,int reqWidth, int reqHeight) {
 
@@ -186,6 +173,7 @@ public class activity_newAlbum extends Activity {
 			    final int height = options.outHeight;
 			    final int width = options.outWidth;
 			    int inSampleSize = 1;
+			
 			    if (height > reqHeight || width > reqWidth) {
 			
 			        final int halfHeight = height / 2;
@@ -201,6 +189,7 @@ public class activity_newAlbum extends Activity {
 			
 			    return inSampleSize;
 	}
+	
 	
 	/*
 	 * Put iz URI
@@ -218,6 +207,7 @@ public class activity_newAlbum extends Activity {
 
         return cursor.getString(column_index);
 	}
+	
 	
 	/*
 	 * ADAPTER

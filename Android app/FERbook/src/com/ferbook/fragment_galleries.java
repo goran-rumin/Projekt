@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,10 +33,9 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 	private ArrayList<Drawable> mNaslovnice = new ArrayList<Drawable>();
 	private ArrayList<String> mNazivi = new ArrayList<String>();
 	private ArrayList<String> mIds = new ArrayList<String>();
-	private ArrayList<Album> mAlbums = new ArrayList<Album>();
 	private String userId;
 	
-	private GridView gridView;
+	private GridView mGridView;
 	private View view;
 	private TextView noAlbumMessage;
 	
@@ -52,7 +52,7 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 		view = inflater.inflate(R.layout.gallery, container, false);
 		setHasOptionsMenu(true);
 		
-		gridView = (GridView) view.findViewById(R.id.gridview);
+		mGridView = (GridView) view.findViewById(R.id.gridview);
 		noAlbumMessage = (TextView) view.findViewById(R.id.noAlbumMessage);
 		
 		userId = Vrati_id.vrati(getActivity());
@@ -65,43 +65,45 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 		 * Treba ovo otkomentirati i zakomentirati redak iznad: new Galleries... 
 		 * */
 		/*
-		Album album;
-		album = new Album("10", "Prvi album", getResources().getDrawable(R.drawable.ic_launcher));
-		mAlbums.add(album);
-		album = new Album("21", "Drugi album", getResources().getDrawable(R.drawable.search));
-		mAlbums.add(album);
-		album = new Album("5", "Treci album", getResources().getDrawable(R.drawable.more));
-		mAlbums.add(album);
+		mNaslovnice.add(getResources().getDrawable(R.drawable.ic_launcher));
+		mNaslovnice.add(getResources().getDrawable(R.drawable.search));
+		mNaslovnice.add(getResources().getDrawable(R.drawable.more));
 		
-		for (int i = 0; i < 3; i++) {
-			mNaslovnice.add(mAlbums.get(i).getAlbumMainPicture());
-			mNazivi.add(mAlbums.get(i).getAlbumName());
-			mIds.add(mAlbums.get(i).getAlbumId());
-		}
+		mNazivi.add("Album 1");
+		mNazivi.add("Album 2");
+		mNazivi.add("Album 2");
 		
-		gridView.setAdapter(new GalleryImageAdapter(view.getContext(), mNaslovnice, mIds));  
+		mIds.add("10");
+		mIds.add("5");
+		mIds.add("20");
+		
+		mGridView.setAdapter(new GalleryImageAdapter(view.getContext(), mNaslovnice, mIds));  
 		*/
 		
-		gridView.setOnItemClickListener(new OnItemClickListener() 
+		mGridView.setOnItemClickListener(new OnItemClickListener() 
 		{
 		    public void onItemClick(AdapterView<?> parent, View v, int position, long id) 
 		    {
+		    	Log.d("denis", mGridView.getItemAtPosition(position).toString());
 		    	Intent i = new Intent(getActivity(), activity_gallery.class);
-		    	String galleryId = (String) (gridView.getItemAtPosition(position));
+		    	String galleryId = (String) (mGridView.getItemAtPosition(position));
 				i.putExtra(activity_gallery.EXTRA_GALLERY_ID, galleryId);
 				startActivity(i);
 		    }
 		});
 		
+		
 		return view;
 	}
 	
+	/*
+	 * MENU
+	 * */
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.add_gallery, menu);
+		inflater.inflate(R.menu.add_gallery, menu); //samo button za novu galeriju
 	}
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -114,25 +116,25 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 		}
 	}
 	
-	//Galleries.prenesi
+	/*
+	 * GALLERIES
+	 * Prikazi sve galerije
+	 * */
 	@Override
 	public void prenesi_getlikes(List<String> albumIds, List<String> names, List<Drawable> naslovnice, 
 			int broj_galerija, String error) {
 		
 		if (error == null) {
-			for (int i = 0; i < broj_galerija; i++) {
-				Album album = new Album(albumIds.get(i), names.get(i), naslovnice.get(i));
-				mAlbums.add(album); 
-				mNaslovnice.add(album.mMainPicture);
-				mNazivi.add(album.mName);
-				mIds.add(album.mId);
+			for (int i = 0; i < broj_galerija; i++) { 
+				mNaslovnice.add(naslovnice.get(i));
+				mNazivi.add(names.get(i));
+				mIds.add(albumIds.get(i));
 			}
 			
-			gridView.setAdapter(new GalleryImageAdapter(view.getContext(), mNaslovnice, mIds));
-	
+			mGridView.setAdapter(new GalleryImageAdapter(view.getContext(), mNaslovnice, mIds));
 		} else {
 			//Ako ne postoji niti jedan album, postavi poruku.
-			gridView.setVisibility(View.INVISIBLE);
+			mGridView.setVisibility(View.INVISIBLE);
 			noAlbumMessage.setVisibility(View.VISIBLE);
 		}
 	}
@@ -150,29 +152,4 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
     	super.onResume();
     	new Galleries().execute(userId, this);
     }
-	
-	private class Album {
-		private String mId;
-		private String mName;
-		private Drawable mMainPicture;
-		
-		public Album(String albumId, String albumName, Drawable albumMainPicture) {
-			mId = albumId;
-			mName = albumName;
-			mMainPicture = albumMainPicture;
-		}
-		
-		/*Geteri i seteri*/
-		public String getAlbumId() {
-			return mId;
-		}
-		
-		public String getAlbumName() {
-			return mName;
-		}
-		
-		public Drawable getAlbumMainPicture() {
-			return mMainPicture;
-		}		
-	}
 }

@@ -70,6 +70,10 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
         
     }
     
+    
+    /*
+     * IMAGE
+     * */
     @Override
     public void prenesi_image(Drawable slika, String error) {
     	if (error == null) { 
@@ -79,6 +83,9 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
     	}
     }
     
+    /*
+     * GETLIKES
+     * */
     @Override
     public void prenesi_getlikes(List<String> timestamps, List<String> userIds, List<String> names, List<String> lastNames, 
     							List<Drawable> pictures, List<String> usernames, List<String> emails, int broj_likeova, String error){
@@ -98,9 +105,12 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
     	}
     }
     
+    /*
+     * LIKE
+     * */
     @Override
     public void prenesi_like(String action, String error, View v) {
-    	if (error == null) { //ako nema pogreske
+    	if (error == null) {
     		if (action.equals("like")){ //korisnik je lajkao
     			mNumberOfLikes = mNumberOfLikes + 1;
     			mButtonLike.setText("Liked (" + mNumberOfLikes + ")");
