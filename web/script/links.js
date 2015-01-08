@@ -19,3 +19,11 @@ function openGallery(id){
 function openMessages(id){
     window.location = rootRed+"web/messages/?userId=" + id;
 };
+
+function openConversation(id){
+    window.location = rootRed+"web/Conversation/?userId=" + id;
+};
+
+function openNewMessage(id){
+    window.location = rootRed+"web/NewMessage/?userId=" + id;
+};
