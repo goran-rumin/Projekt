@@ -3,6 +3,7 @@
  */
 'use strict';
 
+var root= "../../";
 var gallery = angular.module('gallery', ['ngAnimate', 'ngTouch', 'flow']);
 gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function ($scope, $http, $templateCache) {
     $scope.images = [];
@@ -49,6 +50,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
                 cache: $templateCache
             })
                 .success(function (response) {
+					$scope._Index = 0;
                     $scope.images = response.data;
                     console.log("Sad slike:");
                     console.log($scope.images);
@@ -69,6 +71,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
                     console.log(ime);
                     console.log(name);
                     console.log(response);
+					window.location.reload();
                 })
         };
 
