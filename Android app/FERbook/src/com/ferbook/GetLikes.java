@@ -44,7 +44,7 @@ public class GetLikes extends AsyncTask<Object, Void, Void> {//{ "data" : [{"lik
     	//String postId=(String) arg0[0];
 
     	sucelje = (prenesi) arg0[1];
-    	ak= (MainActivity) arg0[1];
+    	ak= (MainActivity) arg0[2];
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	

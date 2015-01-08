@@ -45,7 +45,7 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     	//String postId=(String) arg0[0];
 
     	sucelje = (prenesi) arg0[1];
-    	ak= (MainActivity) arg0[1];
+    	ak= (MainActivity) arg0[2];
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	

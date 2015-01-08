@@ -58,7 +58,7 @@ public class CommentDialog extends Dialog implements GetComments.prenesi, GetLik
 			listview = (ListView) findViewById(R.id.list_comments);
 			adapter = new CommentsAdapter(kontekst,data, this);
 			listview.setAdapter(adapter);
-			new GetComments().execute(post,this);
+			new GetComments().execute(post,this,kontekst);
 			poruka = (EditText) findViewById(R.id.comment_text);
 			Button send = (Button) findViewById(R.id.send);
 			send.setOnClickListener(this);
@@ -74,7 +74,7 @@ public class CommentDialog extends Dialog implements GetComments.prenesi, GetLik
 					new int[] { R.id.likes_name, R.id.likes_image});
 			adapter2.setViewBinder(pov);
 			listview.setAdapter(adapter2);
-			new GetLikes().execute(post,this);
+			new GetLikes().execute(post,this, kontekst);
 		}
 		
 	}
@@ -180,13 +180,13 @@ public class CommentDialog extends Dialog implements GetComments.prenesi, GetLik
 	}
 
 	@Override
-	public void prenesi_getlikes(List<String> likeIds, List<String> timestamps,
+	public void prenesi_getlikes(List<String> timestamps,
 			List<String> userIds, List<String> names, List<String> lastNames,
 			List<Drawable> pictures, List<String> usernames,
 			List<String> emails, int broj_likeova, String error) {
 		if(error!=null)
 			Toast.makeText(kontekst, error, Toast.LENGTH_SHORT).show();
-		for(int i=0;i<likeIds.size();i++){
+		for(int i=0;i<broj_likeova;i++){
 			HashMap<String,Object> redak = new HashMap<String,Object>();
 			redak.put("slika",pictures.get(i));
 			redak.put("ime",names.get(i)+" "+lastNames.get(i));
@@ -214,7 +214,7 @@ public class CommentDialog extends Dialog implements GetComments.prenesi, GetLik
 			Toast.makeText(kontekst, error, Toast.LENGTH_SHORT).show();
 		else{
 			data.clear();
-			new GetComments().execute(post_id,this);
+			new GetComments().execute(post_id,this,kontekst);
 		}
 	}
 }
