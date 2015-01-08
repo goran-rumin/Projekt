@@ -1,0 +1,70 @@
+#to{
+    color: #d1dad3;
+    font-size: 30px;
+    position: relative;
+    float: left;
+    width: 10%;
+}
+
+#name{
+    position: relative;
+    display: inline-block;
+    width: 450px;
+    box-shadow: 0px 0px 2px 3px firebrick;
+    height: 30px;
+}
+
+#message{
+    display: inline-block;
+    min-height:100px;
+    width: 100%;
+    box-shadow: 0px 0px 2px 3px firebrick;
+
+}
+
+#sendB{
+    border-radius: 20px;
+    padding:10px 10px;
+    border:solid firebrick 2px;
+    background-color:#d1d1d1;
+    margin-top:30px;
+    float:right;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+#searchB{
+    border-radius: 20px;
+    padding:10px 10px;
+	border:solid firebrick 2px;
+    background-color:#d1d1d1;
+	float:right;
+    position: relative;
+
+}
+
+
+.sendText{
+   font-size: 20px;
+    text-align: center;
+    color: firebrick;
+}
+
+button:hover{
+    cursor: pointer;
+    cursor:hand;
+}
+
+.friends{
+    font-size: 15px;
+    font-family: courier;
+    color: firebrick;
+    cursor: pointer;
+
+}
+
+#msgL{
+    font-size: 25px;
+    font-family: arial;
+    color: firebrick;
+}

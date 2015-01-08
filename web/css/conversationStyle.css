@@ -1,0 +1,95 @@
+
+#messagesBox, #message {
+    box-shadow: 0px 0px 2px 3px firebrick;
+    width: 100%;
+}
+#messagesBox{
+    min-height: 150px;
+}
+.seen{
+    width:30px;
+    height: 30px;
+    position: relative;
+    float:right;
+}
+
+.clearFix{
+    clear:both;
+}
+
+.profilePic{
+    height: 50px;
+    width:50px;
+    margin-top:8px;
+    margin-bottom: 8px;
+    float:left;
+    z-index: 1000;
+    position: relative;
+}
+
+#currentMessage {
+    position: relative;
+    top: 40px;
+    right: 125px;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 15px;
+    color: black;
+    display: block;
+    overflow: hidden;
+
+}
+
+#more{
+    font-size: 20px;
+    color: #c9c9c9;
+}
+
+
+
+#name{
+    float:left;
+    position: relative;
+    z-index: 100;
+    top:10px;
+    left:10px;
+    font-size: 20px;
+    color:firebrick;
+}
+
+#time{
+    float:right;
+    top:10px;
+    font-size: 20px;
+    color: firebrick;
+    position: relative;
+    z-index: 100;
+    right: 10px;
+}
+
+#message{
+    height: 40px;
+    width: 100%;
+}
+
+#sendB{
+    border-radius: 20px;
+    padding:10px 10px;
+    border:solid firebrick 2px;
+    background-color:#d1d1d1;
+    margin-top:30px;
+    float:right;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+#sendText{
+    font-size: 20px;
+    text-align: center;
+    color: firebrick;
+}
+
+button:hover{
+    cursor: pointer;
+    cursor:hand;
+}

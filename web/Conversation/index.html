@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>FERbook</title>
+
+    <script type="text/javascript" src="../angular/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="../css/conversationStyle.css"/>
+	<link type="text/css" rel="stylesheet" href="../css/template.css"/>
+
+    <script type="text/javascript" src="../script/conversation.js"></script>
+    <script type="text/javascript" src="../script/links.js"></script>
+    <script type="text/javascript" src="../script/root.js"></script>
+
+
+</head>
+<body ng-app="Conversation" ng-controller="convController">
+<div id="header" >
+    <div id="top">
+        <div id="logo">
+            <img src="../images/fer_logo3.png"  alt="FERbook" >
+        </div>
+    </div>
+    <div id="topNav">
+        <div id="topNavLinks">
+
+            <div>
+                <a class="topnav" target='_self' id="newsfeedLink"  >NEWSFEED</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class="topnav" target='_self'  id="wallLink" > WALL</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class="topnav" target='_self' id="galleryLink"> GALLERY</a>
+                <span style='letter-spacing:14px;'> |</span>
+                <a class="topnav" target='_self' id="messagesLink"> MESSAGES</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='belowTop'>
+    <div id='page'>
+
+        <div class="messagesContainer">
+            <div class="message" ng-repeat="obj in conversationData.data" >
+                <div id="messagesBox" ng-init="getInfo(obj.senderId)">
+
+                    <img class="profilePic" ng-click="openWall(obj.senderId)"
+                         ng-src="userInfo.data.picture">
+
+                    <span id="name" ng-bind="userInfo.data.name + ' ' + userInfo.data.lastname"></span>
+                    <span id="time" ng-bind="obj.message.timestamp"></span>
+                    <p id="currentMessage" ng-bind="obj.message">
+                    </p>
+                    <img src="../images/seen.png" class="seen" ng-show="obj.flag">
+                    <img src="../images/notseen.png" class="seen" ng-show="!obj.flag">
+
+                </div>
+                </div>
+
+            <div style="height: 10px"></div>
+
+            <textarea type="text" id="message"placeholder="Write reply..."></textarea>
+            <button ng-click="send()" id="sendB"><span id="sendText"><b>SEND</b></span></button>
+			<p id="emptyMessage"></p>
+
+        </div>
+
+
+</div>
+    </div>
+</body>
+</html>
