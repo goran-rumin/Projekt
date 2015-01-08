@@ -87,10 +87,11 @@ public final class R {
         public static final int upload_pic=0x7f02002e;
     }
     public static final class id {
-        public static final int action_example=0x7f0b0046;
-        public static final int action_logout=0x7f0b0044;
-        public static final int action_settings=0x7f0b0043;
+        public static final int action_example=0x7f0b0049;
+        public static final int action_logout=0x7f0b0047;
+        public static final int action_settings=0x7f0b0046;
         public static final int album_name=0x7f0b0015;
+        public static final int album_title=0x7f0b002e;
         public static final int btnLike=0x7f0b0001;
         public static final int comment=0x7f0b0009;
         public static final int comment_image=0x7f0b0005;
@@ -110,7 +111,7 @@ public final class R {
         public static final int inbox_item_time=0x7f0b001a;
         public static final int inbox_list=0x7f0b0016;
         public static final int inbox_progress=0x7f0b0018;
-        public static final int inbox_refresh=0x7f0b0045;
+        public static final int inbox_refresh=0x7f0b0048;
         public static final int info_email=0x7f0b001f;
         public static final int info_lastname=0x7f0b0020;
         public static final int info_name=0x7f0b001d;
@@ -121,42 +122,44 @@ public final class R {
         public static final int likes_name=0x7f0b0023;
         public static final int list_comments=0x7f0b000c;
         public static final int list_messages=0x7f0b0029;
-        public static final int list_wall=0x7f0b003a;
+        public static final int list_wall=0x7f0b003b;
         public static final int login=0x7f0b0027;
         public static final int login_title=0x7f0b0024;
+        public static final int menu_item_new_album=0x7f0b0044;
+        public static final int menu_item_upload=0x7f0b0045;
         public static final int message_text=0x7f0b002b;
         public static final int messages_text=0x7f0b002d;
         public static final int messages_time=0x7f0b002c;
         public static final int messages_user=0x7f0b0028;
         public static final int navigation_drawer=0x7f0b0004;
-        public static final int news_item_comment=0x7f0b0035;
-        public static final int news_item_image=0x7f0b0032;
-        public static final int news_item_like=0x7f0b0034;
-        public static final int news_item_likesnum=0x7f0b0033;
-        public static final int news_item_p2image=0x7f0b0036;
-        public static final int news_item_p2text=0x7f0b0037;
-        public static final int news_item_pimage=0x7f0b002e;
-        public static final int news_item_ptext=0x7f0b002f;
-        public static final int news_item_strelica=0x7f0b0030;
-        public static final int news_item_text=0x7f0b0031;
-        public static final int news_item_timestamp=0x7f0b0038;
+        public static final int news_item_comment=0x7f0b0036;
+        public static final int news_item_image=0x7f0b0033;
+        public static final int news_item_like=0x7f0b0035;
+        public static final int news_item_likesnum=0x7f0b0034;
+        public static final int news_item_p2image=0x7f0b0037;
+        public static final int news_item_p2text=0x7f0b0038;
+        public static final int news_item_pimage=0x7f0b002f;
+        public static final int news_item_ptext=0x7f0b0030;
+        public static final int news_item_strelica=0x7f0b0031;
+        public static final int news_item_text=0x7f0b0032;
+        public static final int news_item_timestamp=0x7f0b0039;
         public static final int noAlbumMessage=0x7f0b0013;
         public static final int password=0x7f0b0026;
         public static final int picture=0x7f0b0014;
-        public static final int post_send=0x7f0b0042;
-        public static final int post_text=0x7f0b0040;
-        public static final int post_upload=0x7f0b0041;
+        public static final int post_send=0x7f0b0043;
+        public static final int post_text=0x7f0b0041;
+        public static final int post_upload=0x7f0b0042;
         public static final int progressBar1=0x7f0b0010;
-        public static final int search_image=0x7f0b003c;
-        public static final int search_name=0x7f0b003d;
-        public static final int search_send_message=0x7f0b003e;
+        public static final int search_image=0x7f0b003d;
+        public static final int search_name=0x7f0b003e;
+        public static final int search_send_message=0x7f0b003f;
         public static final int section_label=0x7f0b0011;
         public static final int send=0x7f0b000f;
-        public static final int tabcontent=0x7f0b003b;
-        public static final int textView1=0x7f0b0039;
+        public static final int tabcontent=0x7f0b003c;
+        public static final int textView1=0x7f0b003a;
         public static final int unos_komentara=0x7f0b000d;
         public static final int unos_poruke=0x7f0b002a;
-        public static final int unos_posta=0x7f0b003f;
+        public static final int unos_posta=0x7f0b0040;
         public static final int username=0x7f0b0025;
     }
     public static final class layout {
@@ -178,16 +181,19 @@ public final class R {
         public static final int messages=0x7f03000f;
         public static final int messages_layout=0x7f030010;
         public static final int navditem=0x7f030011;
-        public static final int news_layout=0x7f030012;
-        public static final int newsfeed=0x7f030013;
-        public static final int profile_tabovi=0x7f030014;
-        public static final int search_layout=0x7f030015;
-        public static final int wall=0x7f030016;
+        public static final int new_album=0x7f030012;
+        public static final int news_layout=0x7f030013;
+        public static final int newsfeed=0x7f030014;
+        public static final int profile_tabovi=0x7f030015;
+        public static final int search_layout=0x7f030016;
+        public static final int wall=0x7f030017;
     }
     public static final class menu {
-        public static final int global=0x7f0a0000;
-        public static final int inbox=0x7f0a0001;
-        public static final int main=0x7f0a0002;
+        public static final int add_gallery=0x7f0a0000;
+        public static final int galleries_add_pictures=0x7f0a0001;
+        public static final int global=0x7f0a0002;
+        public static final int inbox=0x7f0a0003;
+        public static final int main=0x7f0a0004;
     }
     public static final class string {
         public static final int action_example=0x7f060003;

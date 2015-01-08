@@ -8,8 +8,10 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -31,15 +33,12 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 	private ArrayList<String> mNazivi = new ArrayList<String>();
 	private ArrayList<String> mIds = new ArrayList<String>();
 	private ArrayList<Album> mAlbums = new ArrayList<Album>();
+	private String userId;
 	
 	private GridView gridView;
 	private View view;
 	private TextView noAlbumMessage;
 	
-	/*
-	 * U fragment se kao argument salje sectionNumber 
-	 * zbog odredivanja naslova u ActionBaru.
-	 * */
 	public static fragment_galleries newInstance(int sectionNumber) {
 		fragment_galleries fragment = new fragment_galleries();
 		Bundle args = new Bundle();
@@ -51,15 +50,15 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.gallery, container, false);
-			
-		gridView = (GridView) view.findViewById(R.id.gridview);
+		setHasOptionsMenu(true);
 		
+		gridView = (GridView) view.findViewById(R.id.gridview);
 		noAlbumMessage = (TextView) view.findViewById(R.id.noAlbumMessage);
 		
-		String userId = Vrati_id.vrati(getActivity());
+		userId = Vrati_id.vrati(getActivity());
 
 		new Galleries().execute(userId, this);
-		
+	
 		/*
 		 * Ovo zakomentirano je simulacija albuma da se moze vidjeti kako ce to izgledati.
 		 * Simulacija tri albuma koji imaju id: 10, 21, 5.
@@ -81,6 +80,7 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 		}
 		
 		gridView.setAdapter(new GalleryImageAdapter(view.getContext(), mNaslovnice, mIds));  
+		*/
 		
 		gridView.setOnItemClickListener(new OnItemClickListener() 
 		{
@@ -92,17 +92,34 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 				startActivity(i);
 		    }
 		});
-		*/
 		
 		return view;
 	}
 	
 	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.add_gallery, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.menu_item_new_album:
+				Intent i = new Intent(getActivity(), activity_newAlbum.class);
+				startActivity(i);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	//Galleries.prenesi
+	@Override
 	public void prenesi_getlikes(List<String> albumIds, List<String> names, List<Drawable> naslovnice, 
 			int broj_galerija, String error) {
 		
-
-		if (error == null) { //Ako postoje albumi
+		if (error == null) {
 			for (int i = 0; i < broj_galerija; i++) {
 				Album album = new Album(albumIds.get(i), names.get(i), naslovnice.get(i));
 				mAlbums.add(album); 
@@ -111,20 +128,8 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 				mIds.add(album.mId);
 			}
 			
-			//Postavi adapter
 			gridView.setAdapter(new GalleryImageAdapter(view.getContext(), mNaslovnice, mIds));
-			
-			gridView.setOnItemClickListener(new OnItemClickListener(){
-			    public void onItemClick(AdapterView<?> parent, View v, int position, long id){
-			
-			    	Intent i = new Intent(getActivity(), activity_gallery.class);
-			    	//Id galerije se salje kao EXTRA.
-			    	String galleryId = (String) (gridView.getItemAtPosition(position));
-					i.putExtra(activity_gallery.EXTRA_GALLERY_ID, galleryId);
-					startActivity(i);
-			    }
-			});
-			
+	
 		} else {
 			//Ako ne postoji niti jedan album, postavi poruku.
 			gridView.setVisibility(View.INVISIBLE);
@@ -138,6 +143,13 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 		((MainActivity) activity).onSectionAttached(getArguments().getInt(
 				ARG_SECTION_NUMBER));
 	}
+	
+	//Osvjezi galeriju kada se korisnik vrati iz activity_newAlbum
+	@Override
+    public void onResume(){
+    	super.onResume();
+    	new Galleries().execute(userId, this);
+    }
 	
 	private class Album {
 		private String mId;

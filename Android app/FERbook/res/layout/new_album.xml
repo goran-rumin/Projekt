@@ -5,25 +5,23 @@
 <FrameLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">"
+    android:layout_height="match_parent">
+    
+    <EditText 
+        android:id="@+id/album_title"
+        android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:gravity="center"
+	    android:hint="Naziv albuma" />
 
 	<GridView
 	    android:id="@+id/gridview"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
+	    android:layout_marginTop="60dp"
 	    android:gravity="center"
 	    android:horizontalSpacing="0dp"
 	    android:numColumns="2"
 	    android:stretchMode="columnWidth"
 	    android:verticalSpacing="0dp"/>
-
-	<TextView
-	    android:id="@+id/noAlbumMessage"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:text="Ne postoji niti jedan album."
-	    android:textAppearance="?android:attr/textAppearanceMedium"
-	    android:layout_gravity="center"
-	    android:visibility="invisible" />
-
 </FrameLayout>
