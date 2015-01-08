@@ -112,10 +112,10 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     			imena=data.names(); //JSONArray
     	
     			int i;
-    			List<String> jsonValues = new ArrayList<String>();
+    			List<Integer> jsonValues = new ArrayList<Integer>();
     			
     			for (i = 0; i < imena.length(); i++)		//trebam poredati od novijih prema starijima (od vecih prema manjima)
-    			   jsonValues.add(imena.getString(i));
+    			   jsonValues.add(Integer.parseInt(imena.getString(i)));
     			
     			Collections.sort(jsonValues);				//ovo je ascending, tj od manjih prema vecima
     			Collections.reverse(jsonValues);
@@ -123,7 +123,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     			JSONArray sortedJsonArray = new JSONArray();
     			
     			for(i=0;i<jsonValues.size();i++)
-    				sortedJsonArray.put(jsonValues.get(i));
+    				sortedJsonArray.put(Integer.toString(jsonValues.get(i)));
     				
     			imena=sortedJsonArray;				//konacno
     			
