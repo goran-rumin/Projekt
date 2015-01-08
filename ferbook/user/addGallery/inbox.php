@@ -41,4 +41,4 @@ $output = array(
     "albumId" => $addAlbum->fetch()->id
 );
 $response["data"] = $output;
-echo json_encode($response, JSON_UNESCAPED_UNICODE);
+echo json_encode($response, (float) JSON_UNESCAPED_UNICODE);

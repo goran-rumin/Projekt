@@ -81,4 +81,4 @@ $query->bindParam(2,$userId2);
 $query->execute();
 
 $response["data"]["success"] = true;
-echo json_encode($response, JSON_UNESCAPED_UNICODE);
+echo json_encode($response, (float) JSON_UNESCAPED_UNICODE);

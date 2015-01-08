@@ -51,4 +51,4 @@ foreach ( $requests as $request ) {
 
 $allRequests = array_reverse($allRequests);
 $response["data"] = $allRequests;
-echo json_encode($response, JSON_UNESCAPED_UNICODE);
+echo json_encode($response, (float) JSON_UNESCAPED_UNICODE);

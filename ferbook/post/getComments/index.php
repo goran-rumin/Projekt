@@ -110,4 +110,4 @@ foreach($query as $comment) {
 
 $response["data"] = $comments;
 
-echo json_encode($response, JSON_UNESCAPED_UNICODE);
+echo json_encode($response, (float) JSON_UNESCAPED_UNICODE);

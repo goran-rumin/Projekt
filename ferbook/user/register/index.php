@@ -114,7 +114,7 @@ header("Access-Control-Allow-Origin: *");
         "userId" => $row->id
     );
 
-    echo json_encode($response, JSON_UNESCAPED_UNICODE);
+    echo json_encode($response, (float) JSON_UNESCAPED_UNICODE);
 
 
 /*
@@ -122,7 +122,7 @@ header("Access-Control-Allow-Origin: *");
  * - encrypt the data
  * - save into a $_SESSION['userId'] variable
  */
-  $_SESSION['userId'] = Crypter::encrypt($userId);
+  $_SESSION['userId'] = Crypter::encrypt($row->id);
 
 
 

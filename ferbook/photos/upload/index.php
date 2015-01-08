@@ -9,11 +9,10 @@
 include_once "../../constants.php";
 include_once "../../classes/Crypter.php";
 
+header("Access-Control-Allow-Origin: *");
+
 // Define response array
 $response = array("data"=>array(), "error" => array());
-
-
-header("Access-Control-Allow-Origin: *");
 
 // Check if the data is send in any way
 if( !isset($_POST['userId']) || !isset($_POST['url'])) {
@@ -30,6 +29,8 @@ if( isset($_POST['albumId'])) {
 } else $albumId = 75000;
 $userId = $_POST['userId'];
 $data = base64_decode($_POST['url']);
+$img = $_POST["url"];
+
 $im = imagecreatefromstring($data);
 $width = imagesx( $im );
 $height = imagesy( $im );
@@ -41,7 +42,8 @@ imagecopyresized( $tmp_img, $im, 0, 0, 0, 0, 75, 75, $width, $height );
 imagejpeg( $tmp_img, "data/".$thumbname.".jpeg" );
 imagedestroy($tmp_img);
 imagedestroy($im);
-$url = "http://www.vdl.hr/ferbook/photos/upload/data/".$photoname.".jpeg";
+
+$url = "http://www.vdl.hr/ferbook/photos/upload/data/".$photoname.".jpg";
 $db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 $defAlbum = $db->prepare("SELECT COUNT(*) as defaultAlbum FROM album WHERE id = ?");
 $defAlbum->bindParam(1, $albumId);
@@ -85,4 +87,4 @@ $output = array(
     "url" => $url
 );
 $response["data"] = $output;
-echo json_encode($response, JSON_UNESCAPED_UNICODE);
+echo json_encode($response, (float) JSON_UNESCAPED_UNICODE);

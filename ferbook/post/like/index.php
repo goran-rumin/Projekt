@@ -116,4 +116,4 @@ $query->execute();
 
 $response["data"]["action"] = $like;
 
-echo json_encode($response);
+echo json_encode($response, (float) JSON_UNESCAPED_UNICODE);

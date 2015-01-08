@@ -94,4 +94,4 @@ foreach($query as $like) {
 
 $response["data"] = $likes;
 
-echo json_encode($response);
+echo json_encode($response, (float) JSON_UNESCAPED_UNICODE);

@@ -87,7 +87,7 @@ header("Access-Control-Allow-Origin: *");
         "userId" => $row->id
     );
 
-    echo json_encode($response, JSON_UNESCAPED_UNICODE);
+    echo json_encode($response, (float) JSON_UNESCAPED_UNICODE);
 
 
     /*

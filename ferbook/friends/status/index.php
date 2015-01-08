@@ -57,4 +57,4 @@ if($row->nmbr != 1) {
 }
 
 $response["data"]["success"] = true;
-echo json_encode($response, JSON_UNESCAPED_UNICODE);
+echo json_encode($response, (float) JSON_UNESCAPED_UNICODE);
