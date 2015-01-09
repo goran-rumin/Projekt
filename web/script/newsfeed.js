@@ -195,6 +195,13 @@ app.controller("newsController", function ($scope) {
                     .attr("type", "file")
                     .appendTo($(form));
 
+
+                // Za pretvaranje u base64
+                $(x).change(function(){
+                    readImage( this );
+                });
+                // base64 kraj
+
                 $(form).attr("method", "post").attr("enctype", "multipart/form-data")
                     .attr("target","upload_target").attr("id", "sendPhoto").appendTo($(wrap));
 
@@ -208,6 +215,7 @@ app.controller("newsController", function ($scope) {
 
 
         };
+
 
         $scope.newPost = function () {
             var textInput = $("#newPostData").val();
@@ -559,6 +567,17 @@ app.controller("newsController", function ($scope) {
 
     })
 
+    // Jquery funkcija za upload slika
+    function readImage(input) {
+        if ( input.files && input.files[0] ) {
+            var FR= new FileReader();
+            FR.onload = function(e) {
+                $scope.pictureUrl = e.target.result.substr(e.target.result.indexOf(",")+1);
+                console.log($scope.pictureUrl);
+            };
+            FR.readAsDataURL( input.files[0] );
+        }
+    }
 })
 
 

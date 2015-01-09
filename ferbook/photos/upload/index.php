@@ -87,4 +87,4 @@ $output = array(
     "url" => $url
 );
 $response["data"] = $output;
-echo json_encode($response, (float) JSON_UNESCAPED_UNICODE);
+echo json_encode($response);
