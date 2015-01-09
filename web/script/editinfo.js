@@ -45,7 +45,7 @@ function update(userID) {
         $("#bottomDisc").html("Passwords do not match!");
     }
 	
-	if (name == '' || lastName == '') {
+	else if (name == '' || lastName == '') {
         $("#bottomDisc").show();
         $("#bottomDisc").html("Please enter both your first and last names!");
     }
@@ -61,7 +61,7 @@ function update(userID) {
             url: root + "user/edit/index.php",
             type: "POST",
             data: {
-                username: username,
+                userId: username,
                 name: name,
                 lastname: lastName,
                 password: password
@@ -78,7 +78,7 @@ function update(userID) {
             url: root + "user/edit/index.php",
             type: "POST",
             data: {
-                username: username,
+                userId: username,
                 password: password
             }
 
@@ -93,7 +93,7 @@ function update(userID) {
             url: root + "user/edit/index.php",
             type: "POST",
             data: {
-                username: username,
+                userId: username,
                 name: name,
                 lastname: lastName
             }
@@ -115,8 +115,4 @@ function update(userID) {
             $("#bottomDisc").hide();
         }, 2000);
     }
-    })
-
-
-    //profile picture missing
-}
+    }
