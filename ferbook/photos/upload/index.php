@@ -87,4 +87,4 @@ $output = array(
     "url" => $url
 );
 $response["data"] = $output;
-echo json_encode($response);
+echo str_replace("\\","",json_encode($response));
