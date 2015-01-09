@@ -132,3 +132,27 @@ input,button,select,textarea {
     text-transform: uppercase;
     font-weight: bold;
 }
+
+#sendPhoto{
+    text-align:left;
+    float: left;
+    display: inline-block;
+    width:390px;
+    margin:0px;
+    padding:5px;
+    background-color:#fff;
+}
+
+#submit{
+    vertical-align: middle;
+    float: right;
+    margin-top: 5px;
+}
+
+.inputWrapper{
+    padding-top: 20px;
+    margin-left: 20%;
+    margin-right: 25px;
+    height: 30px;
+    width: 60%;
+}

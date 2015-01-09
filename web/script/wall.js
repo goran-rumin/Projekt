@@ -20,7 +20,7 @@ app.controller("wallController", function($scope) {
     }).success(function(msg) {
         var json = JSON.parse(msg);
         $scope.activeUserID = parseInt(json.data.id);
-        $scope.$apply;
+        $scope.$apply();
         if ($scope.activeUser == -1) $scope.activeUser=location.search.split('userId=')[1];
 
         function readUserData() {
@@ -135,14 +135,14 @@ app.controller("wallController", function($scope) {
                         $(likeText1).addClass("likeText")
                             .text($scope.isLiked(postData[val]) + "  ")
                             .on("click", function () {
-                                $scope.likePost(postData[val]);
+                                $scope.likePost(postData[val].postId, event);
                             })
                             .appendTo($(like));
 
                         $(likeText2).addClass("likeText")
                             .text(postData[val].likesNumber + " likes")
                             .on("click", function () {
-                                $scope.showLikes(event, postData[val])
+                                $scope.showLikes(event, postData[val].postId)
                             })
                             .appendTo($(like));
 
@@ -177,9 +177,35 @@ app.controller("wallController", function($scope) {
 
         $scope.pictureURL = "";
         //TODO
-        $scope.postPicture = function () {
+        $scope.postPicture = function (event) {
 
-        };
+            if ($(event.target).attr("value") == "post"){
+                $(event.target).val("cancel");
+                $(event.target).text("Cancel upload");
+                x = document.createElement("input");
+                wrap = document.createElement("div");
+                form = document.createElement("form");
+                submit = document.createElement("input");
+
+                $(wrap).addClass("inputWrapper").appendTo($(event.target).parent());
+
+                $(x).addClass("inputFile")
+                    .attr("type", "file")
+                    .appendTo($(form));
+
+                $(form).attr("method", "post").attr("enctype", "multipart/form-data")
+                    .attr("target","upload_target").attr("id", "sendPhoto").appendTo($(wrap));
+
+                $(submit).attr("type", "submit").val("Upload").attr("id", "submit").appendTo($(wrap));
+
+            } else {
+                $(event.target).parent().children(".inputWrapper").remove();
+                $(event.target).text("Post picture");
+                $(event.target).val("post");
+            }
+
+
+        }
 
         $scope.newPost = function () {
             var textInput = $("#newPostData").val();
@@ -233,8 +259,8 @@ app.controller("wallController", function($scope) {
             window.open(url);
         }
 
-        $scope.likePost = function (object) {
-            var postID = object.postId;
+        $scope.likePost = function (postID, event) {
+
             $.ajax({
                 url: root + "post/like/index.php",
                 type: "POST",
@@ -245,7 +271,12 @@ app.controller("wallController", function($scope) {
                 },
                 cache: false
             }).success(function (msg) {
+                $scope.likemsg = JSON.parse(msg);
                 $scope.$apply();
+                console.log($scope.likemsg.data);
+                if ($scope.likemsg.data.action == "like") {
+                    $(event.target).text("Unlike ");
+                } else $(event.target).text("Like ");
 
             })
         }
@@ -256,16 +287,27 @@ app.controller("wallController", function($scope) {
             } else  return "Like";
         }
 
-        $scope.showLikes = function (event, object) {
-
-            if ($(event.target).parent().parent()
-                    .children(".commentsContainer")
-                    .has(".likesShow").length > 0) {
-                $(event.target).parent().parent()
-                    .children(".commentsContainer")
-                    .children(".likesShow").remove();
+        $scope.showLikes = function (event, postID) {
+            console.log(event);
+            var hide = false;
+            if ($(event.target).parent().attr("class") == "like"){
+                if ($(event.target).parent().parent()
+                        .children(".commentsContainer")
+                        .has(".likesShow").length > 0) {
+                    $(event.target).parent().parent()
+                        .children(".commentsContainer")
+                        .children(".likesShow").remove();
+                    hide = true;
+                }
             } else {
-                var postID = object.postId;
+                if ($(event.target).parent().parent().parent()
+                        .has(".likesShow").length > 0) {
+                    $(event.target).parent().parent().parent().children(".likesShow").remove();
+                    hide = true;
+                }
+            }
+            if (!hide) {
+
                 $.ajax({
                     url: root + "post/getLikes/index.php",
                     type: "POST",
@@ -282,8 +324,15 @@ app.controller("wallController", function($scope) {
                     if ($scope.likedList.data.length == 0) {
                         console.log($(event.target).parent().parent().children(".commentsContainer").children(".commenetsShow"));
                         $(d).addClass("likesShow")
-                            .text("No one liked this yet.")
-                            .insertAfter($(event.target).parent().parent().children(".commentsContainer").children(".commentsShow"));
+                            .text("No one liked this yet.");
+                        if ($(event.target).parent().attr("class") == "like") {
+
+                            $(d).insertAfter($(event.target).parent().parent().children(".commentsContainer").children(".commentsShow"));
+                        } else {
+                            $(d).addClass("likesShow")
+                                .text("No one liked this yet.")
+                                .insertAfter($(event.target).parent().parent());
+                        }
                     } else {
                         var like = $scope.likedList.data;
                         var arrayNames = [];
@@ -293,14 +342,21 @@ app.controller("wallController", function($scope) {
                         })
                         console.log(arrayNames);
                         $(d).addClass("likesShow")
-                            .text("People that liked this: " + arrayNames)
-                            .insertAfter($(event.target).parent().parent()
+                            .text("People that liked this: " + arrayNames);
+                        if ($(event.target).parent().attr("class") == "like") {
+                            $(d).insertAfter($(event.target).parent().parent()
                                 .children(".commentsContainer").children(".commentsShow"));
+                        } else {
+                            $(d).addClass("likesShow")
+                                .text("People that liked this: " + arrayNames)
+                                .insertAfter($(event.target).parent().parent());
+                        }
                     }
 
                 })
             }
         }
+
 
         $scope.comments = function (event, object) {
 
@@ -326,7 +382,8 @@ app.controller("wallController", function($scope) {
                     url: root + "post/getComments/index.php",
                     type: "POST",
                     data: {
-                        postId: postID
+                        postId: postID,
+                        userId: userID
                     }
                 }).success(function (msg) {
                     $scope.postCommentsData = JSON.parse(msg);
@@ -347,6 +404,7 @@ app.controller("wallController", function($scope) {
                             posterPic = document.createElement("img");
                             mssg = document.createElement("div");
                             comment = document.createElement("div");
+                            likeComments = document.createElement("div");
 
 
                             $(posterPic).addClass("commentPosterPic")
@@ -358,15 +416,36 @@ app.controller("wallController", function($scope) {
                                 + " on " + comments[val].timestamp)
                                 .on("click", function () {
                                     openWall(comments[val].userId);
-                                    console.log(comments[val].userId);
                                 })
                                 .appendTo($(container));
+
+                            like1 = document.createElement("div");
+                            likeText1 = document.createElement("span");
+                            likeText2 = document.createElement("span");
+
+                            $(likeText1).addClass("likeText")
+                                .text($scope.isLiked(comments[val]) + "  ")
+                                .on("click", function (event2) {
+                                    $scope.likePost(comments[val].id, event2);
+                                })
+                                .appendTo($(like1));
+
+                            $(likeText2).addClass("likeText")
+                                .text(comments[val].likesNumber + " likes")
+                                .on("click", function (event2) {
+                                    $scope.showLikes(event2, comments[val].id);
+                                })
+                                .appendTo($(like1));
 
                             $(container).addClass("commentPoster").appendTo($(d));
 
                             $(mssg).addClass("commentText")
                                 .text(comments[val].message)
                                 .appendTo($(d));
+
+                            $(like1).addClass("like1")
+                                .appendTo($(likeComments));
+                            $(likeComments).addClass("likeComments").appendTo($(d));
 
                             $(d).addClass("comments").appendTo($(event.target).parent());
 

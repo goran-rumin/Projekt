@@ -5,16 +5,12 @@
 
 var app = angular.module("NewsFeed", []);
 
-
-
 app.controller("newsController", function ($scope) {
     $scope.profilePicture = "http://www.wiganlatics.co.uk/images/common/bg_player_profile_default_big.png";
     $scope.postOffset = 0;
     $scope.postsPicture = "http://www.photosnewhd.com/media/images/picture-wallpaper.jpg";
 
     var userID = location.search.split('userId=')[1];
-    var result;
-    console.log(root);
 
     $.ajax({
         url: root + "user/active/",
@@ -181,37 +177,86 @@ app.controller("newsController", function ($scope) {
 
         $scope.pictureURL = "";
         //TODO
-        $scope.postPicture = function () {
 
-        }
+
+        $scope.postPicture = function (event) {
+
+            if ($(event.target).attr("value") == "post"){
+                $(event.target).val("cancel");
+                $(event.target).text("Cancel upload");
+                x = document.createElement("input");
+                wrap = document.createElement("div");
+                form = document.createElement("form");
+                submit = document.createElement("input");
+
+                $(wrap).addClass("inputWrapper").appendTo($(event.target).parent());
+
+                $(x).addClass("inputFile")
+                    .attr("type", "file")
+                    .appendTo($(form));
+
+                $(form).attr("method", "post").attr("enctype", "multipart/form-data")
+                    .attr("target","upload_target").attr("id", "sendPhoto").appendTo($(wrap));
+
+                $(submit).attr("type", "submit").val("Upload").attr("id", "submit").appendTo($(wrap));
+
+            } else {
+                $(event.target).parent().children(".inputWrapper").remove();
+                $(event.target).text("Post picture");
+                $(event.target).val("post");
+            }
+
+
+        };
 
         $scope.newPost = function () {
             var textInput = $("#newPostData").val();
+            var url="";
             if (textInput == "" && $scope.pictureURL == "") {
                 $("#newPostMsg").html("Please choose photo or input your message.")
                 setTimeout(function () {
                     $("#newPostMsg").html("")
                 }, 2000);
             } else {
-                $.ajax({
-                    url: root + "post/publish/index.php",
-                    type: "POST",
-                    data: {
-                        sender: userID,
-                        recipient: userID,
-                        message: textInput,
-                        url: $scope.pictureURL
-                    }
-                }).success(function (msg) {
-                    $("#newPostForm").children('input').val('');
-                    $("#newPostMsg").html("Your message was posted!");
-                    setTimeout(function () {
-                        $("#newPostMsg").html("");
-                        $("#postsContainer").children(".post").remove();
-                        $scope.postOffset = 0;
-                        $scope.loadPosts();
-                    }, 2000);
-                })
+                if ($scope.pictureURL != "") {
+                    console.log($scope.pictureURL);
+                    $.ajax({
+                        url: root + "photos/base64",
+                        type: "POST",
+                        data:  {
+                            photo: $scope.pictureURL
+                        },
+                        processData: false,
+                        contentType: false,
+                        cache: false
+
+
+                    }).success(function (msg) {
+                        console.log(msg);
+                        var mssg = JSON.parse(msg);
+                        console.log("parsirano " +mssg);
+                    })
+                } else {
+                    $.ajax({
+                        url: root + "post/publish/index.php",
+                        type: "POST",
+                        data: {
+                            sender: userID,
+                            recipient: userID,
+                            message: textInput,
+                            url: url
+                        }
+                    }).success(function (msg) {
+                        $("#newPostForm").children('input').val('');
+                        $("#newPostMsg").html("Your message was posted!");
+                        setTimeout(function () {
+                            $("#newPostMsg").html("");
+                            $("#postsContainer").children(".post").remove();
+                            $scope.postOffset = 0;
+                            $scope.loadPosts();
+                        }, 2000);
+                    })
+                }
             }
         }
 
@@ -266,13 +311,25 @@ app.controller("newsController", function ($scope) {
 
         $scope.showLikes = function (event, postID) {
 
-            if ($(event.target).parent().parent()
-                    .children(".commentsContainer")
-                    .has(".likesShow").length > 0) {
-                $(event.target).parent().parent()
-                    .children(".commentsContainer")
-                    .children(".likesShow").remove();
+            console.log(event);
+            var hide = false;
+            if ($(event.target).parent().attr("class") == "like"){
+                if ($(event.target).parent().parent()
+                        .children(".commentsContainer")
+                        .has(".likesShow").length > 0) {
+                    $(event.target).parent().parent()
+                        .children(".commentsContainer")
+                        .children(".likesShow").remove();
+                    hide = true;
+                }
             } else {
+                if ($(event.target).parent().parent().parent()
+                        .has(".likesShow").length > 0) {
+                    $(event.target).parent().parent().parent().children(".likesShow").remove();
+                    hide = true;
+                }
+            }
+            if (!hide) {
 
                 $.ajax({
                     url: root + "post/getLikes/index.php",
@@ -288,10 +345,17 @@ app.controller("newsController", function ($scope) {
                     d = document.createElement("div");
 
                     if ($scope.likedList.data.length == 0) {
+
                         $(d).addClass("likesShow")
-                            .text("No one liked this yet.")
-                            .insertAfter($(event.target).parent().parent()
-                                .children(".commentsContainer").children(".commentsShow"));
+                            .text("No one liked this yet.");
+                        if ($(event.target).parent().attr("class") == "like") {
+
+                            $(d).insertAfter($(event.target).parent().parent().children(".commentsContainer").children(".commentsShow"));
+                        } else {
+                            $(d).addClass("likesShow")
+                                .text("No one liked this yet.")
+                                .insertAfter($(event.target).parent().parent());
+                        }
                     } else {
                         var like = $scope.likedList.data;
                         var arrayNames = [];
@@ -299,19 +363,22 @@ app.controller("newsController", function ($scope) {
                             var name = " " + like[val].name + " " + like[val].lastname;
                             arrayNames.push(name);
                         })
-
+                        console.log(arrayNames);
                         $(d).addClass("likesShow")
-                            .text("People that liked this: " + arrayNames)
-                            .insertAfter($(event.target).parent().parent()
+                            .text("People that liked this: " + arrayNames);
+                        if ($(event.target).parent().attr("class") == "like") {
+                            $(d).insertAfter($(event.target).parent().parent()
                                 .children(".commentsContainer").children(".commentsShow"));
-
-                        return arrayNames.length;
+                        } else {
+                            $(d).addClass("likesShow")
+                                .text("People that liked this: " + arrayNames)
+                                .insertAfter($(event.target).parent().parent());
+                        }
                     }
 
                 })
             }
         }
-
 
         $scope.comments = function (event, object) {
 
@@ -331,18 +398,18 @@ app.controller("newsController", function ($scope) {
         $scope.showComments = function (event, object) {
             var postID = object.postId;
             var contentShowed = false;
+
             if (!contentShowed) {
                 $.ajax({
                     url: root + "post/getComments/index.php",
                     type: "POST",
                     data: {
-                        postId: postID
+                        postId: postID,
+                        userId: userID
                     }
                 }).success(function (msg) {
-
                     $scope.postCommentsData = JSON.parse(msg);
                     $scope.$apply();
-
                     var comments = $scope.postCommentsData.data;
 
                     if (comments.length == 0) {
@@ -371,11 +438,26 @@ app.controller("newsController", function ($scope) {
                                 + " on " + comments[val].timestamp)
                                 .on("click", function () {
                                     openWall(comments[val].userId);
-
                                 })
                                 .appendTo($(container));
 
-                            $(container).addClass("commentPoster").appendTo($(d));
+                            like1 = document.createElement("div");
+                            likeText1 = document.createElement("span");
+                            likeText2 = document.createElement("span");
+
+                            $(likeText1).addClass("likeText")
+                                .text($scope.isLiked(comments[val]) + "  ")
+                                .on("click", function (event2) {
+                                    $scope.likePost(comments[val].id, event2);
+                                })
+                                .appendTo($(like1));
+
+                            $(likeText2).addClass("likeText")
+                                .text(comments[val].likesNumber + " likes")
+                                .on("click", function (event2) {
+                                    $scope.showLikes(event2, comments[val].id);
+                                })
+                                .appendTo($(like1));
 
                             $(container).addClass("commentPoster").appendTo($(d));
 
@@ -383,18 +465,15 @@ app.controller("newsController", function ($scope) {
                                 .text(comments[val].message)
                                 .appendTo($(d));
 
+                            $(like1).addClass("like1")
+                                .appendTo($(likeComments));
                             $(likeComments).addClass("likeComments").appendTo($(d));
 
                             $(d).addClass("comments").appendTo($(event.target).parent());
 
-
                         });
-
                     }
-                    contentShowed = true;
-
                 }).success(function () {
-
                     newComm = document.createElement("div");
                     input = document.createElement("input");
                     submit = document.createElement("button");
@@ -413,12 +492,16 @@ app.controller("newsController", function ($scope) {
 
                     $(newComm).addClass("comments")
                         .appendTo($(event.target).parent());
+
                 });
+                contentShowed = true;
             }
             if (contentShowed) {
                 $(event.target).text("Hide comments");
             }
-        }
+
+
+        };
 
 
         $scope.hideComments = function (event) {
@@ -449,12 +532,16 @@ app.controller("newsController", function ($scope) {
             $.ajax({
                 url: root + "user/logout/index.php"
             }).success(function () {
-                window.location.replace(root + "web/login/login.html");
+                window.location.replace(root + "web/login/");
             })
         }
 
         $("#newsfeedLink").on("click", function () {
             openNewsfeed($scope.activeUser);
+        });
+
+        $("#userProfilePicture").on("click", function () {
+            openWall($scope.activeUser);
         });
 
         $("#wallLink").on("click", function () {

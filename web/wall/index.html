@@ -65,10 +65,10 @@
                     <div id="postsContainer" class="tab active">
                         <div class="userNewPost">
                             <div class="newPost">
-                                <form id="newPostForm">
-                                    <input type="text" placeholder="What's on your mind..." id="newPostData"/>
+                                <form id="newPostForm" enctype="multipart/form-data">
+                                    <textarea form="newPostForm" type="text" placeholder="What's on your mind..." id="newPostData"></textarea>
                                 </form>
-                                <button class="button" id="postPicButton" ng-click="postPicture()">Post picture</button>
+                                <button class="button" id="postPicButton" ng-click="postPicture($event)">Post picture</button>
                                 <button class="button" id="submitNewPost" ng-click="newPost()">Send</button>
                                 <p class="errorMsg" id="newPostMsg"></p>
                             </div>

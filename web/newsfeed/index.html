@@ -49,15 +49,17 @@
     <div id="page">
         <div class="userNewPost">
             <div class="newPost">
-                <form id="newPostForm">
-                    <input type="text" placeholder="What's on your mind..." id="newPostData"/>
+                <form id="newPostForm" enctype="multipart/form-data">
+                    <textarea form="newPostForm" type="text" placeholder="What's on your mind..." id="newPostData"></textarea>
                 </form>
-                <button class="button" id="postPicButton" ng-click="postPicture()">Post picture</button>
+                <button class="button" id="postPicButton" value="post" ng-click="postPicture($event)">Post picture</button>
                 <button class="button" id="submitNewPost" ng-click="newPost()">Send</button>
+
+                <p id="result"></p>
                 <p class="errorMsg" id="newPostMsg"></p>
             </div>
             <div class="userInfo">
-                <img ng-src="{{profilePicture}}" ng-click="openWall(userID)" class="profilePic" id="userProfilePicture">
+                <img ng-src="{{profilePicture}}"  class="profilePic" id="userProfilePicture">
 
                 <div id="userContainer">
                     <span class="textUser" ng-bind="userData.data.name + ' ' + userData.data.lastname"> </span>

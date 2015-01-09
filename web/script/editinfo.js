@@ -10,23 +10,27 @@ $(document).ready(function() {
 
         $("#submit").on("click", function () {
             update(activeUserID);
-        })
+        });
 
         $("#newsfeedLink").on("click", function (){
             openNewsfeed(activeUserID);
-        })
+        });
 
         $("#wallLink").on("click", function (){
             openWall(activeUserID);
-        })
+        });
 
 
         $("#galleryLink").on("click", function (){
             openGallery(activeUserID);
-        })
+        });
 
         $("#messagesLink").on("click", function (){
             openMessages(activeUserID);
+        });
+
+        $("#upload").on("click", function(){
+            postPicture(event);
         })
 
     })
@@ -34,7 +38,6 @@ $(document).ready(function() {
 })
 
 function update(userID) {
-    var username = userID;
     var name = $("#name").val();
     var lastName = $("#lastName").val();
     var password = $("#password").val();
@@ -45,7 +48,7 @@ function update(userID) {
         $("#bottomDisc").html("Passwords do not match!");
     }
 	
-	else if (name == '' || lastName == '') {
+	if (name == '' || lastName == '') {
         $("#bottomDisc").show();
         $("#bottomDisc").html("Please enter both your first and last names!");
     }
@@ -61,14 +64,13 @@ function update(userID) {
             url: root + "user/edit/index.php",
             type: "POST",
             data: {
-                userId: username,
+                userId: userID,
                 name: name,
                 lastname: lastName,
                 password: password
             }
 
         }).success(function (msg) {
-            console.log(msg);
             success();
             $("#page").children("input").val("");
         })
@@ -78,12 +80,11 @@ function update(userID) {
             url: root + "user/edit/index.php",
             type: "POST",
             data: {
-                userId: username,
+                userId: userID,
                 password: password
             }
 
         }).success(function (msg) {
-            console.log(msg);
             success();
             $("#page").children("input").val("");
         })
@@ -93,17 +94,19 @@ function update(userID) {
             url: root + "user/edit/index.php",
             type: "POST",
             data: {
-                userId: username,
+                userId: userID,
                 name: name,
                 lastname: lastName
             }
 
         }).success(function (msg) {
-            console.log(msg);
             success();
             $("#page").children("input").val("");
         })
-    } 
+    }  else if (name != '' && lastName =='' || name=='' && lastName != '') {
+        $("#bottomDisc").show();
+        $("#bottomDisc").html("Please fill in both name and last name fields!");
+    }
 
     function success (){
         $("#bottomDisc").show();
@@ -115,4 +118,35 @@ function update(userID) {
             $("#bottomDisc").hide();
         }, 2000);
     }
+}
+function postPicture (event) {
+
+    if ($(event.target).parent().children().has("input").length ==0){
+        $(event.target).text("Cancel upload");
+        x = document.createElement("input");
+        wrap = document.createElement("div");
+        form = document.createElement("form");
+        submit = document.createElement("input");
+
+        $(wrap).addClass("inputWrapper").insertAfter($(event.target));
+
+        $(x).addClass("inputFile")
+            .attr("type", "file")
+            .appendTo($(form));
+
+        $(form).attr("method", "post").attr("enctype", "multipart/form-data")
+            .attr("target","upload_target").attr("id", "sendPhoto").appendTo($(wrap));
+
+        $(submit).attr("type", "submit").val("Upload").attr("id", "submit").appendTo($(wrap));
+
+    } else {
+        $(event.target).parent().children(".inputWrapper").remove();
+        $(event.target).text("Post picture");
+
     }
+
+
+};
+
+
+    //profile picture missing
