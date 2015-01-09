@@ -37,6 +37,10 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
                     console.log(response);
                     $scope.albumList = response.data;
                     console.log($scope.albumList);
+					if($scope.albumList == undefined) {
+                        $("#noPics").show();
+                        $("#noPics").html("No albums available!")
+                    }
                     $scope.myAlbum = "";
                 })
         };
@@ -57,7 +61,11 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
                     $scope.images = response.data;
                     console.log("Sad slike:");
                     console.log($scope.images);
-					if($scope.images.length <= 0 &&  albumId != undefined) $("#noPics").show();
+					if($scope.images.length <= 0 &&  albumId != undefined)
+                    {
+                        $("#noPics").show();
+                        $("#noPics").html("No images in this album, please choose another one!")
+                    }
                     else $("#noPics").hide(); 
                 })
         };
