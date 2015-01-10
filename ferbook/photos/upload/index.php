@@ -8,7 +8,7 @@
 
 include_once "../../constants.php";
 include_once "../../classes/Crypter.php";
-
+ 
 header("Access-Control-Allow-Origin: *");
 
 // Define response array
@@ -23,7 +23,7 @@ if( !isset($_POST['userId']) || !isset($_POST['url'])) {
     echo json_encode($response);
     die();
 };
-// Fetch the data
+// Fetch the data 
 if( isset($_POST['albumId'])) {
     $albumId = $_POST['albumId'];
 } else $albumId = 75000;
@@ -36,10 +36,10 @@ $width = imagesx( $im );
 $height = imagesy( $im );
 $photoname = $userId . time();
 $thumbname = $photoname."thm";
-imagejpeg($im, "data/".$photoname.".jpeg");
+imagejpeg($im, "data/".$photoname.".jpg");
 $tmp_img = imagecreatetruecolor( 75, 75 );
 imagecopyresized( $tmp_img, $im, 0, 0, 0, 0, 75, 75, $width, $height );
-imagejpeg( $tmp_img, "data/".$thumbname.".jpeg" );
+imagejpeg( $tmp_img, "data/".$thumbname.".jpg" );
 imagedestroy($tmp_img);
 imagedestroy($im);
 
@@ -63,7 +63,12 @@ if ( $defAlbum->fetch()->defaultAlbum == 0 ) {
 }
 
 // Create new post with image
+if(isset($_POST['message'])) {
+$upload = $db->prepare("INSERT INTO post(sender, recipient, url, message) VALUES (?,?,?,?)");
+$upload->bindParam(4, $_POST["message"]);
+} else {
 $upload = $db->prepare("INSERT INTO post(sender, recipient, url) VALUES (?,?,?)");
+}
 $upload->bindParam(1, $userId);
 $upload->bindParam(2, $userId);
 $upload->bindParam(3, $url);
@@ -87,4 +92,4 @@ $output = array(
     "url" => $url
 );
 $response["data"] = $output;
-echo str_replace("\\","",json_encode($response));
+echo str_replace("\\", "", json_encode($response));

@@ -31,86 +31,60 @@ if($result) {}
     else {
         $response["error"]=array(
             "errNum" => 3,
-            "errInfo" => "User with that username does not exist."
+            "errInfo" => "User with that user ID does not exist."
         );
 
         echo json_encode($response);
         die();
     }
 
-if(isset($_POST["name"]) && isset($_POST["lastname"]) && isset($_POST["password"])) {
-    $password = $_POST["password"];
-    $name = $_POST["name"];
-    $lastname = $_POST["lastname"];
+if(isset($_POST['password'])) {
+	$passwordNotOk = strlen($password) <= 0  || strlen($password)>100;
+		if($passwordNotOk) {
+			$response["error"]=array(
+				"errNum" => 2,
+				"errInfo" => "Invalid data formats."
+			);
 
-    $passwordNotOk = strlen($password) <= 0  || strlen($password)>100;
-    if($passwordNotOk) {
-        $response["error"]=array(
-            "errNum" => 2,
-            "errInfo" => "Invalid data formats."
-        );
-
-        echo json_encode($response);
-        die();
-    }
-
-    $query = $db->prepare("
-        UPDATE user
-        SET pass = ?, name = ?, last_name = ?
-        WHERE id = ?
-        ");
-    $query->bindParam(1,$password);
-    $query->bindParam(2,$name);
-    $query->bindParam(3,$lastname);
-    $query->bindParam(4,$userId);
-
-    $query->execute();
-
-} else if(isset($_POST["name"]) || isset($_POST["lastname"])) {
-    $name = $_POST["name"];
-    $lastname = $_POST["lastname"];
-
-    $query = $db->prepare("
-        UPDATE user
-        SET name = ?, last_name = ?
-        WHERE id = ?
-        ");
-    $query->bindParam(1,$name);
-    $query->bindParam(2,$lastname);
-    $query->bindParam(3,$userId);
-
-    $query->execute();
-} else if(isset($_POST["password"])){
-    $password = $_POST["password"];
-    $passwordNotOk = strlen($password) <= 0  || strlen($password)>100;
-    if($passwordNotOk) {
-        $response["error"]=array(
-            "errNum" => 2,
-            "errInfo" => "Invalid data formats."
-        );
-
-        echo json_encode($response);
-        die();
-    }
-
+			echo json_encode($response);
+			die();
+		}
     $query = $db->prepare("
         UPDATE user
         SET pass = ?
         WHERE id = ?
-        ");
-    $query->bindParam(1,$password);
-    $query->bindParam(2,$userId);
-
+    ");
+    $query->bindParam(1, $_POST["password"]);
+    $query->bindParam(2, $userId);
     $query->execute();
-} else {
-    $response["error"]=array(
-        "errNum" => 11,
-        "errInfo" => "Not a valid request."
-    );
-
-    echo json_encode($response);
-    die();
 }
+
+if(isset($_POST['name'])) {
+    $query = $db->prepare("
+        UPDATE user
+        SET name = ?
+        WHERE id = ?
+    ");
+    $query->bindParam(1, $_POST["name"]);
+    $query->bindParam(2, $userId);
+    $query->execute();
+}
+
+
+if(isset($_POST['lastname'])) {
+    $query = $db->prepare("
+        UPDATE user
+        SET last_name = ?
+        WHERE id = ?
+    ");
+    $query->bindParam(1, $_POST["lastname"]);
+    $query->bindParam(2, $userId);
+    $query->execute();
+}
+
+
+
+
 
 if(isset($_POST['pictureUrl'])) {
     $query = $db->prepare("
