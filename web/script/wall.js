@@ -6,12 +6,11 @@
 var app = angular.module("Wall",[]);
 
 app.controller("wallController", function($scope) {
-    $scope.profilePicture = "http://www.wiganlatics.co.uk/images/common/bg_player_profile_default_big.png";
+    $scope.profilePicture = "../images/profile_default_big.png";
     $scope.postOffset = 0;
-    $scope.postsPicture = "http://www.photosnewhd.com/media/images/picture-wallpaper.jpg";
+
 
     var userID = location.search.split('userId=')[1];
-
 
     $.ajax({
         url: root+"user/active/",
@@ -21,7 +20,7 @@ app.controller("wallController", function($scope) {
         var json = JSON.parse(msg);
         $scope.activeUserID = parseInt(json.data.id);
         $scope.$apply();
-        if ($scope.activeUser == -1) $scope.activeUser=location.search.split('userId=')[1];
+
 
         function readUserData() {
             //dohvaca podatke za korisnika ciji wall se gleda
@@ -33,11 +32,35 @@ app.controller("wallController", function($scope) {
                 }
             }).success(function (msg) {
                 $scope.userData = JSON.parse(msg);
+                if ($scope.userData.data.picture == null) {
+                    $scope.userData.data.picture = $scope.profilePicture;
+                }
                 $scope.$apply();
 
             })
         }
         readUserData();
+
+
+        if (userID != $scope.activeUserID) {
+
+            $("#postPicButton").hide(); //ne moze se postati slika na tudji zid
+
+
+            $.ajax({
+                url: root + "friends/status/index.php",
+                type: "POST",
+                data: {
+                    userId1: userID,
+                    userId2: $scope.activeUserID
+                }
+            }).success(function (msg) {
+                var status = JSON.parse(msg);
+                if (status.data.statusNumber != 1) {
+                    $(".userNewPost").hide();
+                }
+            })
+        }
 
         $scope.loadPosts = function () {
             $scope.postOffset = $scope.postOffset + 1;
@@ -53,7 +76,7 @@ app.controller("wallController", function($scope) {
 
                 $scope.postsData = JSON.parse(msg);
                 $scope.$apply();
-                console.log($scope.postsData.data);
+
                 var postData = $scope.postsData.data;
                 if (postData.length == 0) {
                     msgCont = document.createElement("div");
@@ -176,7 +199,7 @@ app.controller("wallController", function($scope) {
         $scope.loadPosts();
 
         $scope.pictureURL = "";
-        //TODO
+
         $scope.postPicture = function (event) {
 
             if ($(event.target).attr("value") == "post"){
@@ -193,15 +216,39 @@ app.controller("wallController", function($scope) {
                     .attr("type", "file")
                     .appendTo($(form));
 
+                $(x).change(function(){
+                    if (this.files[0].type != "image/jpeg") {
+                        $("#newPostMsg").html("Wrong file chosen, only supported .jpg photos. Please choose correct file.")
+                        setTimeout(function () {
+                            $("#newPostMsg").html("")
+                        }, 4000);
+                        $(event.target).parent().children(".inputWrapper").remove();
+                        $(event.target).text("Post picture");
+                        $(event.target).val("post");
+
+                        return false;
+                    } else if (this.files[0].size > 1048576) {
+                        $("#newPostMsg").html("Image you have selected is too big. Upload limit is 1 MB.");
+                        setTimeout(function () {
+                            $("#newPostMsg").html("");
+                        }, 4000);
+                        $(event.target).parent().children(".inputWrapper").remove();
+                        $(event.target).text("Post picture");
+                        $(event.target).val("post");
+                        return false;
+                    }
+                    readImage( this );
+                });
+
                 $(form).attr("method", "post").attr("enctype", "multipart/form-data")
                     .attr("target","upload_target").attr("id", "sendPhoto").appendTo($(wrap));
 
-                $(submit).attr("type", "submit").val("Upload").attr("id", "submit").appendTo($(wrap));
 
             } else {
                 $(event.target).parent().children(".inputWrapper").remove();
                 $(event.target).text("Post picture");
                 $(event.target).val("post");
+                $scope.pictureURL="";
             }
 
 
@@ -209,32 +256,65 @@ app.controller("wallController", function($scope) {
 
         $scope.newPost = function () {
             var textInput = $("#newPostData").val();
+
             if (textInput == "" && $scope.pictureURL == "") {
-                $("#newPostMsg").html("Please choose photo or input your message.");
+                $("#newPostMsg").html("Please choose photo or input your message.")
                 setTimeout(function () {
-                    $("#newPostMsg").html("");
+                    $("#newPostMsg").html("")
                 }, 2000);
+            } else if ($scope.pictureURL != ""){
+
+                $("#newPostMsg").html("Your image is uploading.");
+                $.ajax({
+                    url: root + "photos/upload/index.php",
+                    type: "POST",
+                    data: {
+                        userId: userID,
+                        message: textInput,
+                        url: $scope.pictureURL
+                    }
+                }).success(function (msg) {
+
+                    $("#newPostForm").children('textarea').val('');
+                    $("#newPostMsg").html("Your message was posted!");
+                    $("#postPicButton").parent().children(".inputWrapper").remove();
+                    $("#postPicButton").text("Post picture");
+                    $("#postPicButton").val("post");
+                    setTimeout(function () {
+                        $("#newPostMsg").html("");
+                        $("#postsContainer").children(".post").remove();
+                        $scope.postOffset = 0;
+                        $scope.loadPosts();
+                    }, 2000);
+
+                    $scope.pictureURL="";
+                    $scope.$apply();
+                })
             } else {
                 $.ajax({
                     url: root + "post/publish/index.php",
                     type: "POST",
                     data: {
-                        sender: $scope.activeUserID,
+                        sender: userID,
                         recipient: userID,
                         message: textInput,
-                        url: $scope.pictureURL
+                        url: ""
                     }
                 }).success(function (msg) {
-                    $("#newPostForm").children('input').val('');
+                    $("#newPostForm").children('textarea').val('');
                     $("#newPostMsg").html("Your message was posted!");
                     setTimeout(function () {
                         $("#newPostMsg").html("");
                         $("#postsContainer").children(".post").remove();
-                        $scope.postOffset=0;
+                        $scope.postOffset = 0;
                         $scope.loadPosts();
                     }, 2000);
+                    $scope.pictureURL="";
+                    $scope.$apply();
                 })
             }
+
+
         }
 
         $scope.posterText = function (object) {
@@ -514,7 +594,7 @@ app.controller("wallController", function($scope) {
         });
 
         $("#editInfo button").on("click", function () {
-            window.location.replace(root + "web/editinfo/");
+            window.location.replace(rootRed + "editinfo/");
         });
 
         if (userID != $scope.activeUserID) {
@@ -768,5 +848,16 @@ app.controller("wallController", function($scope) {
         });
 
     });
+    // Jquery funkcija za upload slika
+    function readImage(input) {
+        if ( input.files && input.files[0] ) {
+            var FR= new FileReader();
+            FR.onload = function(e) {
+                $scope.pictureURL = e.target.result.substr(e.target.result.indexOf(",")+1);
+
+            };
+            FR.readAsDataURL( input.files[0] );
+        }
+    }
 
 });

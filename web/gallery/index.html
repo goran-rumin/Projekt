@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html ng-app="gallery">
+<html >
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>Gallery</title>
     <script type="text/javascript" src="../angular/angular.js" ></script>
 
     <script type="text/javascript" src="jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" src="../angular/angular-animate.js" ></script>
-    <script type="text/javascript" src="../angular/angular-touch.js" ></script>
     <script type="text/javascript" src="../script/gallery.js"></script>
     <script type="text/javascript" src="../script/links.js"></script>
     <script type="text/javascript" src="../script/root.js"></script>
@@ -15,8 +13,10 @@
 	<link rel="stylesheet" href="../css/alert.css" type="text/css" />
     <link rel="stylesheet" href="../css/galleryStyle.css" type="text/css" />
     <link rel="stylesheet" href="../css/template.css" type="text/css" />
+
+
 </head>
-<body>
+<body ng-app="gallery">
 
 <div id="header">
     <div id="top">
@@ -63,17 +63,25 @@
                     <img src="{{a.url}}" ng-click="showPhoto($index);" />
                 </li>
             </ul>
-        </div><div class="container slider">
-        <img ng-repeat="a in images" class="slide" ng-swipe-right="showPrev()" ng-swipe-left="showNext()" ng-show="isActive($index)" ng-src="{{a.url}}" />
+        </div>
+        <div class="container slider">
+            <div class="picContainer">
+                <img ng-repeat="a in images" class="slide"  ng-show="isActive($index)" ng-src="{{a.url}}" />
+            </div>
 
-        <a class="arrow prev" href="" ng-click="showPrev()" ng-hide="images.length <= 0"></a>
-        <a class="arrow next" href="" ng-click="showNext()" ng-hide="images.length <= 0"></a>
+            <a class="arrow prev" href="" ng-click="showPrev()" ng-hide="images.length <= 0"></a>
+            <a class="arrow next" href="" ng-click="showNext()" ng-hide="images.length <= 0"></a>
+        </div>
+
     </div>
-</div>
     <div class="footer drop">
-        <input type="file" />
+        <button class="btn btn-default" id="uploadNew" ng-click="postPicture($event)">Upload new photo</button>
+        <p id="uploadMsg"></p>
     </div>
+    </div>
+
 </div>
+
 
 
 
