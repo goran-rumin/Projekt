@@ -18,7 +18,8 @@ var userID = location.search.split('userId=')[1];
     }).success(function(msg) {
         var json = JSON.parse(msg);
         $scope.activeUserID = parseInt(json.data.id);
-        $scope.$apply;
+
+        $scope.$apply();
         if ($scope.activeUser == -1) $scope.activeUser=location.search.split('userId=')[1];
 
         $scope.readUserData =function() {
@@ -27,7 +28,7 @@ var userID = location.search.split('userId=')[1];
                 url: root + "user/info/index.php",
                 type: "POST",
                 data: {
-                    userId: $scope.userID
+                    userId: userID
                 }
             }).success(function (msg) {
                 $scope.userData = JSON.parse(msg);
@@ -52,20 +53,18 @@ var userID = location.search.split('userId=')[1];
             $scope.$apply();
             console.log($scope.conversationData.data);
             console.log($scope.activeUserID);
-            console.log(userID);
-
         })
     }
     $scope.readConversation();
 
 
 
-        $scope.getInfo = function(userID){
+        $scope.getInfo = function(userIDpom){
             $.ajax({
                 url: root + "user/info/index.php",
                 type: "POST",
                 data: {
-                    userId: userID
+                    userId: userIDpom
                 }
             }).success(function (msg) {
                 $scope.userInfo = JSON.parse(msg);
@@ -86,23 +85,26 @@ var userID = location.search.split('userId=')[1];
 			}
 		else{
 			$.ajax({
-                url: "../../messages/send/index.php",
+                url: root + "messages/send/index.php",
                 type: "POST",
                 data: {
-                    userid1: $scope.activeUserID,
-                    userid2: userID,
+                    userId1: $scope.activeUserID,
+                    userId2: userID,
                     message: message
                 }
             }).success(function (msg) {
+				console.log($scope.activeUserID);
+				console.log(userID);
+				console.log(message);
+					$("#message").val("");
                     setTimeout(function () {
                         $("#emptyMessage").html("Your message was sent!");
 
-                        $scope.readConversation();
                     }, 2000);
+				 $scope.readConversation();
                 })
             }
         }
-
 
         $("#newsfeedLink").on("click", function () {
             openNewsfeed($scope.activeUserID);

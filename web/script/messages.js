@@ -7,6 +7,7 @@ var app = angular.module("Messages",[]);
 app.controller("messagesController", function($scope) {
     var userID2;
 
+
     $.ajax({
         url: root+"user/active/",
         type : "POST",
@@ -14,6 +15,7 @@ app.controller("messagesController", function($scope) {
     }).success(function(msg) {
         var json = JSON.parse(msg);
         $scope.activeUserID = parseInt(json.data.id);
+
         $scope.$apply();
         if ($scope.activeUserID== -1) $scope.activeUser=location.search.split('userId=')[1];
 
@@ -53,10 +55,10 @@ app.controller("messagesController", function($scope) {
 
             })
         }
-        $scope.openConversation=function(userID){
-            window.location = root + "web/Conversation/?userId=" + userID;
-
-        }
+		
+		$scope.openConversation = function (userID3){
+			openConversation(userID3);
+		}
 
         $("#newsfeedLink").on("click", function () {
             openNewsfeed($scope.activeUserID);
@@ -86,9 +88,8 @@ app.controller("messagesController", function($scope) {
             openNewMessage($scope.activeUserID);
         });
      // $("#name").on("click", function () {
-      //    console.log($scope.userID2);
-      //     openConversation($scope.userID2);
-      // });
+     //      openConversation($scope.userID2);
+     // });
 
 
 

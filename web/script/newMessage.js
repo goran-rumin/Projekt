@@ -6,7 +6,6 @@ var app=angular.module("NewMessage", []);
 
 app.controller("newMsgController", function($scope) {
     var userID2=0;
-
     $.ajax({
         url: root+"user/active/",
         type : "POST",
