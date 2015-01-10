@@ -18,6 +18,7 @@
 
 </head>
 <body ng-app="Messages" ng-controller="messagesController">
+
 <div id="header" >
     <div id="top">
         <div id="logo">
@@ -51,16 +52,17 @@
         <div class="messagesContainer">
             <div class="message" ng-repeat="obj in messagesData.data"  >
                 <div class="messageBox" ng-init="getInfo(obj.userId)">
-                    <img class="profilePic" ng-click="openWall(obj.userId)"
-                         ng-src="userInfo.data.picture" >
-
-                    <span id="name" ng-click="openMessage(obj.userId)"
-                          ng-bind="userInfo.data.name + ' ' + userInfo.data.lastname"></span>
+                    <img class="profilePic"
+                         ng-src="userInfo.data.picture" ng-show="userInfo.data.picture!=null">
+                    <img class="profilePic"
+                         ng-src="http://www.wiganlatics.co.uk/images/common/bg_player_profile_default_big.png" ng-show="userInfo.data.picture==null">
+                    <span id="name" ng-click="openConversation(obj.userId)"
+                          ng-bind="userInfo.data.name + ' ' + userInfo.data.lastname" ></span>
                     <span id="time" ng-bind="obj.lastMessage.timestamp"></span>
                     <p id="lastMessage" ng-bind="obj.lastMessage.message">
                     </p>
-                    <img src="../images/seen.png" class="seen" ng-show="obj.lastMessage.flag">
-                    <img src="../images/notseen.png" class="seen" ng-show="!obj.lastMessage.flag">
+                    <img src="../images/seen.png" class="seen" ng-show="!obj.lastMessage.flag">
+                    <img src="../images/notseen.png" class="seen" ng-show="obj.lastMessage.flag">
 
                 </div>
                 <div class="clearfix"></div>

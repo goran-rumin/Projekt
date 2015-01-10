@@ -5,6 +5,7 @@
 var app = angular.module("Messages",[]);
 
 app.controller("messagesController", function($scope) {
+    var userID2;
 
     $.ajax({
         url: root+"user/active/",
@@ -38,19 +39,24 @@ app.controller("messagesController", function($scope) {
         $scope.readMessages();
 
 
-    function getInfo(userID){
-        $.ajax({
-            url: root + "user/info/index.php",
-            type: "POST",
-            data: {
-                userId: userID
-            }
-        }).success(function (msg) {
-            $scope.userInfo = JSON.parse(msg);
-            $scope.$apply();
+        $scope.getInfo = function(userID){
+            $.ajax({
+                url: root + "user/info/index.php",
+                type: "POST",
+                data: {
+                    userId: userID
+                }
+            }).success(function (msg) {
+                $scope.userInfo = JSON.parse(msg);
+                $scope.$apply();
+                console.log($scope.userInfo.data);
 
-        })
-    }
+            })
+        }
+        $scope.openConversation=function(userID){
+            window.location = root + "web/Conversation/?userId=" + userID;
+
+        }
 
         $("#newsfeedLink").on("click", function () {
             openNewsfeed($scope.activeUserID);
@@ -79,6 +85,12 @@ app.controller("messagesController", function($scope) {
         $("#newMessage").on("click", function () {
             openNewMessage($scope.activeUserID);
         });
+     // $("#name").on("click", function () {
+      //    console.log($scope.userID2);
+      //     openConversation($scope.userID2);
+      // });
+
+
 
 	});
 });
