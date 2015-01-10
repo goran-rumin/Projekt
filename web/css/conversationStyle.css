@@ -1,14 +1,16 @@
 
-#messagesBox, #message {
+.message {
     box-shadow: 0px 0px 2px 3px firebrick;
     width: 100%;
 }
 #messagesBox{
-    min-height: 150px;
+    min-height: 70px;
+    min-width: 100%;
+    align-self: center;
 }
 .seen{
     width:30px;
-    height: 30px;
+    min-height: 3px;
     position: relative;
     float:right;
 }
@@ -20,8 +22,8 @@
 .profilePic{
     height: 50px;
     width:50px;
-    margin-top:8px;
-    margin-bottom: 8px;
+    top:8px;
+    bottom: 8px;
     float:left;
     z-index: 1000;
     position: relative;
@@ -29,21 +31,16 @@
 
 #currentMessage {
     position: relative;
-    top: 40px;
-    right: 125px;
+    z-index: 10;
+    top:40px;
+    right:95px;
     text-align: left;
-    vertical-align: middle;
     font-size: 15px;
     color: black;
-    display: block;
     overflow: hidden;
 
 }
 
-#more{
-    font-size: 20px;
-    color: #c9c9c9;
-}
 
 
 
@@ -53,24 +50,20 @@
     z-index: 100;
     top:10px;
     left:10px;
-    font-size: 20px;
+    font-size: 15px;
     color:firebrick;
 }
 
 #time{
     float:right;
     top:10px;
-    font-size: 20px;
+    font-size: 15px;
     color: firebrick;
     position: relative;
     z-index: 100;
     right: 10px;
 }
 
-#message{
-    height: 40px;
-    width: 100%;
-}
 
 #sendB{
     border-radius: 20px;
@@ -92,4 +85,14 @@
 button:hover{
     cursor: pointer;
     cursor:hand;
+}
+
+#message{
+    width:100%;
+    box-shadow: 0px 0px 2px 3px firebrick;
+    height: 40px;
+}
+
+#emptyMessage{
+    color:firebrick;
 }

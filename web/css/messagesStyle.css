@@ -40,8 +40,8 @@ button:hover, .messageBox:hover {
 }
 
 .profilePic{
-    min-height: 74px;
-    min-width:74px;
+    height: 74px;
+    width:74px;
     margin-top:8px;
     margin-bottom: 8px;
     float:left;

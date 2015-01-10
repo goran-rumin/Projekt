@@ -43,23 +43,26 @@
     <div id='page'>
 
         <div class="messagesContainer">
-            <div class="message" ng-repeat="obj in conversationData.data" >
-                <div id="messagesBox" ng-init="getInfo(obj.senderId)">
+            <div class="message" >
+                <div id="messagesBox" ng-repeat="obj in conversationData.data"  ng-init="getInfo(obj.senderId)">
 
-                    <img class="profilePic" ng-click="openWall(obj.senderId)"
-                         ng-src="userInfo.data.picture">
+                    <img class="profilePic"
+                         ng-src="userInfo.data.picture" ng-show="userInfo.data.picture!=null">
+                    <img class="profilePic"
+                         ng-src="http://www.wiganlatics.co.uk/images/common/bg_player_profile_default_big.png" ng-show="userInfo.data.picture==null">
+
 
                     <span id="name" ng-bind="userInfo.data.name + ' ' + userInfo.data.lastname"></span>
-                    <span id="time" ng-bind="obj.message.timestamp"></span>
-                    <p id="currentMessage" ng-bind="obj.message">
-                    </p>
-                    <img src="../images/seen.png" class="seen" ng-show="obj.flag">
-                    <img src="../images/notseen.png" class="seen" ng-show="!obj.flag">
+                    <span id="time" ng-bind="obj.timestamp"></span>
+                    <div id="currentMessage" ng-bind="obj.message">
+                    </div>
+                    <img src="../images/seen.png" class="seen" ng-show="!obj.flag">
+                    <img src="../images/notseen.png" class="seen" ng-show="obj.flag">
 
                 </div>
                 </div>
 
-            <div style="height: 10px"></div>
+            <div style="height: 30px"></div>
 
             <textarea type="text" id="message"placeholder="Write reply..."></textarea>
             <button ng-click="send()" id="sendB"><span id="sendText"><b>SEND</b></span></button>
