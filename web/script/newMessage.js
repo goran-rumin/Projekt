@@ -55,8 +55,7 @@ app.controller("newMsgController", function($scope) {
         }
 
             else {
-                //  Object.getOwnPropertyNames(ufr).forEach(function (val) {
-                for(val in ufr) {
+                  Object.getOwnPropertyNames(ufr).forEach(function (val){
                     if (val == "length") return false;
                     d = document.createElement("div");
                     var friendStat;
@@ -72,7 +71,7 @@ app.controller("newMsgController", function($scope) {
                         $scope.$apply();
 
                         friendStat = $scope.status.data.statusNumber;
-                        if(friendStat ==1 ){
+                        if(friendStat ==1 && ufr[val].id != $scope.activeUserID){
                             d = document.createElement("div");
                             item = document.createElement("li");
                             infoAdd = document.createElement("div");
@@ -100,7 +99,7 @@ app.controller("newMsgController", function($scope) {
 
                     })
 
-                        }
+                        })
 
                     }
 

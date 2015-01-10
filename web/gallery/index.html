@@ -8,7 +8,6 @@
     <script type="text/javascript" src="jquery-1.11.1.min.js"></script>
     <script type="text/javascript" src="../angular/angular-animate.js" ></script>
     <script type="text/javascript" src="../angular/angular-touch.js" ></script>
-    <script type="text/javascript" src="ng-flow-standalone.js" ></script>
     <script type="text/javascript" src="../script/gallery.js"></script>
     <script type="text/javascript" src="../script/links.js"></script>
     <script type="text/javascript" src="../script/root.js"></script>
@@ -71,15 +70,8 @@
         <a class="arrow next" href="" ng-click="showNext()" ng-hide="images.length <= 0"></a>
     </div>
 </div>
-    <div class="footer" id="upload" flow-init
-         flow-files-submitted="$flow.upload()"
-         flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]">
-        <div class="drop" flow-drop ng-class="dropClass">
-            <span class="btn btn-default" flow-btn>Upload Image</span>
-            <span class="btn btn-default" flow-btn flow-directory ng-show="$flow.supportDirectory">Upload Folder of Images</span>
-            <b>OR</b>
-            Drag And Drop your images here
-            </div>
+    <div class="footer drop">
+        <input type="file" />
     </div>
 </div>
 
