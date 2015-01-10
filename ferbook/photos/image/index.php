@@ -25,13 +25,15 @@ if( !isset($_POST['postId'])) {
 // Fetch the data
 $postId = $_POST['postId'];
 $db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
-$image = $db->prepare("SELECT url FROM post WHERE id = ?");
+$image = $db->prepare("SELECT url, message FROM post WHERE id = ?");
 $image->bindParam(1, $postId);
 $image->setFetchMode(PDO::FETCH_OBJ);
 $image->execute();
-$url = $image->fetch()->url;
+
+$img = $image->fetch();
 $output = array(
-    "url" => $url
+    "url" => $img->url,
+	"message" => $img->message
 );
 
 $response["data"] = $output;
