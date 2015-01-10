@@ -10,7 +10,7 @@
 	vertical-align:top;
     min-width: 100%;
     align-self: center;
-	border:solid black 2px;
+	border:solid grey 2px;
 }
 /*.seen{
     width:30px;
@@ -34,14 +34,15 @@
 }
 
 #currentMessage {
-    position: relative;
-	height:110%;
-    top:40px;
-    text-align: left;
-    font-size: 15px;
-    color: black;
-    overflow: hidden;
-
+height: 110%;
+padding-top: 50px;
+text-align: left;
+font-size: 15px;
+color: black;
+overflow: auto;
+width: 850px;
+margin-bottom: 20px;
+white-space:pre-wrap;
 }
 
 
@@ -91,7 +92,8 @@ button:hover{
 #message{
     width:100%;
     box-shadow: 0px 0px 2px 3px firebrick;
-    height: 40px;
+    height: 70px;
+	resize:none;
 }
 
 #emptyMessage{

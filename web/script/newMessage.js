@@ -13,6 +13,7 @@ app.controller("newMsgController", function($scope) {
     }).success(function(msg) {
         var json = JSON.parse(msg);
         $scope.activeUserID = parseInt(json.data.id);
+
         $scope.$apply();
         console.log($scope.activeUserID);
         if ($scope.activeUserID== -1) $scope.activeUser=location.search.split('userId=')[1];
@@ -43,6 +44,7 @@ app.controller("newMsgController", function($scope) {
         }
 
         $scope.listFriends = function (ufr) {
+			
             if (ufr.length == 0) {
             d = document.createElement("div");
             $(d).addClass("commentsError")
