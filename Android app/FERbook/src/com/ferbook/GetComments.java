@@ -49,9 +49,7 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
-    	NameValuePair post=new BasicNameValuePair("postId", (String) arg0[0]);    	
-    	NameValuePair user=new BasicNameValuePair("userId", Vrati_id.vrati(ak)); 
-    	params.add(post);       
+    	NameValuePair user=new BasicNameValuePair("postId", (String) arg0[0]);    	
     	params.add(user);            	
     	
     	ServiceHandler sh = new ServiceHandler();    	
@@ -70,10 +68,10 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     			imena=data.names(); //JSONArray
     	    	
     			int i;
-    			List<String> jsonValues = new ArrayList<String>();
+    			List<Integer> jsonValues = new ArrayList<Integer>();
     			
     			for (i = 0; i < imena.length(); i++)		//trebam od starijih prema novijima, to ima logike za komentare, znaci od manjih prema vecim idjevima
-    			   jsonValues.add(imena.getString(i));
+    			   jsonValues.add(Integer.parseInt(imena.getString(i)));
     			
     			Collections.sort(jsonValues);				//ovo je ascending, tj od manjih prema vecima
     			//Collections.reverse(jsonValues);
@@ -81,7 +79,7 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     			JSONArray sortedJsonArray = new JSONArray();
     			
     			for(i=0;i<jsonValues.size();i++)
-    				sortedJsonArray.put(jsonValues.get(i));
+    				sortedJsonArray.put(Integer.toString(jsonValues.get(i)));
     				
     			imena=sortedJsonArray;				//konacno
     			
