@@ -49,7 +49,9 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
-    	NameValuePair user=new BasicNameValuePair("postId", (String) arg0[0]);    	
+    	NameValuePair post=new BasicNameValuePair("postId", (String) arg0[0]);    	
+    	NameValuePair user=new BasicNameValuePair("userId", Vrati_id.vrati(ak)); 
+    	params.add(post);       
     	params.add(user);            	
     	
     	ServiceHandler sh = new ServiceHandler();    	

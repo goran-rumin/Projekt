@@ -38,7 +38,7 @@ public class Inbox extends AsyncTask<Object, Void, Void> {
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
-    	NameValuePair user=new BasicNameValuePair("userId1", (String) arg0[0]);    	
+    	NameValuePair user=new BasicNameValuePair("userId", (String) arg0[0]);    	
     	params.add(user);            	
     	
     	ServiceHandler sh = new ServiceHandler();    	

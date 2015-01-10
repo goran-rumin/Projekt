@@ -36,7 +36,7 @@ $album->execute();
 $allImages = array();
 foreach ($album as $imageId) {
     if ( $userId > 0 ) {
-        $image = $db->prepare("SELECT url FROM post WHERE id = ? AND sender = ?");
+        $image = $db->prepare("SELECT url,message FROM post WHERE id = ? AND sender = ?");
         $image->bindParam(1, $imageId->idImage);
         $image->bindParam(2, $userId);
         $image->setFetchMode(PDO::FETCH_OBJ);
@@ -44,7 +44,8 @@ foreach ($album as $imageId) {
         foreach ( $image as $userimage ) {
             $imagedata = array(
                 "postId" => $imageId->idImage,
-                "url" => $userimage->url
+                "url" => $userimage->url,
+				"message" => $userimage->message
             );
             $allImages[] = $imagedata;
         }

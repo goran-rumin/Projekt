@@ -3,7 +3,7 @@
  */
 'use strict';
 
-var gallery = angular.module('gallery', ['ngAnimate', 'ngTouch', 'flow']);
+var gallery = angular.module('gallery', ['ngAnimate', 'ngTouch']);
 gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function ($scope, $http, $templateCache) {
     $scope.images = [];
 

@@ -79,7 +79,13 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi, OnScroll
 			listview.addFooterView(footer);
 			listview.setAdapter(adapter);
 			listview.setOnScrollListener(this);
+			
 			user_id=getArguments().getString("userid");
+			if(savedInstanceState!=null)
+				user_id=savedInstanceState.getString("userid");
+			if(user_id==null)
+				user_id=Vrati_id.vrati(getActivity());
+			
 			post_text = (EditText) rootView.findViewById(R.id.post_text);
 			post_send = (Button) rootView.findViewById(R.id.post_send);
 			post_send.setOnClickListener(this);
@@ -123,6 +129,11 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi, OnScroll
 					ARG_SECTION_NUMBER));*/
 		}
 
+		@Override
+		public void onSaveInstanceState(Bundle stanje){
+			stanje.putString("userid", user_id);
+		}
+		
 		@Override
 		public void prenesi_newsfeed(List<String> postIds, List<String> texts,
 				List<Drawable> urlovi_u_postu, List<String> timestamps,
@@ -202,6 +213,8 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi, OnScroll
 							if(!uri.getPath().endsWith(".jpg") && !uri.getPath().endsWith(".jpeg")){
 								put = getRealPathFromURI(uri);
 							}
+							else
+								put=uri.getPath();
 							if(!put.endsWith(".jpg") && !put.endsWith(".jpeg")){
 								Toast.makeText(getActivity(), "Supported format is JPG", Toast.LENGTH_SHORT).show();
 								smije_objaviti=true;
