@@ -14,14 +14,15 @@ import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 
-public class Upload extends AsyncTask<Object, Void, String> {
+public class Upload extends AsyncTask<Object, Void, Void> {
 	private prenesi sucelje;
-	private static String url="http://vdl.hr/ferbook/photos/upload/index.php";
+	//private static String url="http://vdl.hr/ferbook/photos/upload/index.php";
+	private static String url="http://192.168.1.221/index.php";
 	private String url_slike=null, error_info=null;
 	Bitmap image;
 
 	@Override
-	protected String doInBackground(Object... arg0) {
+	protected Void doInBackground(Object... arg0) {
 		String userId= (String) arg0[0];
 		image=(Bitmap) arg0[1];
 		String albumId= (String) arg0[2];	//OPTIONAL inače null
@@ -35,12 +36,14 @@ public class Upload extends AsyncTask<Object, Void, String> {
 		List<NameValuePair> params= new ArrayList<NameValuePair>();
 		params.add(prvi);
 		params.add(drugi);
-		
+		Log.e("slika2","*"+prvi+" "+drugi+"*");
 		if(albumId!=null) params.add(new BasicNameValuePair("albumId", albumId));
 		
 		ServiceHandler sh = new ServiceHandler();
     	
     	String jsonStr =sh.makeServiceCall(url,  ServiceHandler.POST, params);
+    	Log.e("slika","*"+jsonStr+"*");
+    	
     	
     	if(jsonStr != null){
     		try{
@@ -72,7 +75,7 @@ public class Upload extends AsyncTask<Object, Void, String> {
 		return null;
 	}
 	
-	protected void onPostExecute() {
+	protected void onPostExecute(Void param) {
 	        sucelje.prenesi_upload(url_slike ,error_info);	
 	    }
 	
