@@ -131,7 +131,7 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 				mIds.add(albumIds.get(i));
 			}
 			
-			mGridView.setAdapter(new GalleryImageAdapter(view.getContext(), mNaslovnice, mIds));
+			mGridView.setAdapter(new GalleryImageAdapter(view.getContext(), mNaslovnice, mIds, mNazivi));
 		} else {
 			//Ako ne postoji niti jedan album, postavi poruku.
 			mGridView.setVisibility(View.INVISIBLE);
@@ -150,6 +150,6 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 	@Override
     public void onResume(){
     	super.onResume();
-    	new Galleries().execute(userId, this);
+    	//new Galleries().execute(userId, this);
     }
 }

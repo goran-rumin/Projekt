@@ -41,8 +41,8 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
         postId =  (String)getIntent().getStringExtra(EXTRA_POST_ID);
         mUserId = Vrati_id.vrati(this);
         
-        new Image().execute(postId);
-        new GetLikes().execute(postId, this); 
+        new Image().execute(postId, this);
+        //new GetLikes().execute(postId, this); 
         
         /*
          * Za simulaciju.

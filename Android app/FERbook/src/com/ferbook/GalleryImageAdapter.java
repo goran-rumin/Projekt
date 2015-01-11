@@ -23,11 +23,13 @@ public class GalleryImageAdapter extends BaseAdapter{
 		private List<Drawable> pictures = new ArrayList<Drawable>();
 		private List<String> galleryIds = new ArrayList<String>();
         private LayoutInflater inflater;
+        private List<String> mNazivi = new ArrayList<String>();
 
-        public GalleryImageAdapter(Context c, List<Drawable> slike, List<String> ids){
+        public GalleryImageAdapter(Context c, List<Drawable> slike, List<String> ids, List<String> nazivi){
             inflater = LayoutInflater.from(c);
             pictures = slike;
             galleryIds = ids;
+            mNazivi = nazivi;
         }
 
         @Override
@@ -62,7 +64,7 @@ public class GalleryImageAdapter extends BaseAdapter{
 
             //picture.setImageResource(myIds.get(position));
             picture.setImageDrawable(pictures.get(position));
-            album_name.setText("Album " + (position + 1));
+            album_name.setText(mNazivi.get(position));
 
             return view;
         }
