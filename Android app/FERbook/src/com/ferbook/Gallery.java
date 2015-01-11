@@ -34,7 +34,7 @@ public class Gallery extends AsyncTask<Object, Void, String> {
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
-    	NameValuePair user=new BasicNameValuePair("galleryId", galleryId);    	
+    	NameValuePair user=new BasicNameValuePair("albumId", galleryId);    	
     	params.add(user);            	
     	
     	ServiceHandler sh = new ServiceHandler();    	
