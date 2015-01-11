@@ -1,17 +1,23 @@
 
-#messagesBox, #message {
+.message {
     box-shadow: 0px 0px 2px 3px firebrick;
     width: 100%;
 }
 #messagesBox{
-    min-height: 150px;
+    min-height: 70px;
+	height:auto;
+	display:inline-block;
+	vertical-align:top;
+    min-width: 100%;
+    align-self: center;
+	border:solid grey 2px;
 }
-.seen{
+/*.seen{
     width:30px;
-    height: 30px;
+    min-height: 3px;
     position: relative;
     float:right;
-}
+}*/
 
 .clearFix{
     clear:both;
@@ -20,57 +26,46 @@
 .profilePic{
     height: 50px;
     width:50px;
-    margin-top:8px;
-    margin-bottom: 8px;
+    top:8px;
+    bottom: 8px;
+	left: 8px;
     float:left;
-    z-index: 1000;
     position: relative;
 }
 
 #currentMessage {
-    position: relative;
-    top: 40px;
-    right: 125px;
-    text-align: left;
-    vertical-align: middle;
-    font-size: 15px;
-    color: black;
-    display: block;
-    overflow: hidden;
-
+height: 110%;
+padding-top: 50px;
+text-align: left;
+font-size: 15px;
+color: black;
+overflow: auto;
+width: 850px;
+margin-bottom: 20px;
+white-space:pre-wrap;
 }
 
-#more{
-    font-size: 20px;
-    color: #c9c9c9;
-}
 
 
 
 #name{
     float:left;
     position: relative;
-    z-index: 100;
     top:10px;
-    left:10px;
-    font-size: 20px;
+    left:15px;
+    font-size: 15px;
     color:firebrick;
 }
 
 #time{
     float:right;
     top:10px;
-    font-size: 20px;
+    font-size: 15px;
     color: firebrick;
     position: relative;
-    z-index: 100;
     right: 10px;
 }
 
-#message{
-    height: 40px;
-    width: 100%;
-}
 
 #sendB{
     border-radius: 20px;
@@ -92,4 +87,15 @@
 button:hover{
     cursor: pointer;
     cursor:hand;
+}
+
+#message{
+    width:100%;
+    box-shadow: 0px 0px 2px 3px firebrick;
+    height: 70px;
+	resize:none;
+}
+
+#emptyMessage{
+    color:firebrick;
 }

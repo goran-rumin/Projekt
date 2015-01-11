@@ -150,7 +150,7 @@ public class MessageFragment extends Fragment implements Conversation.prenesi, V
 		}
 		public final WebSocketConnection socket = new WebSocketConnection();
 		void pokreni_websocket(){
-			final String wsuri = "ws://192.168.1.221:9000";
+			final String wsuri = "ws://ferbook.duckdns.org:9000";
 
 			   try {
 			      socket.connect(wsuri, new WebSocketConnectionHandler() {

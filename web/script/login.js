@@ -32,14 +32,13 @@ function login() {
                 password: password
             }
         }).success(function (msg) {
-            console.log(msg);
             var user = JSON.parse(msg);
-            var userId = user.data.userId;
-            console.log(userId);
-            window.location.replace(rootRed + "web/newsfeed/?userId="+userId);
-
-
-
+            if (user.data.length != 0) {
+                window.location.replace(rootRed + "newsfeed/");
+            }
+            else {
+                $("#msgL").html("Wrong username or password.")
+            }
         })
     }
 }
@@ -75,7 +74,19 @@ function register(){
             }
         }).success(function(msg){
             console.log(msg);
-            window.location.replace(rootRed + "web/edituserinfo/edit.html");
+            var mssg = JSON.parse(msg);
+            var error = mssg.error;
+            if (error.length != 0) {
+                if (error.errNum == 2) {
+                    $("#msgR").html("Invalid data formats. Please reenter your data.");
+                } else if (error.errNum == 5) {
+                    $("#msgR").html("User with that username already exists.");
+                } else if (error.errNum == 6) {
+                    $("#msgR").html("User with that email already exists.");
+                }
+            } else {
+                window.location.replace(rootRed + "editinfo/");
+            }
 
         })
     }

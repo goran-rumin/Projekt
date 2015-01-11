@@ -11,6 +11,9 @@ import android.app.Activity;
 //clasa koja vraca id korisnika
 public class Vrati_id {
 
+	//public static String ROOT = "http://vdl.hr/ferbook/";
+	public static String ROOT = "http://ferbook.duckdns.org/ferbook/";
+	
 	public static String vrati(Activity ak){
 		
 		String id=null;

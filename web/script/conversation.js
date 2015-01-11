@@ -18,16 +18,17 @@ var userID = location.search.split('userId=')[1];
     }).success(function(msg) {
         var json = JSON.parse(msg);
         $scope.activeUserID = parseInt(json.data.id);
-        $scope.$apply;
+
+        $scope.$apply();
         if ($scope.activeUser == -1) $scope.activeUser=location.search.split('userId=')[1];
 
-        function readUserData() {
+        $scope.readUserData =function() {
             //dohvaca podatke za korisnika s kim se pregledava razgovor
             $.ajax({
                 url: root + "user/info/index.php",
                 type: "POST",
                 data: {
-                    userId: $scope.userID
+                    userId: userID
                 }
             }).success(function (msg) {
                 $scope.userData = JSON.parse(msg);
@@ -35,43 +36,43 @@ var userID = location.search.split('userId=')[1];
 
             })
         }
-        readUserData();
+        $scope.readUserData();
 
 
     //dohvaca poruke
-    function readConversation(){
+    $scope.readConversation = function(){
         $.ajax({
             url: root + "messages/conversation/index.php",
             type: "POST",
             data: {
                 userId1: $scope.activeUserID,
-                userId2: $scope.userID
+                userId2: userID
             }
         }).success(function(msg){
             $scope.conversationData = JSON.parse(msg);
             $scope.$apply();
             console.log($scope.conversationData.data);
-
+            console.log($scope.activeUserID);
         })
     }
-    readConversation();
+    $scope.readConversation();
 
 
 
-    function getInfo(userIdfunction){
-        $.ajax({
-            url: root + "user/info/index.php",
-            type: "POST",
-            data: {
-                userId: userIdfunction
-            }
-        }).success(function (msg) {
-            $scope.userInfo = JSON.parse(msg);
-            $scope.$apply();
+        $scope.getInfo = function(userIDpom){
+            $.ajax({
+                url: root + "user/info/index.php",
+                type: "POST",
+                data: {
+                    userId: userIDpom
+                }
+            }).success(function (msg) {
+                $scope.userInfo = JSON.parse(msg);
+                $scope.$apply();
+                console.log($scope.userInfo.data);
 
-        })
-
-    }
+            })
+        }
 
 	
     $scope.send= function(){
@@ -84,21 +85,26 @@ var userID = location.search.split('userId=')[1];
 			}
 		else{
 			$.ajax({
-                url: "../../messages/send/index.php",
+                url: root + "messages/send/index.php",
                 type: "POST",
                 data: {
-                    userid1: $scope.activeUserID,
-                    userid2: $scope.userID,
+                    userId1: $scope.activeUserID,
+                    userId2: userID,
                     message: message
                 }
             }).success(function (msg) {
+				console.log($scope.activeUserID);
+				console.log(userID);
+				console.log(message);
+					$("#message").val("");
                     setTimeout(function () {
-                        $scope.readConversation();
+                        $("#emptyMessage").html("Your message was sent!");
+
                     }, 2000);
+				 $scope.readConversation();
                 })
             }
         }
-
 
         $("#newsfeedLink").on("click", function () {
             openNewsfeed($scope.activeUserID);

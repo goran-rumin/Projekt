@@ -30,7 +30,7 @@ public class Galleries extends AsyncTask<Object, Void, Void> {
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/user/galleries/index.php";
+	private static String url = Vrati_id.ROOT+"user/galleries/index.php";
 	
 	
     protected Void doInBackground(Object... arg0) {    //(userId, sucelje )

@@ -52,6 +52,9 @@ public class ServiceHandler {
                 if (params != null) {
                 	 httpPost.setEntity(new UrlEncodedFormEntity(params));
                 }
+                //httpPost.addHeader("Origin", "android");
+                //httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+                //httpPost.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
                 httpResponse = httpClient.execute(httpPost);
  
                 

@@ -17,7 +17,7 @@ public class Comment extends AsyncTask<Object, Void, Void> {
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/post/comment/index.php";
+	private static String url = Vrati_id.ROOT+"post/comment/index.php";
 	
 	
     protected Void doInBackground(Object... arg0) {

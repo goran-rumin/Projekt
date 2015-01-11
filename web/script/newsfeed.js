@@ -6,7 +6,7 @@
 var app = angular.module("NewsFeed", []);
 
 app.controller("newsController", function ($scope) {
-    $scope.profilePicture = "http://www.wiganlatics.co.uk/images/common/bg_player_profile_default_big.png";
+    $scope.profilePicture = "../images/profile_default_big.png";
     $scope.postOffset = 0;
     $scope.postsPicture = "http://www.photosnewhd.com/media/images/picture-wallpaper.jpg";
 
@@ -20,7 +20,6 @@ app.controller("newsController", function ($scope) {
         var json = JSON.parse(msg);
         $scope.activeUser = parseInt(json.data.id);
 
-        if ($scope.activeUser == -1) $scope.activeUser = location.search.split('userId=')[1];
         userID = $scope.activeUser;
 
 
@@ -34,6 +33,9 @@ app.controller("newsController", function ($scope) {
                 }
             }).success(function (msg) {
                 $scope.userData = JSON.parse(msg);
+                if ($scope.userData.data.picture == null) {
+                    $scope.userData.data.picture = $scope.profilePicture;
+                }
                 $scope.$apply();
 
             })
@@ -174,9 +176,7 @@ app.controller("newsController", function ($scope) {
         }
         $scope.loadPosts();
 
-
         $scope.pictureURL = "";
-        //TODO
 
 
         $scope.postPicture = function (event) {
@@ -192,12 +192,33 @@ app.controller("newsController", function ($scope) {
                 $(wrap).addClass("inputWrapper").appendTo($(event.target).parent());
 
                 $(x).addClass("inputFile")
+                    .attr("id", "inputFile")
                     .attr("type", "file")
                     .appendTo($(form));
 
 
                 // Za pretvaranje u base64
                 $(x).change(function(){
+                    if (this.files[0].type != "image/jpeg") {
+                        $("#newPostMsg").html("Wrong file chosen, only supported .jpg photos. Please choose correct file.")
+                        setTimeout(function () {
+                            $("#newPostMsg").html("")
+                        }, 4000);
+                        $(event.target).parent().children(".inputWrapper").remove();
+                        $(event.target).text("Post picture");
+                        $(event.target).val("post");
+
+                        return false;
+                    } else if (this.files[0].size > 1048576) {
+                        $("#newPostMsg").html("Image you have selected is too big. Upload limit is 1 MB.");
+                        setTimeout(function () {
+                            $("#newPostMsg").html("");
+                        }, 4000);
+                        $(event.target).parent().children(".inputWrapper").remove();
+                        $(event.target).text("Post picture");
+                        $(event.target).val("post");
+                        return false;
+                    }
                     readImage( this );
                 });
                 // base64 kraj
@@ -205,12 +226,13 @@ app.controller("newsController", function ($scope) {
                 $(form).attr("method", "post").attr("enctype", "multipart/form-data")
                     .attr("target","upload_target").attr("id", "sendPhoto").appendTo($(wrap));
 
-                $(submit).attr("type", "submit").val("Upload").attr("id", "submit").appendTo($(wrap));
-
             } else {
                 $(event.target).parent().children(".inputWrapper").remove();
                 $(event.target).text("Post picture");
                 $(event.target).val("post");
+                $scope.pictureURL = "";
+
+
             }
 
 
@@ -218,55 +240,66 @@ app.controller("newsController", function ($scope) {
 
 
         $scope.newPost = function () {
+
             var textInput = $("#newPostData").val();
-            var url="";
             if (textInput == "" && $scope.pictureURL == "") {
                 $("#newPostMsg").html("Please choose photo or input your message.")
                 setTimeout(function () {
                     $("#newPostMsg").html("")
                 }, 2000);
+            } else if ($scope.pictureURL != ""){
+
+                $("#newPostMsg").html("Your image is uploading.");
+                $.ajax({
+                    url: root + "photos/upload/index.php",
+                    type: "POST",
+                    data: {
+                        userId: userID,
+                        message: textInput,
+                        url: $scope.pictureURL
+                    }
+                }).success(function (msg) {
+
+                    $("#newPostForm").children('textarea').val('');
+                    $("#newPostMsg").html("Your message was posted!");
+                    $("#postPicButton").parent().children(".inputWrapper").remove();
+                    $("#postPicButton").text("Post picture");
+                    $("#postPicButton").val("post");
+                    setTimeout(function () {
+                        $("#newPostMsg").html("");
+                        $("#postsContainer").children(".post").remove();
+                        $scope.postOffset = 0;
+                        $scope.loadPosts();
+                    }, 2000);
+
+                    $scope.pictureURL="";
+                    $scope.$apply();
+                })
             } else {
-                if ($scope.pictureURL != "") {
-                    console.log($scope.pictureURL);
-                    $.ajax({
-                        url: root + "photos/base64",
-                        type: "POST",
-                        data:  {
-                            photo: $scope.pictureURL
-                        },
-                        processData: false,
-                        contentType: false,
-                        cache: false
-
-
-                    }).success(function (msg) {
-                        console.log(msg);
-                        var mssg = JSON.parse(msg);
-                        console.log("parsirano " +mssg);
-                    })
-                } else {
-                    $.ajax({
-                        url: root + "post/publish/index.php",
-                        type: "POST",
-                        data: {
-                            sender: userID,
-                            recipient: userID,
-                            message: textInput,
-                            url: url
-                        }
-                    }).success(function (msg) {
-                        $("#newPostForm").children('input').val('');
-                        $("#newPostMsg").html("Your message was posted!");
-                        setTimeout(function () {
-                            $("#newPostMsg").html("");
-                            $("#postsContainer").children(".post").remove();
-                            $scope.postOffset = 0;
-                            $scope.loadPosts();
-                        }, 2000);
-                    })
-                }
+                $.ajax({
+                    url: root + "post/publish/index.php",
+                    type: "POST",
+                    data: {
+                        sender: userID,
+                        recipient: userID,
+                        message: textInput,
+                        url: ""
+                    }
+                }).success(function (msg) {
+                    $("#newPostForm").children('textarea').val('');
+                    $("#newPostMsg").html("Your message was posted!");
+                    setTimeout(function () {
+                        $("#newPostMsg").html("");
+                        $("#postsContainer").children(".post").remove();
+                        $scope.postOffset = 0;
+                        $scope.loadPosts();
+                    }, 2000);
+                    $scope.pictureURL="";
+                    $scope.$apply();
+                })
             }
-        }
+
+    }
 
         $scope.posterText = function (object) {
             var posterName = object.senderName;
@@ -298,7 +331,6 @@ app.controller("newsController", function ($scope) {
                 data: {
                     postId: postID,
                     userId: userID
-
                 },
                 cache: false
             }).success(function (msg) {
@@ -540,7 +572,7 @@ app.controller("newsController", function ($scope) {
             $.ajax({
                 url: root + "user/logout/index.php"
             }).success(function () {
-                window.location.replace(root + "web/login/");
+                window.location.replace(rootRed + "login/");
             })
         }
 
@@ -572,8 +604,7 @@ app.controller("newsController", function ($scope) {
         if ( input.files && input.files[0] ) {
             var FR= new FileReader();
             FR.onload = function(e) {
-                $scope.pictureUrl = e.target.result.substr(e.target.result.indexOf(",")+1);
-                console.log($scope.pictureUrl);
+                $scope.pictureURL = e.target.result.substr(e.target.result.indexOf(",")+1);
             };
             FR.readAsDataURL( input.files[0] );
         }

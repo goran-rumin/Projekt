@@ -25,7 +25,7 @@ public class Conversation extends AsyncTask<Object, Void, Void> {
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/messages/conversation/index.php";
+	private static String url = Vrati_id.ROOT+"messages/conversation/index.php";
 	
 	
     protected Void doInBackground(Object... arg0) {

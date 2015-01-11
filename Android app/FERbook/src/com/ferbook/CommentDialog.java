@@ -55,10 +55,11 @@ public class CommentDialog extends Dialog implements GetComments.prenesi, GetLik
 			setContentView(R.layout.comments);
 			
 			naslov = (TextView) findViewById(R.id.comments_text);
+			naslov.setText("Loading");
 			listview = (ListView) findViewById(R.id.list_comments);
 			adapter = new CommentsAdapter(kontekst,data, this);
 			listview.setAdapter(adapter);
-			new GetComments().execute(post,this,kontekst);
+			new GetComments().execute(post,Vrati_id.vrati((Activity)kontekst),this,kontekst);
 			poruka = (EditText) findViewById(R.id.comment_text);
 			Button send = (Button) findViewById(R.id.send);
 			send.setOnClickListener(this);
@@ -84,9 +85,11 @@ public class CommentDialog extends Dialog implements GetComments.prenesi, GetLik
 			List<String> messages, List<String> urlovi,
 			List<String> timestamps, List<String> userIds, List<String> names,
 			List<String> lastnames, List<Drawable> pictures,
-			List<String> usernames, int broj_komentara, String error) {
-		if(error!=null)
+			List<String> usernames, List<Boolean> liked, List<String> likesnum, int broj_komentara, String error) {
+		if(error!=null){
 			Toast.makeText(kontekst, error, Toast.LENGTH_SHORT).show();
+			naslov.setText("No comments");
+		}
 		else
 			naslov.setVisibility(View.GONE);
 		for(int i=0;i<postIds.size();i++){
@@ -96,7 +99,8 @@ public class CommentDialog extends Dialog implements GetComments.prenesi, GetLik
 			redak.put("comment",messages.get(i));
 			redak.put("name",names.get(i)+" "+lastnames.get(i));
 			redak.put("timestamp",timestamps.get(i));
-			redak.put("likes","Likes: "+0);
+			redak.put("liked",liked.get(i));
+			redak.put("likes","Likes: "+likesnum.get(i));
 			data.add(redak);
 		}
 		adapter.notifyDataSetChanged();
@@ -105,7 +109,6 @@ public class CommentDialog extends Dialog implements GetComments.prenesi, GetLik
 	View.OnClickListener listener = new View.OnClickListener(){
 		@Override
 		public void onClick(View v) {
-			Toast.makeText(kontekst, "kliknuto", Toast.LENGTH_SHORT).show();
 			new Like().execute(Vrati_id.vrati((Activity)kontekst),post_id,h,v);
 		}
 	};
@@ -170,7 +173,8 @@ public class CommentDialog extends Dialog implements GetComments.prenesi, GetLik
 			komentar.setText(lista.get(arg0).get("comment").toString());
 			timestamp.setText(lista.get(arg0).get("timestamp").toString());
 			likesnum.setText(lista.get(arg0).get("likes").toString());
-			
+			if((Boolean)lista.get(arg0).get("liked"))
+				like.setText("Liked");
 			like.setTag(lista.get(arg0).get("post_id").toString());
 			
 			like.setOnClickListener(listener);
@@ -214,7 +218,7 @@ public class CommentDialog extends Dialog implements GetComments.prenesi, GetLik
 			Toast.makeText(kontekst, error, Toast.LENGTH_SHORT).show();
 		else{
 			data.clear();
-			new GetComments().execute(post_id,this,kontekst);
+			new GetComments().execute(post_id,Vrati_id.vrati((Activity)kontekst),this,kontekst);
 		}
 	}
 }

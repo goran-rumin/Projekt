@@ -28,7 +28,7 @@ public class Inbox extends AsyncTask<Object, Void, Void> {
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/messages/inbox/index.php";
+	private static String url = Vrati_id.ROOT+"messages/inbox/index.php";
 	
 	
     protected Void doInBackground(Object... arg0) {
@@ -38,7 +38,7 @@ public class Inbox extends AsyncTask<Object, Void, Void> {
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
-    	NameValuePair user=new BasicNameValuePair("userId1", (String) arg0[0]);    	
+    	NameValuePair user=new BasicNameValuePair("userId", (String) arg0[0]);    	
     	params.add(user);            	
     	
     	ServiceHandler sh = new ServiceHandler();    	

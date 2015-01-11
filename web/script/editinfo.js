@@ -1,5 +1,6 @@
 $(document).ready(function() {
-	$("#bottomDisc").hide();
+    $("#bottomDisc").hide();
+
     $.ajax({
         url: root+"user/active/",
         type : "POST",
@@ -7,9 +8,28 @@ $(document).ready(function() {
     }).success(function(msg) {
         var json = JSON.parse(msg);
         var activeUserID = parseInt(json.data.id);
+        var userData;
 
-        $("#submit").on("click", function () {
-            update(activeUserID);
+        $.ajax({
+            url: root + "user/info/index.php",
+            type: "POST",
+            data: {
+                userId: activeUserID
+            }
+
+        }).success(function (msg) {
+            var mssg = JSON.parse(msg);
+            userData = mssg.data;
+            $("#page").children("input").val("");
+            pic = document.createElement("img");
+
+            if (userData.picture == null) userData.picture = "../images/profile_default_big.png";
+            $(pic).attr("id", "profilePic2").attr("src", userData.picture)
+                .css("max-height", "200px").css("max-width", "200px;").insertAfter("#profilePic");
+        })
+
+        $("#submit2").on("click", function () {
+            update(activeUserID, userData);
         });
 
         $("#newsfeedLink").on("click", function (){
@@ -30,35 +50,44 @@ $(document).ready(function() {
         });
 
         $("#upload").on("click", function(){
-            postPicture(event);
+            postPicture(event, activeUserID);
         })
 
     })
 
 })
 
-function update(userID) {
-    var name = $("#name").val();
-    var lastName = $("#lastName").val();
+var pictureURL="";
+var url="";
+
+
+function update(userID, userData) {
+
+    var name;
+    var lastName;
+
+    if ($("#name").val() != "") {
+        name = $("#name").val();
+    } else name = userData.name;
+
+    if ($("#lastName").val() != "") {
+        lastName = $("#lastName").val();
+    } else lastName = userData.lastname;
+
+
     var password = $("#password").val();
     var passwordConfirm = $("#passwordConfirm").val();
 
-    if(password != passwordConfirm) {
+    if (password != passwordConfirm) {
         $("#bottomDisc").show();
         $("#bottomDisc").html("Passwords do not match!");
     }
-	
-	if (name == '' || lastName == '') {
-        $("#bottomDisc").show();
-        $("#bottomDisc").html("Please enter both your first and last names!");
-    }
 
-    if (name == '' && lastName == '' && password == '') {
+    if ($("#name").val() == '' && $("#lastName").val() == '' && $("#password").val() == '') {
         $("#bottomDisc").show();
         $("#bottomDisc").html("Please fill in at least one of the fields!");
-    }
 
-    else if (name != '' && lastName != '' && password != '' && password == passwordConfirm) {
+    } else if (password == passwordConfirm && password != '' && passwordConfirm != '') {
         $("#bottomDisc").hide();
         $.ajax({
             url: root + "user/edit/index.php",
@@ -74,21 +103,7 @@ function update(userID) {
             success();
             $("#page").children("input").val("");
         })
-    }else if (password == passwordConfirm && password != '' && passwordConfirm != ''){
-        $("#bottomDisc").hide();
-        $.ajax({
-            url: root + "user/edit/index.php",
-            type: "POST",
-            data: {
-                userId: userID,
-                password: password
-            }
-
-        }).success(function (msg) {
-            success();
-            $("#page").children("input").val("");
-        })
-    } else if (name != '' && lastName != ''){
+    } else if ($("#name").val() != '' || $("#lastName").val() != '') {
         $("#bottomDisc").hide();
         $.ajax({
             url: root + "user/edit/index.php",
@@ -103,10 +118,9 @@ function update(userID) {
             success();
             $("#page").children("input").val("");
         })
-    }  else if (name != '' && lastName =='' || name=='' && lastName != '') {
-        $("#bottomDisc").show();
-        $("#bottomDisc").html("Please fill in both name and last name fields!");
     }
+
+}
 
     function success (){
         $("#bottomDisc").show();
@@ -118,8 +132,9 @@ function update(userID) {
             $("#bottomDisc").hide();
         }, 2000);
     }
-}
-function postPicture (event) {
+
+
+function postPicture (event, userID) {
 
     if ($(event.target).parent().children().has("input").length ==0){
         $(event.target).text("Cancel upload");
@@ -134,12 +149,86 @@ function postPicture (event) {
             .attr("type", "file")
             .appendTo($(form));
 
+        $(x).change(function(){
+            if (this.files[0].type != "image/jpeg") {
+                $("#uploadMsg").html("Wrong file chosen, only supported .jpg photos. Please choose correct file.")
+                setTimeout(function () {
+                    $("#uploadMsg").html("")
+                }, 4000);
+                $(event.target).parent().children(".inputWrapper").remove();
+                $(event.target).text("Profile picture");
+
+                return false;
+            } else if ($(".inputFile").prop("files")[0].size > 1048576) {
+                $("#uploadMsg").html("Image you have selected is too big. Upload limit is 1 MB.");
+                setTimeout(function () {
+                    $("#uploadMsg").html("");
+                }, 4000);
+                $(event.target).parent().children(".inputWrapper").remove();
+                $(event.target).text("Profile picture");
+                return false;
+            }
+            readImage( this );
+        });
+
         $(form).attr("method", "post").attr("enctype", "multipart/form-data")
             .attr("target","upload_target").attr("id", "sendPhoto").appendTo($(wrap));
 
-        $(submit).attr("type", "submit").val("Upload").attr("id", "submit").appendTo($(wrap));
+        $(submit).attr("type", "submit").val("Upload").attr("id", "submit")
+            .on("click", function(){
 
-    } else {
+                $("#uploadMsg").html("Your image is uploading.");
+                $(event.target).hide();
+                $.ajax({
+                    url: root + "photos/upload/index.php",
+                    type: "POST",
+                    data: {
+                        userId: userID,
+                        url: pictureURL,
+                        message: "Hey! I just changed my profile picture, check it out!"
+                    }
+                }).success(function (msg) {
+                    console.log(msg);
+                    var response = JSON.parse(msg);
+                    url = response.data.url;
+                    $("#uploadMsg").html("Upload finished!");
+                    setTimeout(function () {
+                        $("#uploadMsg").html("Profile picture uploaded. Save your changes.")
+                    }, 2000);
+                    $(event.target).show();
+                    $(event.target).text("Save changes");
+
+                })
+            }).appendTo($(wrap));
+
+    } else if ($(event.target).text() == "Save changes") {
+        $(event.target).parent().children(".inputWrapper").remove();
+        $("#bottomDisc").hide();
+        $.ajax({
+            url: root + "user/edit/index.php",
+            type: "POST",
+            data: {
+                userId: userID,
+                pictureUrl: url
+            }
+
+        }).success(function (msg) {
+            console.log(msg);
+            success();
+            $("#page").children("input").val("");
+            $("#uploadMsg").html("Profile picture changed.");
+            setTimeout(function () {
+                $("#uploadMsg").html("")
+            }, 2000);
+            $(event.target).text("Profile picture");
+
+            pic = document.createElement("img");
+
+            $("#profilePic2").remove();
+            $(pic).attr("id", "profilePic").attr("src", url).css("max-height", "200px").css("max-width", "200px").insertAfter("#profilePic");
+        })
+
+    }else{
         $(event.target).parent().children(".inputWrapper").remove();
         $(event.target).text("Post picture");
 
@@ -148,5 +237,14 @@ function postPicture (event) {
 
 };
 
+function readImage(input) {
+    if ( input.files && input.files[0] ) {
+        var FR= new FileReader();
+        FR.onload = function(e) {
+            pictureURL = e.target.result.substr(e.target.result.indexOf(",")+1);
+            console.log(pictureURL);
+        };
+        FR.readAsDataURL( input.files[0] );
+    }
+}
 
-    //profile picture missing

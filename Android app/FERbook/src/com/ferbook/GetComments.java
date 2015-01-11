@@ -34,28 +34,32 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
 	List<String> lastnames=new ArrayList<String>();
 	List<Drawable> pictures=new ArrayList<Drawable>();
 	List<String> usernames=new ArrayList<String>();
+	List<Boolean> liked = new ArrayList<Boolean>();
+	List<String> likesnum = new ArrayList<String>();
 	
 	static Activity ak;
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/post/getComments/index.php";
+	private static String url = Vrati_id.ROOT+"post/getComments/index.php";
 	
 	
     protected Void doInBackground(Object... arg0) {
     	//String postId=(String) arg0[0];
 
-    	sucelje = (prenesi) arg0[1];
-    	ak= (MainActivity) arg0[2];
+    	sucelje = (prenesi) arg0[2];
+    	ak= (MainActivity) arg0[3];
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
-    	NameValuePair user=new BasicNameValuePair("postId", (String) arg0[0]);    	
+    	NameValuePair post=new BasicNameValuePair("postId", (String) arg0[0]);  
+    	NameValuePair user=new BasicNameValuePair("userId", (String) arg0[1]); 
+    	params.add(post);  
     	params.add(user);            	
     	
     	ServiceHandler sh = new ServiceHandler();    	
     	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, params);
     	
-    	Log.e("GETCjson", jsonStr);
+    	Log.e("GETCjson", ""+jsonStr);
     	
     	JSONObject data=new JSONObject();
     	JSONArray imena=new JSONArray();
@@ -68,10 +72,10 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     			imena=data.names(); //JSONArray
     	    	
     			int i;
-    			List<String> jsonValues = new ArrayList<String>();
+    			List<Integer> jsonValues = new ArrayList<Integer>();
     			
     			for (i = 0; i < imena.length(); i++)		//trebam od starijih prema novijima, to ima logike za komentare, znaci od manjih prema vecim idjevima
-    			   jsonValues.add(imena.getString(i));
+    			   jsonValues.add(Integer.parseInt(imena.getString(i)));
     			
     			Collections.sort(jsonValues);				//ovo je ascending, tj od manjih prema vecima
     			//Collections.reverse(jsonValues);
@@ -79,7 +83,7 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     			JSONArray sortedJsonArray = new JSONArray();
     			
     			for(i=0;i<jsonValues.size();i++)
-    				sortedJsonArray.put(jsonValues.get(i));
+    				sortedJsonArray.put(Integer.toString(jsonValues.get(i)));
     				
     			imena=sortedJsonArray;				//konacno
     			
@@ -124,7 +128,8 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
 						lastname=komentar.getString("lastname");
 						picture=komentar.getString("picture");		//picture url
 						username=komentar.getString("username");
-						
+						String like = komentar.getString("liked");
+						String likenum = komentar.getString("likesNumber");
 						//ako sve ovo gore uspije i ako nejde u catch:
 						
 						postIds.add(postId);
@@ -136,7 +141,11 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
 						lastnames.add(lastname);
 						pictures.add(vrati_sliku(picture));
 						usernames.add(username);
-									
+						if(like.equals("true"))
+							liked.add(true);
+						else
+							liked.add(false);
+						likesnum.add(likenum);
 						
     					br_komentara++;
     					
@@ -157,14 +166,14 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     }
 
     protected void onPostExecute(Void param) {
-        sucelje.prenesi_getcomments(postIds,messages,urlovi_u_poruci,timestamps,userIds,names,lastnames,pictures,usernames,br_komentara,error_info);
+        sucelje.prenesi_getcomments(postIds,messages,urlovi_u_poruci,timestamps,userIds,names,lastnames,pictures,usernames,liked,likesnum,br_komentara,error_info);
     }
     
     
        
     
     public interface prenesi{
-    	void prenesi_getcomments(List<String> postIds, List<String> messages, List<String> urlovi, List<String> timestamps, List<String> userIds, List<String> names, List<String> lastnames,List<Drawable> pictures, List<String> usernames, int broj_komentara, String error);
+    	void prenesi_getcomments(List<String> postIds, List<String> messages, List<String> urlovi, List<String> timestamps, List<String> userIds, List<String> names, List<String> lastnames,List<Drawable> pictures, List<String> usernames, List<Boolean> liked, List<String> likesnum, int broj_komentara, String error);
     }
 
     

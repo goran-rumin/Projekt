@@ -37,7 +37,7 @@ public class GetLikes extends AsyncTask<Object, Void, Void> {//{ "data" : [{"lik
 	static Activity ak;
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/post/getLikes/index.php";
+	private static String url = Vrati_id.ROOT+"post/getLikes/index.php";
 	
 	
     protected Void doInBackground(Object... arg0) {    //(postId, sucelje )

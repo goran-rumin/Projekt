@@ -59,7 +59,7 @@
                 <p class="errorMsg" id="newPostMsg"></p>
             </div>
             <div class="userInfo">
-                <img ng-src="{{profilePicture}}"  class="profilePic" id="userProfilePicture">
+                <img ng-src="{{userData.data.picture}}"  class="profilePic" id="userProfilePicture">
 
                 <div id="userContainer">
                     <span class="textUser" ng-bind="userData.data.name + ' ' + userData.data.lastname"> </span>
@@ -80,7 +80,7 @@
 
     </div>
 </div>
-<div class="chat-wrapper" ng-app="chat" ng-controller="chatCtrl">
+<div class="chat-wrapper"  ng-controller="chatCtrl">
     <div class="chat-users">
         <div class="chatTabHead" onclick="toggleUsersVisibility(this,1)"></div>
         <div ng-repeat="(index,friend) in friends | filter:friendsFilter | orderBy:'lastname'"

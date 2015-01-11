@@ -10,14 +10,14 @@
 
     <ImageView
         android:id="@+id/likes_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:adjustViewBounds="true"
         android:maxHeight="50dp"
         android:maxWidth="50dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_launcher" />
 
     <TextView

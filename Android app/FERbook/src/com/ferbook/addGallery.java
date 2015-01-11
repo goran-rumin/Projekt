@@ -1,7 +1,5 @@
 package com.ferbook;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,22 +7,29 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 
-public class Image extends AsyncTask<String, Void, Void> {
+public class addGallery extends AsyncTask<Object, Void, Void> {
 	private prenesi sucelje;
-	private static String url=Vrati_id.ROOT+"photos/image/index.php";
-	private String url_slike=null, error_info=null;
-	Drawable slika;
+	private static String url=Vrati_id.ROOT+"user/addGallery/index.php";
+	private String albumId=null, error_info=null;
+	
 	
 
 	@Override
-	protected Void doInBackground(String... arg0) {
-		NameValuePair user=new BasicNameValuePair("postId", arg0[0]);
+	protected Void doInBackground(Object... arg0) {
+		String userId = (String) arg0[0];
+		String name = (String ) arg0[1];
+		sucelje = (prenesi) arg0[2];
+		
+		
+		NameValuePair user=new BasicNameValuePair("userId", userId);
+		NameValuePair na=new BasicNameValuePair("name", name);
+		
+		
 		List<NameValuePair> params= new ArrayList<NameValuePair>();
 		params.add(user);
+		params.add(na);
 		
 		ServiceHandler sh = new ServiceHandler();
     	
@@ -35,8 +40,8 @@ public class Image extends AsyncTask<String, Void, Void> {
     			JSONObject jsonObj = new JSONObject(jsonStr);
     			JSONObject data = jsonObj.getJSONObject("data");
     			
-    			url_slike=data.getString("url");
-    			slika=vrati_sliku(url_slike);
+    			albumId=data.getString("albumId");
+    			
     		
     		}
     		catch(JSONException e){
@@ -61,23 +66,14 @@ public class Image extends AsyncTask<String, Void, Void> {
 		return null;
 	}
 	
-	protected void onPostExecute() {
-	        sucelje.prenesi_image(slika ,error_info);	
+	protected void onPostExecute(Void param) {
+	        sucelje.prenesi_image(albumId ,error_info);	
 	    }
 	
 	public interface prenesi{
-    	void prenesi_image(Drawable slika, String error);	//then set image to imageview using code in your activity.
+    	void prenesi_image(String albumId, String error);	//then set image to imageview using code in your activity.
     }
 	
-	
-	public static Drawable vrati_sliku(String url) {
-	    try {
-	        InputStream is = (InputStream) new URL(url).getContent();
-	        Drawable d = Drawable.createFromStream(is, "src name");
-	        return d;
-	    } catch (Exception e) {
-	        return null;
-	    }
-	}
+
 
 }

@@ -8,16 +8,15 @@
 
     <ImageView
         android:id="@+id/news_item_pimage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:adjustViewBounds="true"
         android:maxHeight="50dp"
         android:maxWidth="50dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_launcher" />
 
     <TextView
@@ -104,18 +103,15 @@
 
 	/>
     
-    
-
     <ImageView
         android:id="@+id/news_item_p2image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_above="@+id/news_item_text"
         android:layout_alignRight="@+id/news_item_text"
-        android:adjustViewBounds="true"
         android:maxHeight="50dp"
         android:maxWidth="50dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_launcher" />
 
     <TextView

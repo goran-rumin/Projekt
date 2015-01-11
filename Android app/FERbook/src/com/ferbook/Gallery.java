@@ -13,8 +13,9 @@ import org.json.JSONObject;
 
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 
-public class Gallery extends AsyncTask<Object, Void, String> {
+public class Gallery extends AsyncTask<Object, Void, Void> {
 
 	private String error_info=null;
 	int br_slika=0;
@@ -24,17 +25,17 @@ public class Gallery extends AsyncTask<Object, Void, String> {
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/photos/gallery/index.php";
+	private static String url = Vrati_id.ROOT+"photos/gallery/index.php";
 	
 	
-    protected String doInBackground(Object... arg0) {
+    protected Void doInBackground(Object... arg0) {
     	
     	String galleryId=(String) arg0[0];
     	sucelje = (prenesi) arg0[1];
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
-    	NameValuePair user=new BasicNameValuePair("galleryId", galleryId);    	
+    	NameValuePair user=new BasicNameValuePair("albumId", galleryId);    	
     	params.add(user);            	
     	
     	ServiceHandler sh = new ServiceHandler();    	
@@ -50,6 +51,7 @@ public class Gallery extends AsyncTask<Object, Void, String> {
     			}	
     		catch(JSONException e){
     			//if the mapping doesn't exist, tj, ako je data prazan pa data ne postoji:
+    			Log.e("gallery", "data ne postoji");
     			e.printStackTrace();
     			try{
     				error_info="No pictures";		//ako je data s razlogom prazan
@@ -85,9 +87,10 @@ public class Gallery extends AsyncTask<Object, Void, String> {
 						slike.add(vrati_sliku(url_slike));
 						
     					br_slika++;
+    					Log.e("br_slika", Integer.toString(br_slika));
     					
 					} catch (JSONException e) {
-						e.printStackTrace();
+						//e.printStackTrace();
 						break;
 					}
     				
@@ -109,7 +112,8 @@ public class Gallery extends AsyncTask<Object, Void, String> {
         
     }
 
-    protected void onPostExecute() {
+    protected void onPostExecute(Void param) {
+    	Log.e("prenosim", "prenosim_gallery");
         sucelje.prenesi_gallery(postIds, slike, br_slika,  error_info);
     }
     

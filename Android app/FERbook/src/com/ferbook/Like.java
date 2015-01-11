@@ -21,7 +21,7 @@ public class Like extends AsyncTask<Object, Void, Void> {
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/post/like/index.php";
+	private static String url = Vrati_id.ROOT+"post/like/index.php";
 	
 	
     protected Void doInBackground(Object... arg0) {
