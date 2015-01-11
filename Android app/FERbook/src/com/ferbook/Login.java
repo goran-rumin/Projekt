@@ -19,7 +19,7 @@ public class Login extends AsyncTask<Object, Void, String> {
 	private String error_info=null;
 	private prenesi sucelje;
 	Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/user/login/index.php";
+	private static String url = Vrati_id.ROOT+"user/login/index.php";
 	
 	
     protected String doInBackground(Object... arg0) {

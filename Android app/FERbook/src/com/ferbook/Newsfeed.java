@@ -88,8 +88,8 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	params.add(user);     
     	params.add(time);
     	
-    	if(vrsta==NEWS) url = "http://vdl.hr/ferbook/post/newsfeed/index.php";
-    	else if (vrsta==WALL) url = "http://vdl.hr/ferbook/post/wall/index.php";
+    	if(vrsta==NEWS) url = Vrati_id.ROOT+"post/newsfeed/index.php";
+    	else if (vrsta==WALL) url = Vrati_id.ROOT+"post/wall/index.php";
     	else {
     		error_info="Kriva vrsta";
     		return null;
@@ -98,7 +98,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	ServiceHandler sh = new ServiceHandler();    	
     	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, params);
     	
-    	//Log.e("JSONERROR", ""+jsonStr);
+    	Log.e("JSONERROR", ""+jsonStr);
     	
     	JSONObject data=new JSONObject();
     	JSONArray imena=new JSONArray();

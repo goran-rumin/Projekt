@@ -30,7 +30,7 @@ public class Search extends AsyncTask<Object, Void, Void> {
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/search/index.php";
+	private static String url = Vrati_id.ROOT+"search/index.php";
 	
 	
     protected Void doInBackground(Object... arg0) {

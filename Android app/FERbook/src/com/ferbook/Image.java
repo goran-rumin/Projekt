@@ -15,7 +15,7 @@ import android.os.AsyncTask;
 
 public class Image extends AsyncTask<String, Void, Void> {
 	private prenesi sucelje;
-	private static String url="http://vdl.hr/ferbook/photos/image/index.php";
+	private static String url=Vrati_id.ROOT+"photos/image/index.php";
 	private String url_slike=null, error_info=null;
 	Drawable slika;
 	

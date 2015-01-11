@@ -28,7 +28,7 @@ public class Inbox extends AsyncTask<Object, Void, Void> {
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/messages/inbox/index.php";
+	private static String url = Vrati_id.ROOT+"messages/inbox/index.php";
 	
 	
     protected Void doInBackground(Object... arg0) {

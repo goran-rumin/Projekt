@@ -17,7 +17,7 @@ import android.util.Log;
 public class Upload extends AsyncTask<Object, Void, Void> {
 	private prenesi sucelje;
 	//private static String url="http://vdl.hr/ferbook/photos/upload/index.php";
-	private static String url="http://192.168.1.221/index.php";
+	private static String url=Vrati_id.ROOT+"photos/upload/index.php";
 	private String url_slike=null, error_info=null;
 	Bitmap image;
 
@@ -26,7 +26,8 @@ public class Upload extends AsyncTask<Object, Void, Void> {
 		String userId= (String) arg0[0];
 		image=(Bitmap) arg0[1];
 		String albumId= (String) arg0[2];	//OPTIONAL inače null
-		sucelje = (prenesi) arg0[3];
+		String message= (String) arg0[3];  //opcionalno
+		sucelje = (prenesi) arg0[4];
 		
 		String imageStream=encodeTobase64(image);
 		
@@ -38,6 +39,7 @@ public class Upload extends AsyncTask<Object, Void, Void> {
 		params.add(drugi);
 		Log.e("slika2","*"+prvi+" "+drugi+"*");
 		if(albumId!=null) params.add(new BasicNameValuePair("albumId", albumId));
+		if(message!=null) params.add(new BasicNameValuePair("message", message));
 		
 		ServiceHandler sh = new ServiceHandler();
     	

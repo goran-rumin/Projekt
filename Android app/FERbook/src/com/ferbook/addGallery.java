@@ -11,7 +11,7 @@ import android.os.AsyncTask;
 
 public class addGallery extends AsyncTask<Object, Void, String> {
 	private prenesi sucelje;
-	private static String url="http://vdl.hr/ferbook/user/addGallery/index.php";
+	private static String url=Vrati_id.ROOT+"user/addGallery/index.php";
 	private String albumId=null, error_info=null;
 	
 	

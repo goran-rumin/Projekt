@@ -24,7 +24,7 @@ public class Gallery extends AsyncTask<Object, Void, String> {
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/photos/gallery/index.php";
+	private static String url = Vrati_id.ROOT+"photos/gallery/index.php";
 	
 	
     protected String doInBackground(Object... arg0) {

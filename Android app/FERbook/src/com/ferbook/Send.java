@@ -16,7 +16,7 @@ public class Send extends AsyncTask<Object, Void, Void> {
 	
 	private prenesi sucelje;
 	//Activity kontekst;
-	private static String url = "http://vdl.hr/ferbook/messages/send/index.php";
+	private static String url = Vrati_id.ROOT+"messages/send/index.php";
 	
 	
     protected Void doInBackground(Object... arg0) {

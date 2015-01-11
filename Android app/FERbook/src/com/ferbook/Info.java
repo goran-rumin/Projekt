@@ -15,7 +15,7 @@ import android.os.AsyncTask;
 
 public class Info extends AsyncTask<Object, Void, Void> {
 	private prenesi sucelje;
-	private static String url="http://vdl.hr/ferbook/user/info/index.php";
+	private static String url=Vrati_id.ROOT+"user/info/index.php";
 	private String username=null , name=null, lastName=null, email=null, error_info=null;
 	private Drawable pic=null;
 	
