@@ -10,10 +10,12 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.ferbook.addGallery.prenesi;
+
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 
-public class Image extends AsyncTask<String, Void, Void> {
+public class Image extends AsyncTask<Object, Void, Void> {
 	private prenesi sucelje;
 	private static String url=Vrati_id.ROOT+"photos/image/index.php";
 	private String url_slike=null, error_info=null;
@@ -21,8 +23,11 @@ public class Image extends AsyncTask<String, Void, Void> {
 	
 
 	@Override
-	protected Void doInBackground(String... arg0) {
-		NameValuePair user=new BasicNameValuePair("postId", arg0[0]);
+	protected Void doInBackground(Object... arg0) {
+		NameValuePair user=new BasicNameValuePair("postId", (String) arg0[0]);
+		sucelje = (prenesi) arg0[1];
+		
+		
 		List<NameValuePair> params= new ArrayList<NameValuePair>();
 		params.add(user);
 		
@@ -61,7 +66,7 @@ public class Image extends AsyncTask<String, Void, Void> {
 		return null;
 	}
 	
-	protected void onPostExecute() {
+	protected void onPostExecute(Void param) {
 	        sucelje.prenesi_image(slika ,error_info);	
 	    }
 	
