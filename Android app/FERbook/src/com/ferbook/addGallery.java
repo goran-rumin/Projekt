@@ -20,7 +20,7 @@ public class addGallery extends AsyncTask<Object, Void, String> {
 	protected String doInBackground(Object... arg0) {
 		String userId = (String) arg0[0];
 		String name = (String ) arg0[1];
-		sucelje = (prenesi) arg0[1];
+		sucelje = (prenesi) arg0[2];
 		
 		
 		NameValuePair user=new BasicNameValuePair("userId", userId);
