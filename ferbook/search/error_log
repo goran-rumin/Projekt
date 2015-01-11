@@ -1,0 +1,1 @@
+[08-Jan-2015 23:08:14 Europe/Berlin] PHP Warning:  json_encode() expects parameter 2 to be long, string given in /home/vdlhr/public_html/ferbook/search/index.php on line 173

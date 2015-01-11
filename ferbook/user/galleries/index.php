@@ -11,7 +11,7 @@ include_once "../../classes/Crypter.php";
 
 header("Access-Control-Allow-Origin: *");
 // Define response array
-$response = array("data"=>[], "error" => []);
+$response = array("data"=>array(), "error" => array());
 
 // Check if the data is send in any way
 if( !isset($_POST['userId'])) {
@@ -32,7 +32,7 @@ $albums->execute();
 foreach ($albums as $album) {
     $images = $db->prepare("SELECT COUNT(*) as allImages FROM albumhasimage WHERE idAlbum = ? ORDER BY idImage DESC");
     $images->bindParam(1, $album->id);
-    $images->setFetchMode(PDO::FETCH_OBJ);
+    $images->setFetchMode(PDO::FETCH_OBJ); 
     $images->execute();
     if ( $images->fetch()->allImages > 0 ) {
         $postID = $db->prepare("SELECT idImage FROM albumhasimage WHERE idAlbum = ? ORDER BY idImage DESC");

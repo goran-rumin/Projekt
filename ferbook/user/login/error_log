@@ -1,0 +1,3 @@
+[08-Jan-2015 23:08:57 Europe/Berlin] PHP Warning:  json_encode() expects parameter 2 to be long, string given in /home/vdlhr/public_html/ferbook/user/login/index.php on line 90
+[08-Jan-2015 23:09:12 Europe/Berlin] PHP Warning:  json_encode() expects parameter 2 to be long, string given in /home/vdlhr/public_html/ferbook/user/login/index.php on line 90
+[08-Jan-2015 23:18:58 Europe/Berlin] PHP Warning:  json_encode() expects parameter 2 to be long, string given in /home/vdlhr/public_html/ferbook/user/login/index.php on line 90

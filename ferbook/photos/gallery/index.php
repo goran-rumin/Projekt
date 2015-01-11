@@ -63,4 +63,4 @@ foreach ($album as $imageId) {
 }
 
 $response["data"] = $allImages;
-echo json_encode($response, (float) JSON_UNESCAPED_UNICODE);
+echo json_encode($response);

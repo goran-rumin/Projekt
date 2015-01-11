@@ -1,0 +1,15 @@
+[13-Dec-2014 16:09:43 Europe/Berlin] PHP Parse error:  syntax error, unexpected '[' in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 16
+[13-Dec-2014 16:09:46 Europe/Berlin] PHP Parse error:  syntax error, unexpected '[' in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 16
+[13-Dec-2014 16:09:50 Europe/Berlin] PHP Parse error:  syntax error, unexpected '[' in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 16
+[13-Dec-2014 16:10:02 Europe/Berlin] PHP Parse error:  syntax error, unexpected '[' in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 16
+[14-Dec-2014 15:08:25 Europe/Berlin] PHP Parse error:  syntax error, unexpected '[' in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 16
+[18-Dec-2014 16:17:19 Europe/Berlin] PHP Parse error:  syntax error, unexpected '[' in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 16
+[19-Dec-2014 00:05:19 Europe/Berlin] PHP Parse error:  syntax error, unexpected '[' in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 16
+[19-Dec-2014 00:05:31 Europe/Berlin] PHP Parse error:  syntax error, unexpected '[' in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 16
+[19-Dec-2014 09:18:21 Europe/Berlin] PHP Parse error:  syntax error, unexpected '[' in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 16
+[19-Dec-2014 09:19:37 Europe/Berlin] PHP Parse error:  syntax error, unexpected '[' in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 16
+[19-Dec-2014 09:19:39 Europe/Berlin] PHP Parse error:  syntax error, unexpected '[' in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 16
+[19-Dec-2014 10:00:57 Europe/Berlin] PHP Parse error:  syntax error, unexpected '[' in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 16
+[19-Dec-2014 10:01:31 Europe/Berlin] PHP Parse error:  syntax error, unexpected '[' in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 16
+[19-Dec-2014 10:05:32 Europe/Berlin] PHP Parse error:  syntax error, unexpected '[' in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 16
+[08-Jan-2015 23:07:43 Europe/Berlin] PHP Warning:  json_encode() expects parameter 2 to be long, string given in /home/vdlhr/public_html/ferbook/messages/inbox/index.php on line 108

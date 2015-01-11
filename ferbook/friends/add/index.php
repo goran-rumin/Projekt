@@ -12,7 +12,7 @@ include_once "../../classes/Crypter.php";
 
 header("Access-Control-Allow-Origin: *");
 // Define response array
-$response = array("data"=>array(), "error" => array());
+$response = array( "data"=>array() , "error"=>array() );
 
 // Check if the data is send in any way
 
@@ -32,7 +32,7 @@ $userId1 = $_POST['userId1'];
 $userId2 = $_POST['userId2'];
 
 
-$db = new PDOPDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 
 $query = $db->prepare("SELECT COUNT(*) as nmbr FROM user WHERE id = ? || id = ?");
 $query->bindParam(1, $userId1);

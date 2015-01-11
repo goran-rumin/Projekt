@@ -36,7 +36,7 @@ $messages->setFetchMode(PDO::FETCH_OBJ);
 $messages->execute();
 $numberOfMessages = $messages->fetch()->allMessages;
 if ( $numberOfMessages > 0 ) {
-    $messages = $db->prepare("SELECT id, message, timestamp, flag, sender FROM messages WHERE sender = ? AND recipient = ? OR sender = ? AND recipient = ?");
+    $messages = $db->prepare("SELECT messages.id, messages.message as message, messages.timestamp as timestamp, messages.flag as flag, messages.sender as sender, user.name as name, user.last_name as last_name, user.picture as picture FROM messages INNER JOIN user ON user.id = messages.sender WHERE sender = ? AND recipient = ? OR sender = ? AND recipient = ? ORDER BY messages.timestamp");
     $messages->bindParam(1, $userId1);
     $messages->bindParam(2, $userId2);
     $messages->bindParam(3, $userId2);
@@ -57,14 +57,20 @@ if ( $numberOfMessages > 0 ) {
                 "message" => $onemessage->message,
                 "senderId" => $onemessage->sender,
                 "timestamp" => $onemessage->timestamp,
-                "flag" => $flag
+                "flag" => $flag,
+				"name" => $onemessage->name,
+				"last_name" => $onemessage->last_name,
+				"picture" => $onemessage->picture
             );
         } else {
             $oneoutput = array(
                 "message" => $onemessage->message,
                 "senderId" => $onemessage->sender,
                 "timestamp" => $onemessage->timestamp,
-                "flag" => $onemessage->flag
+                "flag" => $onemessage->flag,
+				"name" => $onemessage->name,
+				"last_name" => $onemessage->last_name,
+				"picture" => $onemessage->picture
             );
         }
         $output[] = $oneoutput;
