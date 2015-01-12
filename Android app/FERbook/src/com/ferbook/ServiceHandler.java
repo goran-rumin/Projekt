@@ -13,6 +13,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
  
@@ -72,7 +73,7 @@ public class ServiceHandler {
  
             }
             httpEntity = httpResponse.getEntity();
-            response = EntityUtils.toString(httpEntity);
+            response = EntityUtils.toString(httpEntity, HTTP.UTF_8);
  
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

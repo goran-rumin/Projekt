@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class Galleries extends AsyncTask<Object, Void, Void> {
 	
@@ -45,7 +46,6 @@ public class Galleries extends AsyncTask<Object, Void, Void> {
     	
     	ServiceHandler sh = new ServiceHandler();    	
     	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, params);
-    	
     	JSONArray data=new JSONArray();
     	
     	if(jsonStr != null){

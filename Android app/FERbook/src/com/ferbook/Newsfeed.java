@@ -89,7 +89,11 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	params.add(time);
     	
     	if(vrsta==NEWS) url = Vrati_id.ROOT+"post/newsfeed/index.php";
-    	else if (vrsta==WALL) url = Vrati_id.ROOT+"post/wall/index.php";
+    	else if (vrsta==WALL) {
+    		url = Vrati_id.ROOT+"post/wall/index.php";
+    		NameValuePair user2=new BasicNameValuePair("userId2", Vrati_id.vrati(ak));	
+        	params.add(user2);  
+    	}
     	else {
     		error_info="Kriva vrsta";
     		return null;

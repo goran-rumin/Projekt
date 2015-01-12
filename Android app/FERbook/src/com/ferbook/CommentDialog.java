@@ -109,7 +109,7 @@ public class CommentDialog extends Dialog implements GetComments.prenesi, GetLik
 	View.OnClickListener listener = new View.OnClickListener(){
 		@Override
 		public void onClick(View v) {
-			new Like().execute(Vrati_id.vrati((Activity)kontekst),post_id,h,v);
+			new Like().execute(Vrati_id.vrati((Activity)kontekst),(String) v.getTag(),h,v);
 		}
 	};
 	

@@ -81,6 +81,13 @@ foreach($query as $user) {
 }
 
 
+if(isset($_POST['userId2'])){  //parametar za provjeru dal je korisnik koji gleda wall lajkao
+    $userId2=$_POST['userId2'];
+}
+else{
+    $userId2=$_SESSION['userId'];
+}
+
 // get posts with comments
 $query = $db->prepare("
     SELECT post.id as id, post.sender as sender, post.recipient as recipient, post.timestamp as timestamp, post.message as message, post.url as url, `like`.id as `like`,
@@ -93,7 +100,7 @@ $query = $db->prepare("
     ORDER BY TIMESTAMP DESC
     LIMIT ".$offset.",20
 ");
-$query->bindParam(1, $_SESSION['userId']);
+$query->bindParam(1, $userId2);
 $query->bindParam(2, $userId);
 $query->setFetchMode(PDO::FETCH_OBJ);
 $query->execute();
