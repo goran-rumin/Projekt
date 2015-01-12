@@ -24,13 +24,21 @@ if( !isset($_POST['userId']) || !isset($_POST['url'])) {
     die();
 };
 // Fetch the data 
+$userId = $_POST['userId'];
+$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 if( isset($_POST['albumId'])) {
     $albumId = $_POST['albumId'];
-} else $albumId = 75000;
-$userId = $_POST['userId'];
+} else {
+    $albumName = $userId."_Default";
+    $defAlbum = $db->prepare("SELECT id FROM album WHERE name = ?");
+    $defAlbum->bindParam(1, $albumName);
+    $defAlbum->setFetchMode(PDO::FETCH_OBJ);
+    $defAlbum->execute();
+    $albumId = $defAlbum->fetch()->id;
+}
+
 $data = base64_decode($_POST['url']);
 $img = $_POST["url"];
-
 $im = imagecreatefromstring($data);
 $width = imagesx( $im );
 $height = imagesy( $im );
@@ -42,32 +50,14 @@ imagecopyresized( $tmp_img, $im, 0, 0, 0, 0, 75, 75, $width, $height );
 imagejpeg( $tmp_img, "data/".$thumbname.".jpg" );
 imagedestroy($tmp_img);
 imagedestroy($im);
-
 $url = "http://www.vdl.hr/ferbook/photos/upload/data/".$photoname.".jpg";
-$db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
-$defAlbum = $db->prepare("SELECT COUNT(*) as defaultAlbum FROM album WHERE id = ?");
-$defAlbum->bindParam(1, $albumId);
-$defAlbum->setFetchMode(PDO::FETCH_OBJ);
-$defAlbum->execute();
-
-// If default album does not exist, create it
-if ( $defAlbum->fetch()->defaultAlbum == 0 ) {
-    $defAlbum = $db->prepare("INSERT INTO album(id, name, creator) VALUES (?,?,?)");
-    $default = "default";
-    $user = 0;
-    $defAlbum->bindParam(1, $albumId);
-    $defAlbum->bindParam(2, $default);
-    $defAlbum->bindParam(3, $user);
-    $defAlbum->setFetchMode(PDO::FETCH_OBJ);
-    $defAlbum->execute();
-}
 
 // Create new post with image
 if(isset($_POST['message'])) {
-$upload = $db->prepare("INSERT INTO post(sender, recipient, url, message) VALUES (?,?,?,?)");
-$upload->bindParam(4, $_POST["message"]);
+	$upload = $db->prepare("INSERT INTO post(sender, recipient, url, message) VALUES (?,?,?,?)");
+	$upload->bindParam(4, $_POST["message"]);
 } else {
-$upload = $db->prepare("INSERT INTO post(sender, recipient, url) VALUES (?,?,?)");
+	$upload = $db->prepare("INSERT INTO post(sender, recipient, url) VALUES (?,?,?)");
 }
 $upload->bindParam(1, $userId);
 $upload->bindParam(2, $userId);

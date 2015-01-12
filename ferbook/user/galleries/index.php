@@ -43,12 +43,14 @@ foreach ($albums as $album) {
         $lastimage->bindParam(1, $postID->fetch()->idImage);
         $lastimage->setFetchMode(PDO::FETCH_OBJ);
         $lastimage->execute();
+		if ( $album->name === $userId."_Default" ) $album->name = "Default";
         $albumdata = array (
             "albumId" => $album->id,
             "name" => $album->name,
             "url" => $lastimage->fetch()->url
         );
     } else {
+		if ( $album->name === $userId."_Default" ) $album->name = "Default";
         $albumdata = array (
             "albumId" => $album->id,
             "name" => $album->name,

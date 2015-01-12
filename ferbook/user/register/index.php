@@ -113,6 +113,14 @@ header("Access-Control-Allow-Origin: *");
     $response["data"] = array(
         "userId" => $row->id
     );
+	
+	// Create new default album for registered user
+	$albumName = $row->id."_Default";
+	$addAlbum = $db->prepare("INSERT INTO album(name, creator) VALUES (?,?)");
+	$addAlbum->bindParam(1, $albumName);
+	$addAlbum->bindParam(2, $row->id);
+	$addAlbum->setFetchMode(PDO::FETCH_OBJ);
+	$addAlbum->execute();
 
     echo json_encode($response, (float) JSON_UNESCAPED_UNICODE);
 
