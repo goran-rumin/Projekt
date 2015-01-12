@@ -2,12 +2,25 @@
     cursor: pointer;
     display: block;
     height: 64px;
-    margin-top: -35px;
     outline: medium none;
     position: absolute;
-    top: 50%;
     width: 54px;
     z-index: 5;
+    vertical-align: middle;
+}
+
+.area {
+    margin-top: -75px;
+    width: 100px;
+    height: 200px;
+}
+
+.area-left {
+    margin-right: -40px;
+}
+
+.area-right {
+    margin-left: -40px;
 }
 
 .arrow.prev {
@@ -260,8 +273,9 @@
     border: 1px solid #FFFFFF;
     border-radius: 5px;
     width: 800px;
-    margin: 10px auto 50px;
+    margin: 10px auto 10px;
     min-height: 400px;
+    max-height: 800px;
 }
 
 .picContainer{
@@ -294,4 +308,77 @@
 
 #topVal {
     color: black;
+}
+
+.container {
+    padding-right: 5px;
+    padding-left: 5px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.row {
+    margin-right: -15px;
+    margin-left: -15px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.window {
+    position: relative;
+    min-height: 1px;
+    padding-right: 5px;
+    padding-left: 5px;
+    float: left;
+}
+
+#ispod {
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #afafaf;
+    padding: 5px 5px 5px 5px;
+    border-radius: 4px;
+}
+
+#lajkaj, #lajk, #kom, #likeComment , #likesCom, .posterInfo {
+    cursor: pointer;
+}
+
+#lajkaj:hover, #lajk:hover, #kom:hover, #likeComment:hover, #likesCom:hover, .posterInfo:hover {
+    text-decoration: underline;
+}
+
+#lajkali {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    min-height: 16px;
+}
+
+#komentirali {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    width: 95%;
+    min-height: 75px;
+    text-align: left;
+    padding: 0;
+}
+
+.posterInfo {
+    color: #8a0000;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#timestamp {
+    color: #8a0000;
+    font-size: 10px;
+    margin-left: 5px;
+}
+
+.msg {
+    font-size: 14px;
+    margin-left: 35px;
+    width: 80%;
 }

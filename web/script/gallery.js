@@ -5,8 +5,11 @@
 
 var gallery = angular.module('gallery', []);
 gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function ($scope, $http, $templateCache) {
+    $(".hide").hide();
+    $("#bottomDisc").hide();
+    $scope.profilePicture = "../images/profile_default_big.png";
     $scope.images = [];
-
+    $scope.unlike = 0;
     var userID = location.search.split('userId=')[1];
     $("#noPics").hide();
 
@@ -20,7 +23,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
 
         if(userID != $scope.activeUserID) {
             $("#albumAdder").hide();
-            $("#upload").hide();
+            $(".footer").hide();
         }
 
     });
@@ -34,9 +37,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
             cache: $templateCache
         })
             .success(function (response) {
-                console.log(response);
                 $scope.albumList = response.data;
-                console.log($scope.albumList);
                 if($scope.albumList == undefined) {
                     $("#noPics").show();
                     $("#noPics").html("No albums available!")
@@ -47,8 +48,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
 
     $scope.showImages = function (albumId) {
         var albumIdn = albumId;
-        console.log(albumIdn);
-        console.log("albumiD " + albumId);
+        var userID = location.search.split('userId=')[1];
         $http({
             method: 'POST',
             url: root + 'photos/gallery/index.php',
@@ -57,16 +57,43 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
             cache: $templateCache
         })
             .success(function (response) {
+                $(".hide").show();
                 $scope._Index = 0;
+                $scope.izracun = 2000;
                 $scope.images = response.data;
-                console.log("Sad slike:");
-                console.log($scope.images);
+
+
+
+                $.ajax({
+                    url: root + "friends/status/index.php",
+                    type: "POST",
+                    data: {
+                        userId1: userID,
+                        userId2: $scope.activeUserID
+                    }
+                }).success(function(msg){
+                    var status = JSON.parse(msg);
+                    if(status.data.statusNumber != 1 && userID != $scope.activeUserID) {
+                        $("#lajkaj").hide();
+                        $("#likeComment").hide();
+                        $("#comments").hide();
+                    }
+                });
+
+
                 if($scope.images.length <= 0 &&  albumId != undefined)
                 {
                     $("#noPics").show();
                     $("#noPics").html("No images in this album, please choose another one!")
                 }
-                else $("#noPics").hide();
+                //ubaciti .............................................................
+                else {
+                    $("#noPics").hide();
+                    $("#lajkali").hide();
+                    $("#komentirali").hide();
+                    getComments($scope.images[$scope._Index].postId);
+                    getLikes($scope.images[$scope._Index].postId);
+                }
             })
     };
 
@@ -81,29 +108,51 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
         })
             .success(function (response) {
                 $scope.albumList.push(name);
-                console.log(ime);
-                console.log(name);
-                console.log(response);
                 window.location.reload();
             })
     };
 
     $scope._Index = 0;
+    $scope.izracun = 2000;
+
 
     $scope.isActive = function (index) {
+        if($scope.imageId == undefined) $scope.imageId = $scope.images[0].postId;
+
+        var pic = document.getElementById("pic"+index);
+        var width = pic.naturalWidth;
+        var height = pic.naturalHeight;
+        if((height/2 + 165)<$scope.izracun) $scope.izracun = height/2 + 165;
+        $(".arrow").css({
+            "top": $scope.izracun + "px"
+        });
+
         return $scope._Index === index;
     };
 
+    //ubaciti .............................................................
+
     $scope.showPrev = function () {
         $scope._Index = ($scope._Index > 0) ? --$scope._Index : $scope.images.length - 1;
+        $scope.imageId = $scope.images[$scope._Index].postId;
+        getComments($scope.images[$scope._Index].postId);
+        getLikes($scope.images[$scope._Index].postId);
     };
 
     $scope.showNext = function () {
         $scope._Index = ($scope._Index < $scope.images.length - 1) ? ++$scope._Index : 0;
+        $scope.imageId = $scope.images[$scope._Index].postId;
+        $("#lajkali").hide();
+        getComments($scope.images[$scope._Index].postId);
+        getLikes($scope.images[$scope._Index].postId);
     };
 
     $scope.showPhoto = function (index) {
         $scope._Index = index;
+        $scope.imageId = $scope.images[$scope._Index].postId;
+        $("#lajkali").hide();
+        getComments($scope.images[$scope._Index].postId);
+        getLikes($scope.images[$scope._Index].postId);
     };
 
     $scope.pictureURL = "";
@@ -185,7 +234,6 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
                             albumId: album
                         }
                     }).success(function (msg) {
-                        console.log(msg);
                         var response = JSON.parse(msg);
                         if (response.error.length ==0) {
                             $("#uploadMsg").html("Upload finished!");
@@ -238,7 +286,6 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
         openWall($scope.activeUserID);
     });
 
-
     $("#galleryLink").on("click", function () {
         openGallery($scope.activeUserID);
     });
@@ -252,6 +299,244 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
         openMessages($scope.activeUserID);
     });
 
+    //ubaciti .............................................................
+    function readUserData() {
+        $.ajax ({
+            url: root + "user/info/index.php",
+            type: "POST",
+            data: {
+                userId: userID
+            }
+        }).success(function (msg) {
+            $scope.userData = JSON.parse(msg);
+            if ($scope.userData.data.picture == null) {
+                $scope.userData.data.picture = $scope.profilePicture;
+            }
+            $scope.$apply();
+
+        })
+    }
+
+    function getComments(postId) {
+        $scope.allComments = [];
+        $.ajax({
+            url: root + "post/getComments/index.php",
+            type: "POST",
+            data: {
+                postId: postId,
+                userId: $scope.activeUserID
+            }
+        }).success(function (msg) {
+            $scope.comments = JSON.parse(msg);
+            $scope.commentsAlt = $scope.comments.data;
+            $scope.howManyComm = 0;
+            for (var o in $scope.comments.data)
+            {
+                $scope.howManyComm++;
+                $scope.test = $scope.commentsAlt[o];
+                $scope.allComments.push($scope.test);
+            }
+            $("#kom").html("Show " + $scope.howManyComm + " comments");
+            $scope.$apply();
+        })
+    }
+
+    function getLikes(postId) {
+        $.ajax({
+            url: root + "post/getLikes/index.php",
+            type: "POST",
+            data: {
+                postId: postId
+            }
+        }).success(function (msg) {
+            $scope.likes = JSON.parse(msg);
+            var likesAlt = $scope.likes.data;
+            $scope.howManyLikes = 0;
+            for (var o in $scope.likes.data)
+            {
+                $scope.howManyLikes++;
+
+                if(likesAlt[o].userId == $scope.activeUserID) $("#lajkaj").html("Unlike");
+            }
+            $("#lajk").html($scope.howManyLikes + " Likes");
+            if($scope.howManyLikes == 0) $("#lajkaj").html("Like");
+            $scope.$apply();
+        })
+    }
+
+    $("#lajkaj").click(function (){
+        $.ajax({
+            url: root + "post/like/index.php",
+            type: "POST",
+            data: {
+                postId: $scope.images[$scope._Index].postId,
+                userId: $scope.activeUserID
+            },
+            cache: false
+        }).success(function(msg){
+            $scope.likeMsg = JSON.parse(msg);
+
+            if($scope.likeMsg.data.action == "like") {
+                $scope.howManyLikes += 1;
+
+                $("#lajk").html($scope.howManyLikes + " Likes");
+                $("#lajkaj").html("Unlike");
+            }
+            else {
+                $scope.howManyLikes -= 1;
+
+                $("#lajk").html($scope.howManyLikes + " Likes");
+                $("#lajkaj").html("Like");
+            }
+
+            });
+    });
+
+    $scope.checkLikes = function(postId, index) {
+        $.ajax({
+            url: root + "post/getLikes/index.php",
+            type: "POST",
+            data: {
+                postId: postId
+            }
+        }).success(function(comm) {
+            $scope.commentLikes = JSON.parse(comm);
+            var commentsAlt = $scope.commentLikes.data;
+
+            for (var o in $scope.commentLikes.data) {
+                if(commentsAlt[o].userId == $scope.activeUserID)
+                {
+                    $(".like"+index).html("Unlike");
+                    $scope.unlike = 1;
+                }
+                else $scope.unlike = 0;
+            }
+
+        });
+    };
+
+    $scope.likeCom = function(postId, br, index) {
+        $.ajax({
+            url: root + "post/getLikes/index.php",
+            type: "POST",
+            data: {
+                postId: postId
+            }
+        }).success(function(por) {
+            $scope.likedCom = JSON.parse(por);
+            var likedComAlt = $scope.likedCom.data;
+
+            $scope.howManyCom = 0;
+
+            for (var o in $scope.likedCom.data)
+            {
+                $scope.howManyCom++;
+
+                if(likedComAlt[o].userId == $scope.activeUserID && !$("#likeComment").is(":hidden")) $(".like"+index).html("Unlike");
+            }
+
+        });
+
+        $.ajax({
+            url: root + "post/like/index.php",
+            type: "POST",
+            data: {
+                postId: postId,
+                userId: $scope.activeUserID
+            },
+            cache: false
+        }).success(function(msg){
+            $scope.likeComm = JSON.parse(msg);
+            var pomBr = br;
+            $scope.pomVar = $scope.likeComm.data.action;
+
+            if(!$("#likeComment").is(":hidden")) {
+                if(br == 0) $(".like"+index).html("Like");
+                if($scope.pomVar == "like") {
+                    $scope.howManyCom++;
+                    $(".msgL"+index).html($scope.howManyCom +" Likes");
+                    $(".like"+index).html("Unlike");
+                }
+                else if ($scope.pomVar == "unlike") {
+                    $scope.howManyCom--;
+                    $(".msgL"+index).html($scope.howManyCom +" Likes");
+                    $(".like"+index).html("Like");
+                }
+            }
+        });
+    };
+
+    $("#lajk").on('click', function(){
+        var rj = "People who liked this: ";
+        var likesAlt = $scope.likes.data;
+        var pom = $scope.howManyLikes;
+        if($scope.howManyLikes == 0) {
+            $("#lajkali").html("No one liked this yet.");
+        }
+        if($scope.howManyLikes > 0) {
+            for (var o in likesAlt) {
+                rj += " " + likesAlt[o].name + " " + likesAlt[o].lastname;
+                if(pom>1) rj += ",";
+                pom--;
+            }
+            $("#lajkali").html(rj);
+        }
+        if( $("#lajkali").is(":hidden") ) {
+            $("#lajkali").show();
+        }
+        else
+        {
+            $("#lajkali").hide();
+        }
+    });
+
+    $("#kom").on('click', function(){
+        var pom = $scope.howManyComm;
+        if($scope.howManyComm == 0) {
+            $("#komentirali").html("No comments yet ...")
+        }
+        /*else {
+         $("#komentirali").html($scope.test.message);
+         }*/
+        if( $("#komentirali").is(":hidden") ) {
+            $("#komentirali").show();
+            $(".delete").show();
+        }
+        else
+        {
+            $("#komentirali").hide();
+            $(".delete").hide();
+        }
+    });
+
+    $scope.addNewComment = function(message){
+        $(".hide").show();
+        $.ajax({
+            url: root + "post/comment/index.php",
+            type: "POST",
+            data: {
+                postId: $scope.imageId,
+                userId: $scope.activeUserID,
+                message: message
+            }
+        }).success(function(msg) {
+            $scope.howManyComm++;
+            $("#kom").html("Show " + $scope.howManyComm + " comments");
+            $("#bottomDisc").show();
+            $("#bottomDisc").html("Comment added successfully!");
+            setTimeout(function () {
+                $("#bottomDisc").html("");
+                $("#msg").val("");
+                $("#bottomDisc").hide();
+                getComments($scope.imageId);
+                getLikes($scope.imageId);
+            }, 2000);
+        });
+    };
+
+    $scope.seeProfile = function(userId) {
+        window.location = rootRed+"wall/?userId=" + userId;
+    }
 
 
 }]);

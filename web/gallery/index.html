@@ -10,12 +10,11 @@
     <script type="text/javascript" src="../script/links.js"></script>
     <script type="text/javascript" src="../script/root.js"></script>
 
-	<link rel="stylesheet" href="../css/alert.css" type="text/css" />
+    <link rel="stylesheet" href="../css/alert.css" type="text/css" />
     <link rel="stylesheet" href="../css/galleryStyle.css" type="text/css" />
     <link rel="stylesheet" href="../css/template.css" type="text/css" />
 
     <link rel="shortcut icon" href="../images/fer_logo_ico.ico"/>
-
 </head>
 <body ng-app="gallery">
 
@@ -49,7 +48,7 @@
                 <option id="topVal" value="">Choose one of the albums from the list:</option>
             </select></span>
 
-            <button ng-click="showImages(myAlbum.albumId)" class="btn btn-default">Submit</button>
+        <button ng-click="showImages(myAlbum.albumId)" class="btn btn-default">Submit</button>
 
         <form novalidate ng-controller="albumCtrl" id="albumAdder" name="newAlbum">
             Write new album title: <input type="text" class="form-control" ng-model="name" />
@@ -67,19 +66,39 @@
         </div>
         <div class="container slider">
             <div class="picContainer">
-                <img ng-repeat="a in images" class="slide"  ng-show="isActive($index)" ng-src="{{a.url}}" />
+                <img ng-repeat="a in images" class="slide" id="pic{{$index}}"  ng-show="isActive($index)" ng-src="{{a.url}}" />
             </div>
 
-            <a class="arrow prev" href="" ng-click="showPrev()" ng-hide="images.length <= 0"></a>
-            <a class="arrow next" href="" ng-click="showNext()" ng-hide="images.length <= 0"></a>
+            <a class="arrow prev" href="" ng-click="showPrev()" ng-hide="images.length <= 0"><div class="area area-left"></div></a>
+            <a class="arrow next" href="" ng-click="showNext()" ng-hide="images.length <= 0"><div class="area area-right"></div></a>
         </div>
+
+        <div class="container hide" id="ispod" ng-hide="images.length <= 0"><div class="row"><div class="window" id = "kom" ng-hide="images.length <= 0" style="width: 80%; text-align: left; margin-left: 12px"></div>
+            <a class="window" id = "lajkaj">Like</a>
+            <div class="window" id = "lajk" style="width: 8%"></div></div>
+            <p class = "alert alert-grey" id="lajkali"></p>
+            <div ng-repeat="comment in allComments" id="komentirali" class = "alert alert-danger delete">
+                <img src="{{comment.picture}}" ng-click="seeProfile(comment.userId)" class="posterInfo" style="max-width: 50px; max-height: 50px; vertical-align: middle; padding: 3px 3px 3px 3px" /><span class="posterInfo" ng-click="seeProfile(comment.userId)">{{comment.name}} {{comment.lastname}}</span>
+                <span id="timestamp">posted on: {{comment.timestamp}}:</span>
+                <p class="msg">{{comment.message}}</p>
+                <div class="row" style="text-align: right; margin-right: 15px; margin-bottom: 3px"><a ng-init="checkLikes(comment.id, $index)" ng-click="likeCom(comment.id, comment.likesNumber, $index)" id="likeComment" class="like{{$index}}" style="margin-right: 10px;">Like</a>
+                    <span id="likesCom" class="msgL{{$index}}">{{comment.likesNumber}} Likes</span></div>
+            </div>
+
+
+            <form novalidate ng-controller="albumCtrl" id="comments" name="newComment">
+                <input type="text" id="msg" class="form-control" style="width: 90%" ng-model="message" />
+                <input type="submit" ng-click="addNewComment(message)" class="btn btn-default" value="Post" />
+            </form>
+            <p id="bottomDisc" class="alert alert-success"></p></div>
+
 
     </div>
     <div class="footer drop">
         <button class="btn btn-default" id="uploadNew" ng-click="postPicture($event)">Upload new photo</button>
         <p id="uploadMsg"></p>
     </div>
-    </div>
+</div>
 
 </div>
 

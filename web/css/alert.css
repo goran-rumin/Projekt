@@ -88,3 +88,17 @@
 .alert-danger .alert-link {
     color: #843534;
 }
+
+.alert-grey {
+    color: #abaeb0;
+    background-color: #dadedf;
+    border-color: #e3ebeb;
+}
+
+.alert-grey hr {
+    border-top-color: #dae1e4;
+}
+
+.alert-grey .alert-link {
+    color: #7a7f84;
+}
