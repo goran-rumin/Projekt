@@ -104,7 +104,7 @@
             <div ng-repeat="message in chatTab" class="message"
                  ng-class="{'me':getClass(message.senderId,'me'), 'other':getClass(message.senderId,'other')}">
                 <div class="sender">
-                    {{ getFriendsName(message.senderId, 1) }}, {{ message.timestamp*1000 | date:'yyyy-MM-dd HH:mm' }}
+                    {{ getFriendsName(message.senderId, 1) }}, {{ message.timestamp }}
                 </div>
                 <div class="text">
                     {{ message.message }}

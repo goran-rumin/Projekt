@@ -6,7 +6,7 @@
  * Time: 20:05
  */
 
-
+session_start();
 include_once "../../constants.php";
 include_once "../../classes/Crypter.php";
 
@@ -93,7 +93,7 @@ $query = $db->prepare("
     ORDER BY TIMESTAMP DESC
     LIMIT ".$offset.",20
 ");
-$query->bindParam(1, $userId);
+$query->bindParam(1, $_SESSION['userId']);
 $query->bindParam(2, $userId);
 $query->setFetchMode(PDO::FETCH_OBJ);
 $query->execute();
