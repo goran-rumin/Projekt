@@ -139,20 +139,20 @@ app.controller("newsController", function ($scope) {
 
                         $(likeText1).addClass("likeText")
                             .text($scope.isLiked(postData[val]) + "  ")
-                            .on("click", function () {
+                            .on("click", function (event) {
                                 $scope.likePost(postData[val].postId, event);
                             })
                             .appendTo($(like));
 
                         $(likeText2).addClass("likeText")
                             .text(postData[val].likesNumber)
-                            .on("click", function () {
+                            .on("click", function (event) {
                                 $scope.showLikes(event, postData[val].postId)
                             })
                             .appendTo($(like));
 
                         $(likeText3).addClass("likeText").text(" likes")
-                            .on("click", function () {
+                            .on("click", function (event) {
                                 $scope.showLikes(event, postData[val].postId)
                             })
                             .appendTo($(like));
@@ -164,7 +164,7 @@ app.controller("newsController", function ($scope) {
 
                         $(commentsShow).addClass("commentsShow")
                             .text("Show comments")
-                            .on("click", function () {
+                            .on("click", function (event) {
                                 $scope.comments(event, postData[val]);
                             })
                             .appendTo($(commentsContainer));
@@ -569,7 +569,7 @@ app.controller("newsController", function ($scope) {
 
                     $(submit).addClass("buttonComment")
                         .text("Post")
-                        .on("click", function () {
+                        .on("click", function (event) {
                             $scope.postComment($(input).val(), postID, event, object);
                         })
 

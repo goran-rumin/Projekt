@@ -153,9 +153,10 @@ li.active a, li.active a:hover {
     vertical-align: middle;
 }
 .infoAdd {
-    width: 190px;
+    max-width: 190px;
     float: left;
-    margin-top: 60px;
+    margin-top: 20px;
+    margin-left: 10px;
 }
 .nameContainer span{
     cursor: pointer;

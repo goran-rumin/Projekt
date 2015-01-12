@@ -49,7 +49,7 @@ $(document).ready(function() {
             openMessages(activeUserID);
         });
 
-        $("#upload").on("click", function(){
+        $("#upload").on("click", function(event){
             postPicture(event, activeUserID);
         })
 
@@ -230,7 +230,7 @@ function postPicture (event, userID) {
 
     }else{
         $(event.target).parent().children(".inputWrapper").remove();
-        $(event.target).text("Post picture");
+        $(event.target).text("Profile picture");
 
     }
 

@@ -1,5 +1,4 @@
 #logo{
-    position: fixed;
     margin-top: 25px;
     margin-left: 45px;
     width: 400px;
@@ -9,12 +8,22 @@
 body{
     background-color: #c9c9c9;
 }
-
-#msg{
+div {
+    display: inline-block;
+}
+.top {
+    width:100%;
+}
+#msg {
     color: #790316;
-    margin-left: 600px;
+    margin-left: 100px;
+    margin-top: 100px;
     font-size: 100px;
     font-family: courier;
+    display: inline-block;
+    vertical-align: top;
+    width: 70%;
+    padding-top: 50px;
 }
 
 .container{
@@ -22,6 +31,14 @@ body{
     margin-top: auto;
     width: 500px;
     clear:both;
+}
+
+.welcome {
+    width: 500px;
+    margin-left: 50px;
+    height: 300px;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .container input{
@@ -52,13 +69,16 @@ body{
     font-family: courier;
 }
 
-.message{
-    font-size: 25px;
-    color:white;
-    margin-left:600px;
-
+.message {
+    font-size: 30px;
+    color: rgb(166, 22, 22);
+    margin-left: 100px;
+    text-align: center;
+    font-weight: bold;
+    display: inline-block;
+    vertical-align: top;
+    width: 500px;
 }
-
 .register{
     margin-left:650px;
     height: 50px;
@@ -78,8 +98,12 @@ body{
     display:none;
 }
 
-#submit, #msgR{
+#submit{
     margin-left:50px;
+}
+
+#msgR {
+    margin-left: 0;
 }
 
 

@@ -68,7 +68,7 @@
     overflow: auto;
 
 }
-.button, .buttonComment {
+.button, .buttonComment, .buttonFR {
     padding:5px;
     margin-bottom: 10px;
     color: #790316;
@@ -256,7 +256,7 @@ button:hover, .buttonComment:hover{
 }
 .commentInput {
     margin:5px;
-    width:88%;
+    width:85%;
     padding: 3px;
 }
 .buttonComment {
@@ -276,5 +276,11 @@ button:hover, .buttonComment:hover{
 #submit{
     vertical-align: middle;
     float: right;
+}
+
+.buttonFR {
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 

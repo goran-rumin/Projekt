@@ -34,7 +34,7 @@ $userId2 = $_POST['userId2'];
 
 $db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 
-$query = $db->prepare("SELECT COUNT(*) as nmbr, flag FROM friends WHERE sender = ? AND recipient = ? OR sender = ? AND recipient = ?");
+$query = $db->prepare("SELECT COUNT(*) as nmbr, flag,sender,recipient FROM friends WHERE sender = ? AND recipient = ? OR sender = ? AND recipient = ?");
 $query->bindParam(1, $userId1);
 $query->bindParam(2, $userId2);
 $query->bindParam(3, $userId2);
@@ -47,6 +47,8 @@ if($row->nmbr != 1) {
     $response["data"]["statusNumber"] = -1;
     $response["data"]["status"] = "none";
 } else {
+        $response["data"]["sender"] = $row->sender;
+        $response["data"]["recipient"] = $row->recipient;
     if($row->flag == 1) {
         $response["data"]["statusNumber"] = 1;
         $response["data"]["status"] = "friends";

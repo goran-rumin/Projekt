@@ -98,12 +98,14 @@ app.controller("chatCtrl",function($scope, $filter){
 
     $scope.formatDate = function(unixTimestamp) {
         var date = new Date(unixTimestamp*1000);
-        return date.getDate() + "/" + date.getMonth() +
-            "/" + date.getFullYear() + " " + date.getHours()
-        + "-" + date.getMinutes();
+        return date.getFullYear() + "-" + date.getMonth()+1 +
+            "-" + date.getDate() + " " + date.getHours()
+        + ":" + date.getMinutes() + ":" +date.getSeconds();
     }
 
+
     $scope.sendMsg = function($event, tab, index) {
+        var timestamp = $scope.formatDate(new Date().getTime()/1000);
         if($event.keyIdentifier == "Enter" && !$event.shiftKey
             || $.browser.mozilla && $event.key == "Enter") {
             if($.browser.mozilla) {
@@ -121,7 +123,7 @@ app.controller("chatCtrl",function($scope, $filter){
             tab.push({
                 "message" : message,
                 "senderId": $scope.activeUser,
-                "timestamp" : new Date().getTime()/1000,
+                "timestamp" : timestamp,
                 "flag": 1
             });
 

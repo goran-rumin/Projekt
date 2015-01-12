@@ -46,7 +46,7 @@ app.controller("wallController", function($scope) {
 
             $("#postPicButton").hide(); //ne moze se postati slika na tudji zid
 
-
+            //ne moze se postati na wall ako nisu prijatelji
             $.ajax({
                 url: root + "friends/status/index.php",
                 type: "POST",
@@ -160,20 +160,20 @@ app.controller("wallController", function($scope) {
 
                         $(likeText1).addClass("likeText")
                             .text($scope.isLiked(postData[val]) + "  ")
-                            .on("click", function () {
+                            .on("click", function (event) {
                                 $scope.likePost(postData[val].postId, event);
                             })
                             .appendTo($(like));
 
                         $(likeText2).addClass("likeText")
                             .text(postData[val].likesNumber)
-                            .on("click", function () {
+                            .on("click", function (event) {
                                 $scope.showLikes(event, postData[val].postId)
                             })
                             .appendTo($(like));
 
                         $(likeText3).addClass("likeText").text(" likes")
-                            .on("click", function () {
+                            .on("click", function (event) {
                                 $scope.showLikes(event, postData[val].postId)
                             })
                             .appendTo($(like));
@@ -186,7 +186,7 @@ app.controller("wallController", function($scope) {
 
                         $(commentsShow).addClass("commentsShow")
                             .text("Show comments")
-                            .on("click", function () {
+                            .on("click", function (event) {
                                 $scope.comments(event, postData[val]);
                             })
                             .appendTo($(commentsContainer));
@@ -365,7 +365,7 @@ app.controller("wallController", function($scope) {
                 type: "POST",
                 data: {
                     postId: postID,
-                    userId: userID
+                    userId: $scope.activeUserID
 
                 },
                 cache: false
@@ -589,7 +589,7 @@ app.controller("wallController", function($scope) {
 
                     $(submit).addClass("buttonComment")
                         .text("Post")
-                        .on("click", function () {
+                        .on("click", function (event) {
                             $scope.postComment($(input).val(), postID, event, object);
                         })
 
@@ -673,7 +673,7 @@ app.controller("wallController", function($scope) {
         })
 
         $("#searchQuery").keypress(function (event) {
-                
+
                 if((event.keyCode || event.which) == 13)
                 {
                     $scope.friendsSearch();
@@ -775,14 +775,37 @@ app.controller("wallController", function($scope) {
                                         return "Add friend";
                                     } else if (friendStat == 1) {
                                         return "Delete friend";
+                                    } else if  (friendStat == 0 && $scope.status.data.sender == $scope.activeUserID) {
+                                       return "Request sent"
                                     } else return "Pending request";
+
                                 })
-                                .on("click", function () {
+                                .on("click", function (event) {
                                     if (friendStat == -1) {
                                         $scope.addFriend(ufr[val].id, event);
                                     } else if (friendStat == 1) {
                                         $scope.deleteFriend(ufr[val].id, event);
-                                    } else $scope.confirmFriend(ufr[val].id, event);
+                                    } else {
+                                        if ($scope.status.data.recipient == $scope.activeUserID) {
+                                            $(event.target).hide();
+                                            button1 = document.createElement("button");
+                                            button2 = document.createElement("button");
+
+                                            $(button1).addClass("buttonFR").text("Delete request")
+                                                .on("click", function(event3){
+                                                    $scope.deleteFriend(ufr[val].id, event3);
+
+                                                })
+                                            .appendTo($(infoAdd));
+
+                                            $(button2).addClass("buttonFR").text("Confirm")
+                                                .on("click", function(event3){
+                                                    $scope.confirmFriend(ufr[val].id, event3);
+                                                })
+                                                .appendTo($(infoAdd));
+
+                                        }
+                                    }
 
                                 })
                                 .appendTo($(infoAdd));
@@ -807,7 +830,7 @@ app.controller("wallController", function($scope) {
             }).success(function (msg) {
                 $scope.status = JSON.parse(msg);
                 $scope.$apply();
-                $(event.target).text("Pending request");
+                $(event.target).text("Request sent");
             })
         };
 
@@ -822,7 +845,7 @@ app.controller("wallController", function($scope) {
             }).success(function (msg) {
                 $scope.status = JSON.parse(msg);
                 $scope.$apply();
-                $(event.target).text("Delete friend");
+                $(event.target).parent().parent().fadeOut("slow");
                 requests();
             })
         };
@@ -839,6 +862,7 @@ app.controller("wallController", function($scope) {
                 $scope.status = JSON.parse(msg);
                 $scope.$apply();
                 $(event.target).parent().parent().fadeOut("slow");
+                requests();
             })
         }
 
