@@ -20,7 +20,7 @@ var userID = location.search.split('userId=')[1];
         $scope.activeUserID = parseInt(json.data.id);
 
         $scope.$apply();
-        if ($scope.activeUser == -1) $scope.activeUser=location.search.split('userId=')[1];
+
 
         $scope.readUserData =function() {
             //dohvaca podatke za korisnika s kim se pregledava razgovor

@@ -14,13 +14,14 @@
     <script type="text/javascript" src="../script/links.js"></script>
     <script type="text/javascript" src="../script/root.js"></script>
 
+    <link rel="shortcut icon" href="../images/fer_logo_ico.ico"/>
 
 </head>
 <body ng-app="Conversation" ng-controller="convController">
 <div id="header" >
     <div id="top">
         <div id="logo">
-            <img src="../images/fer_logo3.png"  alt="FERbook" >
+            <a href="../newsfeed"><img src="../images/fer_logo3.png"  alt="FERbook" ></a>
         </div>
     </div>
     <div id="topNav">
@@ -47,7 +48,7 @@
                 <div id="messagesBox" ng-repeat="obj in conversationData.data"  >
 
                     <img class="profilePic"
-                         ng-src="obj.picture" ng-show="obj.picture!=null">
+                         ng-src="{{obj.picture}}" ng-show="obj.picture!=null">
                     <img class="profilePic"
                          ng-src="http://www.wiganlatics.co.uk/images/common/bg_player_profile_default_big.png" ng-show="obj.picture==null">
 

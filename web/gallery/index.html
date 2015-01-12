@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="../css/galleryStyle.css" type="text/css" />
     <link rel="stylesheet" href="../css/template.css" type="text/css" />
 
+    <link rel="shortcut icon" href="../images/fer_logo_ico.ico"/>
 
 </head>
 <body ng-app="gallery">
@@ -21,7 +22,7 @@
 <div id="header">
     <div id="top">
         <div id="logo">
-            <img src="../images/fer_logo3.png"  alt="FERbook" >
+            <a href="../newsfeed"><img src="../images/fer_logo3.png"  alt="FERbook" ></a>
         </div>
     </div>
     <div id="topNav">
@@ -74,7 +75,7 @@
         </div>
 
     </div>
-    <div class="footer drop" id="upload">
+    <div class="footer drop">
         <button class="btn btn-default" id="uploadNew" ng-click="postPicture($event)">Upload new photo</button>
         <p id="uploadMsg"></p>
     </div>

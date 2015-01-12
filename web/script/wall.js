@@ -32,8 +32,8 @@ app.controller("wallController", function($scope) {
                 }
             }).success(function (msg) {
                 $scope.userData = JSON.parse(msg);
-                if ($scope.userData.data.picture == null) {
-                    $scope.userData.data.picture = $scope.profilePicture;
+                if ($scope.userData.data.picture != null) {
+                    $scope.profilePicture = $scope.userData.data.picture;
                 }
                 $scope.$apply();
 
@@ -97,11 +97,13 @@ app.controller("wallController", function($scope) {
                         likeComments = document.createElement("div");
                         like = document.createElement("div");
                         commentsContainer = document.createElement("div");
-
+                        profilePicCont = document.createElement("div");
                         profilePic = document.createElement("img");
                         timestampContainer = document.createElement("div");
                         infoPoster = document.createElement("span");
                         timestamp = document.createElement("span");
+
+                        $(profilePicCont).addClass("profilePicCont").appendTo($(userInfoPost));
 
                         $(profilePic).addClass("profilePic")
                             .attr("src", function () {
@@ -112,7 +114,7 @@ app.controller("wallController", function($scope) {
                             .on("click", function () {
                                 openWall(postData[val].senderId);
                             })
-                            .appendTo($(userInfoPost));
+                            .appendTo($(profilePicCont));
 
                         $(infoPoster).addClass("infoPoster")
                             .text($scope.posterText(postData[val]))
@@ -154,6 +156,7 @@ app.controller("wallController", function($scope) {
                         likePic = document.createElement("img");
                         likeText1 = document.createElement("span");
                         likeText2 = document.createElement("span");
+                        likeText3 = document.createElement("span");
 
                         $(likeText1).addClass("likeText")
                             .text($scope.isLiked(postData[val]) + "  ")
@@ -163,11 +166,18 @@ app.controller("wallController", function($scope) {
                             .appendTo($(like));
 
                         $(likeText2).addClass("likeText")
-                            .text(postData[val].likesNumber + " likes")
+                            .text(postData[val].likesNumber)
                             .on("click", function () {
                                 $scope.showLikes(event, postData[val].postId)
                             })
                             .appendTo($(like));
+
+                        $(likeText3).addClass("likeText").text(" likes")
+                            .on("click", function () {
+                                $scope.showLikes(event, postData[val].postId)
+                            })
+                            .appendTo($(like));
+
 
                         $(like).addClass("like")
                             .appendTo($(likeComments));
@@ -254,6 +264,15 @@ app.controller("wallController", function($scope) {
 
         }
 
+        $("#newPostData").keypress(function (event) {
+            var key = event.which;
+            if((event.keyCode || event.which) == 13)
+            {
+                $scope.newPost();
+                return false;
+            }
+        });
+
         $scope.newPost = function () {
             var textInput = $("#newPostData").val();
 
@@ -269,7 +288,7 @@ app.controller("wallController", function($scope) {
                     url: root + "photos/upload/index.php",
                     type: "POST",
                     data: {
-                        userId: userID,
+                        userId: $scope.activeUserID,
                         message: textInput,
                         url: $scope.pictureURL
                     }
@@ -295,7 +314,7 @@ app.controller("wallController", function($scope) {
                     url: root + "post/publish/index.php",
                     type: "POST",
                     data: {
-                        sender: userID,
+                        sender: $scope.activeUserID,
                         recipient: userID,
                         message: textInput,
                         url: ""
@@ -354,10 +373,18 @@ app.controller("wallController", function($scope) {
                 $scope.likemsg = JSON.parse(msg);
                 $scope.$apply();
                 console.log($scope.likemsg.data);
+                var number = $(event.target).next().text();
                 if ($scope.likemsg.data.action == "like") {
                     $(event.target).text("Unlike ");
-                } else $(event.target).text("Like ");
+                    number = parseInt(number)+1;
+                    $(event.target).next().text(parseInt(number));
 
+                } else {
+                    $(event.target).text("Like ");
+                    number = parseInt(number)-1;
+                    $(event.target).next().text(parseInt(number));
+
+                }
             })
         }
 
@@ -480,6 +507,8 @@ app.controller("wallController", function($scope) {
 
                             d = document.createElement("div");
                             container = document.createElement("div");
+                            timestampContainer = document.createElement("div");
+                            posterPicCont = document.createElement("div");
                             poster = document.createElement("div");
                             posterPic = document.createElement("img");
                             mssg = document.createElement("div");
@@ -487,9 +516,11 @@ app.controller("wallController", function($scope) {
                             likeComments = document.createElement("div");
 
 
+                            $(posterPicCont).addClass("commentPosterPicCont").appendTo($(container));
+
                             $(posterPic).addClass("commentPosterPic")
-                                .attr("src", $scope.profilePicture)
-                                .appendTo($(container));
+                                .attr("src", comments[val].picture)
+                                .appendTo($(posterPicCont));
 
                             $(poster).addClass("cInfoPoster")
                                 .text(comments[val].name + " " + comments[val].lastname
@@ -502,6 +533,7 @@ app.controller("wallController", function($scope) {
                             like1 = document.createElement("div");
                             likeText1 = document.createElement("span");
                             likeText2 = document.createElement("span");
+                            likeText3 = document.createElement("span");
 
                             $(likeText1).addClass("likeText")
                                 .text($scope.isLiked(comments[val]) + "  ")
@@ -511,11 +543,18 @@ app.controller("wallController", function($scope) {
                                 .appendTo($(like1));
 
                             $(likeText2).addClass("likeText")
-                                .text(comments[val].likesNumber + " likes")
+                                .text(comments[val].likesNumber)
                                 .on("click", function (event2) {
                                     $scope.showLikes(event2, comments[val].id);
                                 })
                                 .appendTo($(like1));
+
+                            $(likeText3).addClass("likeText").text(" likes")
+                                .on("click", function (event2) {
+                                    $scope.showLikes(event2, comments[val].postId)
+                                })
+                                .appendTo($(like1));
+
 
                             $(container).addClass("commentPoster").appendTo($(d));
 
@@ -538,6 +577,14 @@ app.controller("wallController", function($scope) {
 
                     $(input).addClass("commentInput")
                         .attr("type", "text")
+                        .keypress(function (event2) {
+
+                            if((event2.keyCode || event2.which) == 13)
+                            {
+                                $scope.postComment($(input).val(), postID, event, object);
+                                return false;
+                            }
+                        })
                         .appendTo($(newComm));
 
                     $(submit).addClass("buttonComment")
@@ -572,7 +619,7 @@ app.controller("wallController", function($scope) {
                 type: "POST",
                 data: {
                     postId: postID,
-                    userId: userID,
+                    userId: $scope.activeUserID,
                     message: text
 
                 }
@@ -624,6 +671,15 @@ app.controller("wallController", function($scope) {
             });
 
         })
+
+        $("#searchQuery").keypress(function (event) {
+                
+                if((event.keyCode || event.which) == 13)
+                {
+                    $scope.friendsSearch();
+                    return false;
+                }
+            });
 
         $scope.friendsSearch = function () {
             var textInput = $("#searchQuery").val();
@@ -693,7 +749,7 @@ app.controller("wallController", function($scope) {
                         $(linkPic).addClass("linkPicture")
                             .attr("src", function () {
                                 if (ufr[val].picture == null) {
-                                    return $scope.profilePicture;
+                                    return "../images/profile_default_big.png";
                                 } else return ufr[val].picture;
                             })
                             .on("click", function () {

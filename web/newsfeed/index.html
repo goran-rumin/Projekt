@@ -21,13 +21,15 @@
     <link href="../chat/chat.css" rel="stylesheet" type="text/css"/>
     <link href="../css/template.css" rel="stylesheet" type="text/css"/>
 
+    <link rel="shortcut icon" href="../images/fer_logo_ico.ico"/>
+
 
 </head>
 <body ng-app="NewsFeed" ng-controller="newsController">
 <div id="header">
     <div id="top">
         <div id="logo">
-            <img src="../images/fer_logo3.png" alt="FERbook">
+            <a href="../newsfeed"><img src="../images/fer_logo3.png" alt="FERbook"></a>
         </div>
     </div>
     <div id="topNav">
@@ -59,7 +61,9 @@
                 <p class="errorMsg" id="newPostMsg"></p>
             </div>
             <div class="userInfo">
-                <img ng-src="{{userData.data.picture}}"  class="profilePic" id="userProfilePicture">
+                <div class="profilePicCont">
+                    <img ng-src="{{userData.data.picture}}"  class="profilePic" id="userProfilePicture">
+                </div>
 
                 <div id="userContainer">
                     <span class="textUser" ng-bind="userData.data.name + ' ' + userData.data.lastname"> </span>
