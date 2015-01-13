@@ -264,7 +264,7 @@ public class activity_newAlbum extends Activity implements Upload.prenesi, addGa
 	 * ADDGALLERY
 	 * */
 	@Override
-	public void prenesi_image(String albumId, String error) {
+	public void prenesi_newGallery(String albumId, String error) {
 		Log.d("denis", "U addgallery, uploadaj svaku sliku");
 		Log.d("denis", "id novog albuma: " + albumId);
 		if (error == null && albumId != null ) {
