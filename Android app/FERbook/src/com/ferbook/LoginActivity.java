@@ -13,11 +13,13 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends Activity implements View.OnClickListener, Login.prenesi{  //3. korisnik probni 1234
@@ -26,6 +28,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Log
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_layout);
+		TextView reg = (TextView) findViewById(R.id.reg);
 		Button login = (Button) findViewById(R.id.login);
 		login.setOnClickListener(this);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -35,6 +38,16 @@ public class LoginActivity extends Activity implements View.OnClickListener, Log
 			Intent prebaci = new Intent(getBaseContext(), MainActivity.class);
 			prebaci.putExtra("id", id);
 			startActivity(prebaci);
+		}
+		else{
+			reg.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent pogledaj = new Intent(Intent.ACTION_VIEW);
+					pogledaj.setData(Uri.parse("http://ferbook.duckdns.org"));
+					startActivity(pogledaj);
+				}
+			});
 		}
 	}
 	ProgressDialog pd;

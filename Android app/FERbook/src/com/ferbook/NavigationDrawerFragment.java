@@ -270,7 +270,7 @@ public class NavigationDrawerFragment extends Fragment {
 		}
 		if (item.getItemId() == R.id.action_logout) {
 			getActivity().deleteFile("id.txt");
-			Toast.makeText(getActivity(), "Odlogirano / file izbrisan", Toast.LENGTH_SHORT)
+			Toast.makeText(getActivity(), "You have logged out", Toast.LENGTH_SHORT)
 					.show();
 			Intent prebaci = new Intent(getActivity().getBaseContext(), LoginActivity.class);
 			prebaci.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

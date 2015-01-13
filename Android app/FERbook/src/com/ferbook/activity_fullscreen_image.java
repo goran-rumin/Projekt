@@ -35,7 +35,7 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
         super.onCreate(savedInstanceState);
  
         setContentView(R.layout.activity_fullscreenpicture);
-        
+        getActionBar().hide();
         imageView = (ImageView)findViewById(R.id.imgDisplay); 
         mButtonLike = (Button)findViewById(R.id.btnLike);
         
@@ -73,6 +73,12 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
     }
     
     
+    @Override
+	public void onPause(){
+    	imageView.setImageDrawable(null);
+    	imageView.destroyDrawingCache();
+		super.onPause();
+	}
     /*
      * IMAGE
      * */
