@@ -271,7 +271,7 @@ public class activity_newAlbum extends Activity implements Upload.prenesi, addGa
 			for (int i = 0; i < mPicturePaths.size(); i++){
 				Bitmap slika = BitmapFactory.decodeFile(mPicturePaths.get(i));
 				
-				new Upload().execute(Vrati_id.vrati(this), slika, albumId, "", this); 
+				new Upload().execute(Vrati_id.vrati(this), slika, albumId, "", this, Vrati_id.vrati(this)); 
 			}
 			Log.d("denis", "Uploadao slike za korisnika: " + Vrati_id.vrati(this));
 			Toast.makeText(this, "Upload finished." , Toast.LENGTH_SHORT).show();
