@@ -10,11 +10,10 @@
         $(document).ready(function() {
 
             $.ajax({
-                url : "user/login/",
+                url : "messages/inbox/",
                 type : "POST",
                 data: {
-                    username : "jewbre1",
-                    password : "pass123"
+                    userId : 1
                 }
             }).success(function(msg){
                 console.log(msg);
