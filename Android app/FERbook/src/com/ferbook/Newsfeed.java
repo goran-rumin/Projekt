@@ -12,7 +12,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.http.NameValuePair;
@@ -45,7 +47,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	
 	int br_postova;
 	
-		
+	Drawable nova;
 	List<String> postIds = new ArrayList<String>();
 	List<String> texts = new ArrayList<String>();
 	List<Drawable> urlovi_u_postu = new ArrayList<Drawable>();
@@ -65,6 +67,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	List<Integer>broj_komentara=new ArrayList<Integer>();
 	List<Integer>broj_likeova=new ArrayList<Integer>();
 	List<Boolean>liked_boolean=new ArrayList<Boolean>();
+	private static final Map<String, Drawable> slikice= new HashMap<String, Drawable>(); //url, slika
 	
 	private prenesi sucelje;
 	//Activity kontekst;
@@ -102,7 +105,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	ServiceHandler sh = new ServiceHandler();    	
     	String jsonStr = sh.makeServiceCall(url,  ServiceHandler.POST, params);
     	
-    	Log.e("JSONERROR", ""+jsonStr);
+    	//Log.e("JSONERROR", ""+jsonStr);
     	
     	JSONObject data=new JSONObject();
     	JSONArray imena=new JSONArray();
@@ -202,13 +205,26 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 						senderIds.add(senderId);
 						senderNames.add(senderName);
 						senderLastnames.add(senderLastname);
-						senderPictures.add(vrati_sliku(senderPicture));
+						
+						if(slikice.containsKey(senderPicture))	//senderPicture je url
+							senderPictures.add(slikice.get(senderPicture));
+						else{
+							senderPictures.add(nova=vrati_sliku(senderPicture));
+							slikice.put(senderPicture, nova);
+						}
+						
 						senderUsernames.add(senderUsername);
 						senderEmails.add(senderEmail);
 						recipientIds.add(recipientId);
 						recipientNames.add(recipientName);
 						recipientLastnames.add(recipientLastname);
-						recipientPictures.add(vrati_sliku(recipientPicture));
+						
+						if(slikice.containsKey(recipientPicture))	//senderPicture je url
+							recipientPictures.add(slikice.get(recipientPicture));
+						else{
+							recipientPictures.add(nova=vrati_sliku(recipientPicture));
+							slikice.put(recipientPicture, nova);
+						}
 						recipientUsernames.add(recipientUsername);
 						recipientEmails.add(recipientEmail);
 						liked_boolean.add(liked);
