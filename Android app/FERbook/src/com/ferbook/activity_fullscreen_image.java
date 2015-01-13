@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,7 +43,7 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
         mUserId = Vrati_id.vrati(this);
         
         new Image().execute(postId, this);
-        //new GetLikes().execute(postId, this); 
+        new GetLikes().execute(postId, this, null); 
         
         /*
          * Za simulaciju.
@@ -63,7 +64,8 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
 		mButtonLike.setOnClickListener(new View.OnClickListener() {		
 			@Override
 			public void onClick(View v) {
-				new Like().execute(mUserId, postId, getCallingActivity(), R.layout.activity_fullscreenpicture);
+				Log.d("denis", mUserId + " " + postId + " " + v);
+				new Like().execute(mUserId, postId, activity_fullscreen_image.this, v);
 			}
 		});
 
@@ -89,7 +91,7 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
     @Override
     public void prenesi_getlikes(List<String> timestamps, List<String> userIds, List<String> names, List<String> lastNames, 
     							List<Drawable> pictures, List<String> usernames, List<String> emails, int broj_likeova, String error){
-    	if (error == null) {
+    	if (error == null || error.equals("No likes")) {
     		
     		mNumberOfLikes = broj_likeova;
     		
@@ -101,6 +103,7 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
     		}
     	} else {
     		Toast.makeText(this, "Greska kod likeova1", Toast.LENGTH_SHORT).show();
+    		Log.d("denis", error+broj_likeova);
     		mButtonLike.setText("Like (" + "-1" + ")");
     	}
     }
@@ -110,6 +113,8 @@ public class activity_fullscreen_image extends Activity implements Image.prenesi
      * */
     @Override
     public void prenesi_like(String action, String error, View v) {
+    	
+    	Log.d("denis", "" + action + " " + error + " " + mNumberOfLikes);
     	if (error == null) {
     		if (action.equals("like")){ //korisnik je lajkao
     			mNumberOfLikes = mNumberOfLikes + 1;

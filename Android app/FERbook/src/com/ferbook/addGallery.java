@@ -36,7 +36,7 @@ public class addGallery extends AsyncTask<Object, Void, Void> {
     	
     	String jsonStr =sh.makeServiceCall(url,  ServiceHandler.POST, params);
     	
-    	Log.e("JSON", jsonStr);
+    	Log.d("denis", "json: " + jsonStr);
     	
     	if(jsonStr != null){
     		try{

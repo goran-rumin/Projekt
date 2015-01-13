@@ -37,6 +37,7 @@ public class GetLikes extends AsyncTask<Object, Void, Void> {//{ "data" : [{"lik
 	static Activity ak;
 	private prenesi sucelje;
 	//Activity kontekst;
+	boolean slika=true;
 	private static String url = Vrati_id.ROOT+"post/getLikes/index.php";
 	
 	
@@ -45,6 +46,8 @@ public class GetLikes extends AsyncTask<Object, Void, Void> {//{ "data" : [{"lik
 
     	sucelje = (prenesi) arg0[1];
     	ak= (MainActivity) arg0[2];
+    	
+    	if(ak==null) slika=false;
     	
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
@@ -130,7 +133,8 @@ public class GetLikes extends AsyncTask<Object, Void, Void> {//{ "data" : [{"lik
 						userIds.add(userId);
 						names.add(name);
 						lastNames.add(lastName);
-						pictures.add(vrati_sliku(picture));
+						if(slika==true)
+							pictures.add(vrati_sliku(picture));
 						usernames.add(username);
 						emails.add(email);
 											
@@ -166,8 +170,9 @@ public class GetLikes extends AsyncTask<Object, Void, Void> {//{ "data" : [{"lik
     }
 
     
-    private static Drawable vrati_sliku(String url) {
+    public static Drawable vrati_sliku(String url) {
     	Log.e("URLprijeParsinga", url);
+    	//if(ak==null) return null;
     	if(url==null){
     		Drawable d = ak.getResources().getDrawable( R.drawable.ferbook );
 	    	return d;
