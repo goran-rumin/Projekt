@@ -11,32 +11,25 @@ body{
 div {
     display: inline-block;
 }
-.top {
-    width:100%;
-}
+
 #msg {
     color: #790316;
     margin-left: 100px;
-    margin-top: 100px;
     font-size: 100px;
     font-family: courier;
     display: inline-block;
     vertical-align: top;
     width: 70%;
-    padding-top: 50px;
+	font-weight:bold;
 }
 
 .container{
-    margin-left: 600px;
-    margin-top: auto;
-    width: 500px;
-    clear:both;
+
 }
 
 .welcome {
     width: 500px;
     margin-left: 50px;
-    height: 300px;
     display: inline-block;
     vertical-align: top;
 }
@@ -48,6 +41,7 @@ div {
 
 .button{
     margin-right: 0px;
+	margin-left:100px;
     alignment: right;
     border: 2px solid #790316;
     border-radius: 5px;
@@ -57,13 +51,15 @@ div {
 }
 
 .whatis{
+    margin-left: 100px;
     margin-right: 50px;
     color: #790316;
     font-size: 30px;
 }
 
 #or{
-    margin-left: 760px;
+	margin-left:300px;
+
     color: #790316;
     font-size: 50px;
     font-family: courier;
@@ -80,7 +76,8 @@ div {
     width: 500px;
 }
 .register{
-    margin-left:650px;
+	margin-left:170px;
+
     height: 50px;
     width: 350px;
     background-color: darkgrey;
@@ -99,11 +96,11 @@ div {
 }
 
 #submit{
-    margin-left:50px;
+    margin-left:170px;
 }
 
 #msgR {
-    margin-left: 0;
+    margin-left: 100px;
 }
 
 
