@@ -14,7 +14,7 @@ header("Access-Control-Allow-Origin: *");
     $response = array("data"=>array(), "error" => array());
 
     if(isset($_SESSION['userId'])) {
-        $response["data"]["id"] = Crypter::decrypt($_SESSION["userId"]);
+        $response["data"]["id"] = $_SESSION["userId"];
     } else {
         $response["data"]["id"] = -1;
     }

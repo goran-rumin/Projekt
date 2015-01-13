@@ -95,7 +95,7 @@ header("Access-Control-Allow-Origin: *");
      * - encrypt the data
      * - save into a $_SESSION['userId'] variable
      */
-      $_SESSION['userId'] = Crypter::encrypt($response["data"]["userId"]);
+      $_SESSION['userId'] = $response["data"]["userId"];
 
 
 
