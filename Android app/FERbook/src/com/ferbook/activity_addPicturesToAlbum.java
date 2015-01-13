@@ -15,6 +15,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ import android.widget.Toast;
 /*
  * Ova aktivnost sluzi za dodavanje slika u postojeci album
  * */
-public class activity_addPicturesToAlbum extends Activity {
+public class activity_addPicturesToAlbum extends Activity implements Upload.prenesi {
 	
 	final int ACTIVITY_CHOOSE_FILE = 1;
 	public static final String EXTRA_GALLERY_ID = "com.ferbook.image_position";
@@ -37,15 +38,15 @@ public class activity_addPicturesToAlbum extends Activity {
 	private GridView mGridView;
 	private Boolean smije_objaviti = true;
 	private ArrayList<String> mPicturePaths = new ArrayList<String>();
+	private ArrayList<Uri> mPictureUris = new ArrayList<Uri>();
 	private ArrayList<Bitmap> mPictures = new ArrayList<Bitmap>();	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gallery); //samo nam treba GridView	
-
-		mGalleryId = getIntent().getStringExtra(EXTRA_GALLERY_ID);
 		
+		mGalleryId = getIntent().getStringExtra(EXTRA_GALLERY_ID);
 		mGridView = (GridView)findViewById(R.id.gridview);
 	}
 	
@@ -78,8 +79,8 @@ public class activity_addPicturesToAlbum extends Activity {
 					smije_objaviti = false;
 					Toast.makeText(this, "Starting upload..." , Toast.LENGTH_SHORT).show();
 					for (int i = 0; i < mPicturePaths.size(); i++){
-						Bitmap slika = BitmapFactory.decodeFile(mPicturePaths.get(i));
-						new Upload().execute(Vrati_id.vrati(this), slika, mGalleryId, this); 
+						Bitmap slika1 = BitmapFactory.decodeFile(mPicturePaths.get(i));
+						new Upload().execute(Vrati_id.vrati(this), slika1, mGalleryId, "", this);
 					}
 					Toast.makeText(this, "Upload finished." , Toast.LENGTH_SHORT).show();
 					smije_objaviti=true;
@@ -120,7 +121,7 @@ public class activity_addPicturesToAlbum extends Activity {
 							put = getRealPathFromURI(uri); //iz puta cu dobiti Bitmap sliku
 							
 							mPicturePaths.add(put); //spremam puteve svih slika koje treba dodati
-							
+							mPictureUris.add(uri);
 							//napravi sample sliku za galeriju, koja je manja od prave slike
 							Bitmap myPicture =  decodeSampledBitmapFromResource(put, 100, 100); 
 							
@@ -259,5 +260,12 @@ public class activity_addPicturesToAlbum extends Activity {
 
             return view;
         }
+	}
+	
+	@Override
+	public void prenesi_upload(String url_slike, String error) {
+		if(error!=null) {
+			Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+		}
 	}
 }
