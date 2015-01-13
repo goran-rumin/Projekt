@@ -196,7 +196,7 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi, OnScroll
 			if(slika!=null){
 				smije_objaviti=false;
 				Toast.makeText(getActivity(), "Picture is uploading. Please wait...", Toast.LENGTH_SHORT).show();
-				new Upload().execute(Vrati_id.vrati(getActivity()),slika,null,post,this);
+				new Upload().execute(Vrati_id.vrati(getActivity()),slika,null,post,this,user_id);
 			}
 			else{
 				new Publish().execute(Vrati_id.vrati(getActivity()), user_id, post, null, this);
@@ -282,6 +282,7 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi, OnScroll
 			else{
 				data.clear();
 				trenutacni_index=1;
+				pd = ProgressDialog.show(getActivity(), "", "Please wait...", true, true);
 				new Newsfeed().execute(user_id, trenutacni_index, (Integer) Newsfeed.WALL, this, getActivity());
 			}
 		}

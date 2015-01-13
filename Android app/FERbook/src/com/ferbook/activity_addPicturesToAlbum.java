@@ -80,7 +80,7 @@ public class activity_addPicturesToAlbum extends Activity implements Upload.pren
 					Toast.makeText(this, "Starting upload..." , Toast.LENGTH_SHORT).show();
 					for (int i = 0; i < mPicturePaths.size(); i++){
 						Bitmap slika1 = BitmapFactory.decodeFile(mPicturePaths.get(i));
-						new Upload().execute(Vrati_id.vrati(this), slika1, mGalleryId, "", this);
+						new Upload().execute(Vrati_id.vrati(this), slika1, mGalleryId, "", this, Vrati_id.vrati(this));
 					}
 					Toast.makeText(this, "Upload finished." , Toast.LENGTH_SHORT).show();
 					smije_objaviti=true;
