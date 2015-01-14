@@ -532,6 +532,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
                 $("#bottomDisc").hide();
                 getComments($scope.imageId);
                 getLikes($scope.imageId);
+                window.scrollTo(0,document.body.scrollHeight);
             }, 2000);
         });
     };

@@ -50,7 +50,7 @@
 
         <button ng-click="showImages(myAlbum.albumId)" class="btn btn-default">Submit</button>
 
-        <form novalidate ng-controller="albumCtrl" id="albumAdder" name="newAlbum">
+        <form novalidate id="albumAdder" name="newAlbum">
             Write new album title: <input type="text" class="form-control" ng-model="name" />
             <input type="submit" ng-click="addNewAlbum(name)" class="btn btn-default" value="Save" />
         </form>
@@ -86,7 +86,7 @@
             </div>
 
 
-            <form novalidate ng-controller="albumCtrl" id="comments" name="newComment">
+            <form novalidate id="comments" name="newComment">
                 <input type="text" id="msg" class="form-control" style="width: 90%" ng-model="message" />
                 <input type="submit" ng-click="addNewComment(message)" class="btn btn-default" value="Post" />
             </form>
