@@ -120,8 +120,8 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
         if($scope.imageId == undefined) $scope.imageId = $scope.images[0].postId;
 
         var pic = document.getElementById("pic"+index);
-        var width = pic.naturalWidth;
-        var height = pic.naturalHeight;
+        var width = pic.width;
+        var height = pic.height;
         if((height/2 + 165)<$scope.izracun) $scope.izracun = height/2 + 165;
         $(".arrow").css({
             "top": $scope.izracun + "px"
