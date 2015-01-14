@@ -525,7 +525,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
             $scope.howManyComm++;
             $("#kom").html("Show " + $scope.howManyComm + " comments");
             $("#bottomDisc").show();
-            $("#bottomDisc").html("Comment added successfully! Please refresh to see the comment ...");
+            $("#bottomDisc").html("Comment added successfully! Please wait a moment ...");
             setTimeout(function () {
                 $("#bottomDisc").html("");
                 $("#msg").val("");
