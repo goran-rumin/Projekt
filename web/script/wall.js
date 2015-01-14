@@ -32,7 +32,7 @@ app.controller("wallController", function($scope) {
                 }
             }).success(function (msg) {
                 $scope.userData = JSON.parse(msg);
-                if ($scope.userData.data.picture != null) {
+                if ($scope.userData.data.picture != null  && $scope.userData.data.picture != "") {
                     $scope.profilePicture = $scope.userData.data.picture;
                 }
                 $scope.$apply();
@@ -43,8 +43,6 @@ app.controller("wallController", function($scope) {
 
 
         if (userID != $scope.activeUserID) {
-
-            $("#postPicButton").hide(); //ne moze se postati slika na tudji zid
 
             //ne moze se postati na wall ako nisu prijatelji
             $.ajax({
@@ -266,7 +264,7 @@ app.controller("wallController", function($scope) {
 
         $("#newPostData").keypress(function (event) {
             var key = event.which;
-            if((event.keyCode || event.which) == 13)
+            if((event.keyCode || event.which) == 13 && !event.shiftKey)
             {
                 $scope.newPost();
                 return false;
@@ -284,31 +282,60 @@ app.controller("wallController", function($scope) {
             } else if ($scope.pictureURL != ""){
 
                 $("#newPostMsg").html("Your image is uploading.");
-                $.ajax({
-                    url: root + "photos/upload/index.php",
-                    type: "POST",
-                    data: {
-                        userId: $scope.activeUserID,
-                        message: textInput,
-                        url: $scope.pictureURL
-                    }
-                }).success(function (msg) {
+                if (userID == $scope.activeUserID) {
+                    $.ajax({
+                        url: root + "photos/upload/index.php",
+                        type: "POST",
+                        data: {
+                            userId: $scope.activeUserID,
+                            message: textInput,
+                            url: $scope.pictureURL
+                        }
+                    }).success(function (msg) {
 
-                    $("#newPostForm").children('textarea').val('');
-                    $("#newPostMsg").html("Your message was posted!");
-                    $("#postPicButton").parent().children(".inputWrapper").remove();
-                    $("#postPicButton").text("Post picture");
-                    $("#postPicButton").val("post");
-                    setTimeout(function () {
-                        $("#newPostMsg").html("");
-                        $("#postsContainer").children(".post").remove();
-                        $scope.postOffset = 0;
-                        $scope.loadPosts();
-                    }, 2000);
+                        $("#newPostForm").children('textarea').val('');
+                        $("#newPostMsg").html("Your message was posted!");
+                        $("#postPicButton").parent().children(".inputWrapper").remove();
+                        $("#postPicButton").text("Post picture");
+                        $("#postPicButton").val("post");
+                        setTimeout(function () {
+                            $("#newPostMsg").html("");
+                            $("#postsContainer").children(".post").remove();
+                            $scope.postOffset = 0;
+                            $scope.loadPosts();
+                        }, 2000);
 
-                    $scope.pictureURL="";
-                    $scope.$apply();
-                })
+                        $scope.pictureURL = "";
+                        $scope.$apply();
+                    })
+                } else {
+                    $.ajax({
+                        url: root + "photos/upload/index.php",
+                        type: "POST",
+                        data: {
+                            userId: $scope.activeUserID,
+                            userId2: userID,
+                            message: textInput,
+                            url: $scope.pictureURL
+                        }
+                    }).success(function (msg) {
+
+                        $("#newPostForm").children('textarea').val('');
+                        $("#newPostMsg").html("Your message was posted!");
+                        $("#postPicButton").parent().children(".inputWrapper").remove();
+                        $("#postPicButton").text("Post picture");
+                        $("#postPicButton").val("post");
+                        setTimeout(function () {
+                            $("#newPostMsg").html("");
+                            $("#postsContainer").children(".post").remove();
+                            $scope.postOffset = 0;
+                            $scope.loadPosts();
+                        }, 2000);
+
+                        $scope.pictureURL = "";
+                        $scope.$apply();
+                    })
+                }
             } else {
                 $.ajax({
                     url: root + "post/publish/index.php",
@@ -748,7 +775,7 @@ app.controller("wallController", function($scope) {
 
                         $(linkPic).addClass("linkPicture")
                             .attr("src", function () {
-                                if (ufr[val].picture == null) {
+                                if (ufr[val].picture == null || ufr[val].picture=="") {
                                     return "../images/profile_default_big.png";
                                 } else return ufr[val].picture;
                             })
@@ -768,7 +795,8 @@ app.controller("wallController", function($scope) {
                             .text(ufr[val].name + " " + ufr[val].lastname)
                             .appendTo($(nameDiv));
 
-                        if (userID == $scope.activeUserID) {
+                        if (userID == $scope.activeUserID && ufr[val].id != $scope.activeUserID) {
+
                             $(button).addClass("button")
                                 .text(function () {
                                     if (friendStat == -1) {
