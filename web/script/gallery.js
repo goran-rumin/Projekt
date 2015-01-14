@@ -118,15 +118,15 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
 
     $scope.isActive = function (index) {
         if($scope.imageId == undefined) $scope.imageId = $scope.images[0].postId;
-
-        var pic = document.getElementById("pic"+index);
-        var width = pic.width;
-        var height = pic.height;
-        if((height/2 + 165)<$scope.izracun) $scope.izracun = height/2 + 165;
-        $(".arrow").css({
-            "top": $scope.izracun + "px"
-        });
-
+        setTimeout(function () {
+            var pic = document.getElementById("pic" + index);
+            var width = pic.width;
+            var height = pic.height;
+            if ((height / 2 + 165) < $scope.izracun && height > 0) $scope.izracun = height / 2 + 165;
+            $(".arrow").css({
+                "top": $scope.izracun + "px"
+            });
+        }, 100);
         return $scope._Index === index;
     };
 
@@ -525,7 +525,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
             $scope.howManyComm++;
             $("#kom").html("Show " + $scope.howManyComm + " comments");
             $("#bottomDisc").show();
-            $("#bottomDisc").html("Comment added successfully!");
+            $("#bottomDisc").html("Comment added successfully! Please refresh to see the comment ...");
             setTimeout(function () {
                 $("#bottomDisc").html("");
                 $("#msg").val("");
