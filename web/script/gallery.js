@@ -332,7 +332,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
             $scope.howManyComm = 0;
             for (var o in $scope.comments.data)
             {
-                $scope.howManyComm += 1;
+                $scope.howManyComm++;
                 $scope.test = $scope.commentsAlt[o];
                 $scope.allComments.push($scope.test);
             }
@@ -354,7 +354,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
             $scope.howManyLikes = 0;
             for (var o in $scope.likes.data)
             {
-                $scope.howManyLikes += 1;
+                $scope.howManyLikes++;
 
                 if(likesAlt[o].userId == $scope.activeUserID) $("#lajkaj").html("Unlike");
             }
@@ -436,7 +436,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
             }
 
         });
-
+        setTimeout(function () {
         $.ajax({
             url: root + "post/like/index.php",
             type: "POST",
@@ -450,6 +450,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
             var pomBr = br;
             $scope.pomVar = $scope.likeComm.data.action;
 
+
             if(!$("#likeComment").is(":hidden")) {
                 if(br == 0) $(".like"+index).html("Like");
                 if($scope.pomVar == "like") {
@@ -458,12 +459,13 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
                     $(".like"+index).html("Unlike");
                 }
                 else if ($scope.pomVar == "unlike") {
-                    $scope.howManyCom -= 1;
+                    if($scope.howManyCom>0) $scope.howManyCom -= 1;
                     $(".msgL"+index).html($scope.howManyCom +" Likes");
                     $(".like"+index).html("Like");
                 }
             }
         });
+        }, 200);
     };
 
     $("#lajk").on('click', function(){
@@ -520,7 +522,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
                 message: message
             }
         }).success(function(msg) {
-            $scope.howManyComm += 1;
+            $scope.howManyComm++;
             $("#kom").html("Show " + $scope.howManyComm + " comments");
             $("#bottomDisc").show();
             $("#bottomDisc").html("Comment added successfully!");
@@ -540,3 +542,4 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
 
 
 }]);
+
