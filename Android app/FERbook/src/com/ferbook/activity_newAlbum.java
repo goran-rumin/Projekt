@@ -32,7 +32,7 @@ import android.widget.Toast;
  * koji ce se uploadati
  * */
 
-public class activity_newAlbum extends Activity {
+public class activity_newAlbum extends Activity implements Upload.prenesi, addGallery.prenesi {
 		
 	private ArrayList<Bitmap> mPictures = new ArrayList<Bitmap>();
 	private ArrayList<String> mPicturePaths = new ArrayList<String>();
@@ -80,19 +80,8 @@ public class activity_newAlbum extends Activity {
 						if (editText_imeAlbuma.getText().toString() != "") {
 							smije_objaviti=false;
 							Toast.makeText(this, "Starting upload..." , Toast.LENGTH_SHORT).show();
+							new addGallery().execute(Vrati_id.vrati(this), editText_imeAlbuma.getText().toString(), this);
 							
-							Log.d("denis", "" + mPicturePaths.size());
-							/*Kako dobijem id za novi album*/
-							for (int i = 0; i < mPicturePaths.size(); i++){
-								Bitmap slika = BitmapFactory.decodeFile(mPicturePaths.get(i));
-								//new Upload().execute(Vrati_id.vrati(this), slika, mGalleryId, this); 
-							}
-							
-							
-							Toast.makeText(this, "Upload finished." , Toast.LENGTH_SHORT).show();
-							smije_objaviti=true;
-							mPictures.clear();
-							editText_imeAlbuma.setText("");
 							return true;
 						} else {
 							Toast.makeText(this, "Niste upisali ime albuma." , Toast.LENGTH_SHORT).show();
@@ -270,4 +259,38 @@ public class activity_newAlbum extends Activity {
             return view;
         }
 	}
+	
+	/*
+	 * ADDGALLERY
+	 * */
+	@Override
+	public void prenesi_newGallery(String albumId, String error) {
+		Log.d("denis", "U addgallery, uploadaj svaku sliku");
+		Log.d("denis", "id novog albuma: " + albumId);
+		if (error == null && albumId != null ) {
+			for (int i = 0; i < mPicturePaths.size(); i++){
+				Bitmap slika = BitmapFactory.decodeFile(mPicturePaths.get(i));
+				
+				new Upload().execute(Vrati_id.vrati(this), slika, albumId, "", this, Vrati_id.vrati(this)); 
+			}
+			Log.d("denis", "Uploadao slike za korisnika: " + Vrati_id.vrati(this));
+			Toast.makeText(this, "Upload finished." , Toast.LENGTH_SHORT).show();
+			smije_objaviti=true;
+			mPictures.clear();
+			editText_imeAlbuma.setText("");
+		} else {
+			Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	/*
+	 * UPLOAD
+	 * */
+	@Override
+	public void prenesi_upload(String url_slike, String error) {
+		if(error!=null) {
+			Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+		}
+	}
+	
 }

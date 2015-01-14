@@ -25,9 +25,17 @@ if( !isset($_POST['userId'])) {
 // Fetch the data
 $userId = $_POST['userId'];
 $db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
-$inbox = $db->prepare("SELECT message, timestamp, flag, sender, recipient FROM messages WHERE sender = ? OR recipient = ?");
+$inbox = $db->prepare("SELECT message, timestamp, flag, sender, recipient FROM messages
+WHERE id IN (SELECT MAX(id) FROM messages
+    	WHERE sender = ? AND recipient IN (SELECT DISTINCT recipient FROM messages WHERE sender = ?)
+    	OR sender IN (SELECT DISTINCT sender FROM messages WHERE recipient = ?) AND recipient = ?
+    	GROUP BY sender, recipient
+             )
+ORDER BY id ASC");
 $inbox->bindParam(1, $userId);
 $inbox->bindParam(2, $userId);
+$inbox->bindParam(3, $userId);
+$inbox->bindParam(4, $userId);
 $inbox->setFetchMode(PDO::FETCH_OBJ);
 $inbox->execute();
 $allFriends = array();

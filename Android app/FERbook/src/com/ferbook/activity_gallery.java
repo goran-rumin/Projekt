@@ -57,7 +57,7 @@ public class activity_gallery extends Activity implements Gallery.prenesi {
 		
 		mGridView = (GridView)findViewById(R.id.gridview);
 		
-		new Gallery().execute(mGalleryId, this);
+		new Gallery().execute(mGalleryId, this);  
 		
 		/*
 		 * Ovo zakometirano je za simulaciju tri albuma.
@@ -114,7 +114,6 @@ public class activity_gallery extends Activity implements Gallery.prenesi {
 		switch (item.getItemId()) {
 			case R.id.menu_item_new_album: //korisnik zeli dodati slike u album
 					Intent i = new Intent(this, activity_addPicturesToAlbum.class);
-					Log.d("denis", mGalleryId);
 					i.putExtra(activity_gallery.EXTRA_GALLERY_ID, mGalleryId);
 					startActivity(i);
 					return true;

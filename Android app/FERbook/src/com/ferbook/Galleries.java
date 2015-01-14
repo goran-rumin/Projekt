@@ -85,7 +85,7 @@ public class Galleries extends AsyncTask<Object, Void, Void> {
 						
 						albumIds.add(albumId);
 						names.add(name);
-						naslovnice.add(vrati_sliku(url_slike));
+						naslovnice.add(GetLikes.vrati_sliku(url_slike));
 											
 									
 						

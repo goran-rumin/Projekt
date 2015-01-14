@@ -101,7 +101,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
         var ime = name;
         $http({
             method: 'POST',
-            url: root + 'user/addGallery/inbox.php',
+            url: root + 'user/addGallery/index.php',
             data: $.param({'userId': userID, 'name': ime}),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             cache: $templateCache

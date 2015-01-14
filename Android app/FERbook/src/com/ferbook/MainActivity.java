@@ -48,7 +48,6 @@ public class MainActivity extends Activity implements
 				final FragmentManager fragmm = getFragmentManager();
 				user_id_poruke=pokretanje_iz_pretrage.getStringExtra("id_za_poruke");
 				String ime_poruke=pokretanje_iz_pretrage.getStringExtra("ime_za_poruke");
-				Log.e("poruke",user_id_poruke+"+"+ime_poruke);
 				fragmm.beginTransaction().replace(R.id.container, 
 						MessageFragment.newInstance(2, user_id_poruke, ime_poruke), "MessageFragment").addToBackStack("prebacivanje").commit();
 			}
@@ -58,7 +57,6 @@ public class MainActivity extends Activity implements
 			}
 		
 		mTitle = getTitle();
-		Toast.makeText(this, getIntent().getStringExtra("id"), Toast.LENGTH_SHORT).show();
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
@@ -156,9 +154,7 @@ public class MainActivity extends Activity implements
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
+		
 		if (id == R.id.action_example) {
 			return true;
 		}

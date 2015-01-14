@@ -33,7 +33,7 @@ app.controller("newsController", function ($scope) {
                 }
             }).success(function (msg) {
                 $scope.userData = JSON.parse(msg);
-                if ($scope.userData.data.picture != null) {
+                if ($scope.userData.data.picture != null && $scope.userData.data.picture != "") {
                     $scope.profilePicture = $scope.userData.data.picture;
                 }
                 $scope.$apply();
@@ -249,7 +249,7 @@ app.controller("newsController", function ($scope) {
 
         $("#newPostData").keypress(function (event) {
             var key = event.which;
-            if((event.keyCode || event.which) == 13)
+            if((event.keyCode || event.which) == 13 && !event.shiftKey)
             {
                 $scope.newPost();
                 return false;

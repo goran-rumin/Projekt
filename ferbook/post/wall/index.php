@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Created by PhpStorm.
  * User: Vilim Stubičan
@@ -85,7 +85,7 @@ if(isset($_POST['userId2'])){  //parametar za provjeru dal je korisnik koji gled
     $userId2=$_POST['userId2'];
 }
 else{
-    $userId2=$_SESSION['userId'];
+    $userId2=Crypter::decrypt($_SESSION['userId']);
 }
 
 // get posts with comments

@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 	public class WallListAdapter extends BaseAdapter{
 		private final Context context;
@@ -74,12 +73,14 @@ import android.widget.Toast;
 			ime_korisnika2.setOnClickListener(listener);
 			profilna2.setOnClickListener(listener);
 			
+			slika.setTag(redak.get("news_item_pid"));
+			slika.setOnClickListener(listener2);
+			
 			broj_likeova.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					CommentDialog dialog = new CommentDialog(context,CommentDialog.TYPE_SHOW_LIKES, (String) v.getTag(), host);
 					dialog.show();
-					Toast.makeText(context, "Kliknuto "+v.getTag(), Toast.LENGTH_SHORT).show();
 				}
 			});
 			
@@ -88,7 +89,6 @@ import android.widget.Toast;
 				public void onClick(View v) {
 					CommentDialog dialog = new CommentDialog(context,CommentDialog.TYPE_COMMENT, (String) v.getTag(), host);
 					dialog.show();
-					Toast.makeText(context, "Kliknuto "+v.getTag(), Toast.LENGTH_SHORT).show();
 				}
 			});
 			
@@ -122,6 +122,15 @@ import android.widget.Toast;
 				Intent prebaci = new Intent(((Activity) context).getBaseContext(), MainActivity.class);
 				prebaci.putExtra("id_za_profil", (String) v.getTag());
 				prebaci.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				((Activity) context).startActivity(prebaci);
+			}
+		};
+		
+		View.OnClickListener listener2 = new View.OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				Intent prebaci = new Intent(((Activity) context).getBaseContext(), activity_fullscreen_image.class);
+				prebaci.putExtra("com.ferbook.image_position", (String) v.getTag());
 				((Activity) context).startActivity(prebaci);
 			}
 		};

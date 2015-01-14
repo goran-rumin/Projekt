@@ -1,4 +1,4 @@
-<?php
+?php
 /**
  * Created by PhpStorm.
  * User: Davor
@@ -25,11 +25,19 @@ if( !isset($_POST['userId']) || !isset($_POST['url'])) {
 };
 // Fetch the data 
 $userId = $_POST['userId'];
+
+if(isset($_POST['userId2'])){
+    $userId2=$_POST['userId2'];
+}
+else{
+    $userId2=$_POST['userId'];
+}
+
 $db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 if( isset($_POST['albumId'])) {
     $albumId = $_POST['albumId'];
 } else {
-    $albumName = $userId."_Default";
+    $albumName = $userId2."_Default";
     $defAlbum = $db->prepare("SELECT id FROM album WHERE name = ?");
     $defAlbum->bindParam(1, $albumName);
     $defAlbum->setFetchMode(PDO::FETCH_OBJ);
@@ -45,12 +53,12 @@ $height = imagesy( $im );
 $photoname = $userId . time();
 $thumbname = $photoname."thm";
 imagejpeg($im, "data/".$photoname.".jpg");
-$tmp_img = imagecreatetruecolor( 75, 75 );
-imagecopyresized( $tmp_img, $im, 0, 0, 0, 0, 75, 75, $width, $height );
+$tmp_img = imagecreatetruecolor( 150, 150 );
+imagecopyresized( $tmp_img, $im, 0, 0, 0, 0, 150, 150, $width, $height );
 imagejpeg( $tmp_img, "data/".$thumbname.".jpg" );
 imagedestroy($tmp_img);
 imagedestroy($im);
-$url = "http://www.vdl.hr/ferbook/photos/upload/data/".$photoname.".jpg";
+$url = "http://ferbook.duckdns.org/ferbook/photos/upload/data/".$photoname.".jpg";
 
 // Create new post with image
 if(isset($_POST['message'])) {
@@ -60,7 +68,7 @@ if(isset($_POST['message'])) {
 	$upload = $db->prepare("INSERT INTO post(sender, recipient, url) VALUES (?,?,?)");
 }
 $upload->bindParam(1, $userId);
-$upload->bindParam(2, $userId);
+$upload->bindParam(2, $userId2);
 $upload->bindParam(3, $url);
 $upload->setFetchMode(PDO::FETCH_OBJ);
 $upload->execute();

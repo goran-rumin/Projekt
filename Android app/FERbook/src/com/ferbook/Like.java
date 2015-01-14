@@ -27,7 +27,7 @@ public class Like extends AsyncTask<Object, Void, Void> {
     protected Void doInBackground(Object... arg0) {
     	String userId=(String) arg0[0];
     	String postId=(String) arg0[1];
-    	
+    	Log.d("denis", "async 1");
     	sucelje = (prenesi) arg0[2];
     	v = (View) arg0[3];
     	
@@ -50,11 +50,12 @@ public class Like extends AsyncTask<Object, Void, Void> {
     			JSONObject jsonObj = new JSONObject(jsonStr);
     			JSONObject data = jsonObj.getJSONObject("data");
     			//JSONArray data = jsonObj.getJSONArray("data");
-    			
+    			Log.d("denis", "async 2");
     			action = data.getString("action");
     			
     		}
     		catch(JSONException e){
+    			Log.d("denis", "async 3");
     			//if the mapping doesn't exist, tj, ako je data prazan pa userid ne postoji:
     			e.printStackTrace();
     			try{
@@ -82,6 +83,7 @@ public class Like extends AsyncTask<Object, Void, Void> {
     }
 
     protected void onPostExecute(Void param) {
+    	Log.d("denis", "onPOstexecute");
         sucelje.prenesi_like(action, error_info, v);
     }
     

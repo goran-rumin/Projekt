@@ -130,7 +130,7 @@ header("Access-Control-Allow-Origin: *");
  * - encrypt the data
  * - save into a $_SESSION['userId'] variable
  */
-  $_SESSION['userId'] = Crypter::encrypt($row->id);
+  $_SESSION['userId'] = $row->id;
 
 
 

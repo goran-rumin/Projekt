@@ -8,6 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class addGallery extends AsyncTask<Object, Void, Void> {
 	private prenesi sucelje;
@@ -34,6 +35,8 @@ public class addGallery extends AsyncTask<Object, Void, Void> {
 		ServiceHandler sh = new ServiceHandler();
     	
     	String jsonStr =sh.makeServiceCall(url,  ServiceHandler.POST, params);
+    	
+    	Log.d("denis", "json: " + jsonStr);
     	
     	if(jsonStr != null){
     		try{
@@ -67,11 +70,11 @@ public class addGallery extends AsyncTask<Object, Void, Void> {
 	}
 	
 	protected void onPostExecute(Void param) {
-	        sucelje.prenesi_image(albumId ,error_info);	
+	        sucelje.prenesi_newGallery(albumId ,error_info);	
 	    }
 	
 	public interface prenesi{
-    	void prenesi_image(String albumId, String error);	//then set image to imageview using code in your activity.
+    	void prenesi_newGallery(String albumId, String error);	//then set image to imageview using code in your activity.
     }
 	
 

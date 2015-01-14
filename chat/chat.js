@@ -7,9 +7,9 @@ var app = angular.module("chat",[]);
 app.controller("chatCtrl",function($scope, $filter){
     var root = "http://vdl.hr/ferbook/";
     var Server;
-    $(document).ready(function() {
+    function connectToSocket() {
 
-        Server = new FancyWebSocket("ws://192.168.1.221:9000");
+        Server = new FancyWebSocket("ws://localhost:9000");
         console.log("connecting");
 
         Server.bind("open",function() {
@@ -28,34 +28,36 @@ app.controller("chatCtrl",function($scope, $filter){
                     $scope.conversations[key].push(newMsg["msg"]);
                     $scope.$apply();
                     chatNotOpen = false;
+                    scrollMax(parseInt(newMsg["sender"]));
                     break;
                 }
             }
 
             if(chatNotOpen) {
                 $.ajax({
-                    url : "http://vdl.hr/ferbook/messages/conversation",
+                    url : "http://vdl.hr/ferbook/messages/conversation/",
                     type : "POST",
                     data : {
                         userId1 : parseInt(newMsg["sender"]),
                         userId2 : parseInt($scope.activeUser)
                     }
                 }).success(function(msg){
-                    $scope.conversations[parseInt(newMsg["sender"])] = JSON.parse(msg);
-                    $scope.conversations[parseInt(newMsg["sender"])].push(newMsg["msg"]);
+                    $scope.conversations[newMsg["sender"].toString()] = JSON.parse(msg)["data"];
+                    $scope.conversations[newMsg["sender"].toString()].push(newMsg["msg"]);
                     $scope.$apply();
+                    scrollMax(parseInt(newMsg["sender"]));
+
                 })
             }
 
 
-            scrollMax(parseInt(newMsg["sender"]));
 
         })
 
         Server.connect();
 
 
-    })
+    }
 
 
     $.ajax({
@@ -78,6 +80,7 @@ app.controller("chatCtrl",function($scope, $filter){
             console.log(msg);
             $scope.friends = json.data;
             $scope.$apply();
+            connectToSocket();
         })
 
 
@@ -164,8 +167,7 @@ app.controller("chatCtrl",function($scope, $filter){
                     userId2 : parseInt(elem.friend.id)
                 }
             }).success(function(msg){
-                console.log(msg);
-                $scope.conversations[parseInt(elem.friend.id)] = JSON.parse(msg)["data"];
+                $scope.conversations[elem.friend.id] = JSON.parse(msg)["data"];
                 $scope.$apply();
             })
         }

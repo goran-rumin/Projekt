@@ -84,7 +84,7 @@ public class Gallery extends AsyncTask<Object, Void, Void> {
 						//ako sve ovo gore uspije i ako nejde u catch:
 						
 						postIds.add(postId);
-						slike.add(vrati_sliku(url_slike));
+						slike.add(GetLikes.vrati_sliku(url_slike));
 						
     					br_slika++;
     					Log.e("br_slika", Integer.toString(br_slika));
