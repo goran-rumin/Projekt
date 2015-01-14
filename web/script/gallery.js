@@ -332,7 +332,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
             $scope.howManyComm = 0;
             for (var o in $scope.comments.data)
             {
-                $scope.howManyComm++;
+                $scope.howManyComm += 1;
                 $scope.test = $scope.commentsAlt[o];
                 $scope.allComments.push($scope.test);
             }
@@ -354,7 +354,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
             $scope.howManyLikes = 0;
             for (var o in $scope.likes.data)
             {
-                $scope.howManyLikes++;
+                $scope.howManyLikes += 1;
 
                 if(likesAlt[o].userId == $scope.activeUserID) $("#lajkaj").html("Unlike");
             }
@@ -430,7 +430,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
 
             for (var o in $scope.likedCom.data)
             {
-                $scope.howManyCom++;
+                $scope.howManyCom += 1;
 
                 if(likedComAlt[o].userId == $scope.activeUserID && !$("#likeComment").is(":hidden")) $(".like"+index).html("Unlike");
             }
@@ -453,12 +453,12 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
             if(!$("#likeComment").is(":hidden")) {
                 if(br == 0) $(".like"+index).html("Like");
                 if($scope.pomVar == "like") {
-                    $scope.howManyCom++;
+                    $scope.howManyCom += 1;
                     $(".msgL"+index).html($scope.howManyCom +" Likes");
                     $(".like"+index).html("Unlike");
                 }
                 else if ($scope.pomVar == "unlike") {
-                    $scope.howManyCom--;
+                    $scope.howManyCom -= 1;
                     $(".msgL"+index).html($scope.howManyCom +" Likes");
                     $(".like"+index).html("Like");
                 }
@@ -520,7 +520,7 @@ gallery.controller('albumCtrl', ['$scope', '$http', '$templateCache', function (
                 message: message
             }
         }).success(function(msg) {
-            $scope.howManyComm++;
+            $scope.howManyComm += 1;
             $("#kom").html("Show " + $scope.howManyComm + " comments");
             $("#bottomDisc").show();
             $("#bottomDisc").html("Comment added successfully!");
