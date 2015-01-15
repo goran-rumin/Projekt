@@ -36,6 +36,8 @@ public class activity_gallery extends Activity implements Gallery.prenesi {
 	public static final String EXTRA_GALLERY_ID = "com.ferbook.image_position";
 	public static final String EXTRA_GALLERY_NAME = "com.ferbook.gallery_name";
 	
+	public static final String EXTRA_NEW_PICTURES = "com.ferbook.new_pictures";
+	
 	private String mGalleryId;
 	private String mGalleryName;
 	private GridView mGridView;
@@ -45,11 +47,9 @@ public class activity_gallery extends Activity implements Gallery.prenesi {
 	private ArrayList<String> ids = new ArrayList<String>();
 	private ArrayList<Bitmap> nove_slike = new ArrayList<Bitmap>();
 	
-	//sluzi samo za simulaciju albuma, nis korisno, kasnije treba obrisat
-	
-	private ArrayList<Drawable> album1 = new ArrayList<Drawable>();
-	private ArrayList<Drawable> album2 = new ArrayList<Drawable>();
-	private ArrayList<Drawable> album3 = new ArrayList<Drawable>();
+	private ProgressDialog mProgressDialog;
+	private Boolean mProgressDialogShowed = false;
+	private Boolean mNewPicturesUploaded = false;
 	
 	
 	@Override
@@ -65,47 +65,7 @@ public class activity_gallery extends Activity implements Gallery.prenesi {
 		mGridView = (GridView)findViewById(R.id.gridview);
 		
 		new Gallery().execute(mGalleryId, this);  
-		
-		/*
-		 * Ovo zakometirano je za simulaciju tri albuma.
-		 * Ovisno o id-u prikazat ce se jedan od njih.
-		 * Za simulaciju otkomentirati ovo i zakomentirati prvi redak iznad.
-		 * Uz to treba otkomentirati i onaj dio u fragment_galleries.
-		 * */
-		/*
-		album1.add(getResources().getDrawable(R.drawable.ic_launcher));
-		album1.add(getResources().getDrawable(R.drawable.search));
-		album1.add(getResources().getDrawable(R.drawable.more));
 
-		
-		album2.add(getResources().getDrawable(R.drawable.search));
-		album2.add(getResources().getDrawable(R.drawable.ic_launcher));
-		album2.add(getResources().getDrawable(R.drawable.more));
-		
-		album3.add(getResources().getDrawable(R.drawable.more));
-		album3.add(getResources().getDrawable(R.drawable.ic_launcher));
-		album3.add(getResources().getDrawable(R.drawable.search));
-		
-		if(mGalleryId != null){
-			if (mGalleryId.equals("10")) {
-				mGridView.setAdapter(new GalleryAdapter(this, album1));
-			} else if (mGalleryId.equals("21")) {
-				mGridView.setAdapter(new GalleryAdapter(this, album2));
-			} else {
-				mGridView.setAdapter(new GalleryAdapter(this, album3));
-			}
-		} 
-
-		mGridView.setOnItemClickListener(new OnItemClickListener() 
-		{
-		    public void onItemClick(AdapterView<?> parent, View v, int position, long id) 
-		    {
-		    	Intent i = new Intent(activity_gallery.this, activity_fullscreen_image.class);
-				i.putExtra(activity_fullscreen_image.EXTRA_POST_ID, position);
-				startActivity(i);
-		    }
-		});
-		*/
 	}
 	
 	/*
@@ -122,7 +82,7 @@ public class activity_gallery extends Activity implements Gallery.prenesi {
 			case R.id.menu_item_new_album: //korisnik zeli dodati slike u album
 					Intent i = new Intent(this, activity_addPicturesToAlbum.class);
 					i.putExtra(activity_gallery.EXTRA_GALLERY_ID, mGalleryId);
-					startActivity(i);
+					startActivityForResult(i, 12);
 					return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -135,6 +95,8 @@ public class activity_gallery extends Activity implements Gallery.prenesi {
 	 * */
 	@Override
 	public void prenesi_gallery(final List<String> postIds, List<Drawable> slike, int broj_slika, String error) {	
+		mProgressDialog.dismiss();
+		mProgressDialogShowed = true;
 		if (error == null) {
 			for (int i = 0; i < broj_slika; i++) {
 				album.add(slike.get(i));
@@ -156,7 +118,36 @@ public class activity_gallery extends Activity implements Gallery.prenesi {
 		});
 	}
 	
-
+	/*
+	 * 	ONSTART
+	 * */
+	@Override
+    public void onStart(){
+    	super.onStart();
+    	Log.d("denis", "onStart");
+    	if (!mProgressDialogShowed)
+    		mProgressDialog = ProgressDialog.show(this, "", "Please wait...", true, true);
+    }
+	
+	/*
+	 * 	ONACTIVITYRESULT
+	 * */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data){
+		Log.d("denis", "onActivityResult");
+    	if (data == null) {
+    		return;
+    	}
+    	mNewPicturesUploaded = data.getBooleanExtra(activity_gallery.EXTRA_NEW_PICTURES, false);
+    	Log.d("denis", "" + mNewPicturesUploaded);
+    	if (mNewPicturesUploaded) {
+    		Log.d("denis", "Nove slike su tu");
+    		mProgressDialog = ProgressDialog.show(this, "", "Please wait...", true, true);
+    		new Gallery().execute(mGalleryId, this); 
+    	} else {
+    		Log.d("denis", "Stare slike");
+    	}
+    }
 	
 	
 	/*

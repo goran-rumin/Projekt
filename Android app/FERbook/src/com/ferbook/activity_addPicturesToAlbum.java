@@ -39,12 +39,20 @@ public class activity_addPicturesToAlbum extends Activity implements Upload.pren
 	private Boolean smije_objaviti = true;
 	private ArrayList<String> mPicturePaths = new ArrayList<String>();
 	private ArrayList<Uri> mPictureUris = new ArrayList<Uri>();
-	private ArrayList<Bitmap> mPictures = new ArrayList<Bitmap>();	
+	private ArrayList<Bitmap> mPictures = new ArrayList<Bitmap>();
+	
+	private Boolean mNewPicturesUploaded = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gallery); //samo nam treba GridView	
+		
+		this.setTitle("Add Pictures");
+		
+		Intent data = new Intent();
+		data.putExtra(activity_gallery.EXTRA_NEW_PICTURES, mNewPicturesUploaded);
+		setResult(RESULT_OK, data);
 		
 		mGalleryId = getIntent().getStringExtra(EXTRA_GALLERY_ID);
 		mGridView = (GridView)findViewById(R.id.gridview);
@@ -77,6 +85,12 @@ public class activity_addPicturesToAlbum extends Activity implements Upload.pren
 					Toast.makeText(this, "Niste odabrali niti jednu sliku." , Toast.LENGTH_SHORT).show();
 				} else if (smije_objaviti){
 					smije_objaviti = false;
+					
+					mNewPicturesUploaded = true;
+					Intent data = new Intent();
+					data.putExtra(activity_gallery.EXTRA_NEW_PICTURES, mNewPicturesUploaded);
+					setResult(RESULT_OK, data);
+					
 					Toast.makeText(this, "Starting upload..." , Toast.LENGTH_SHORT).show();
 					for (int i = 0; i < mPicturePaths.size(); i++){
 						Bitmap slika1 = BitmapFactory.decodeFile(mPicturePaths.get(i));
