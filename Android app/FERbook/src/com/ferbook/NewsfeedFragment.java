@@ -83,7 +83,7 @@ public class NewsfeedFragment extends Fragment implements Newsfeed.prenesi, Like
 
 		@Override
 		public void prenesi_newsfeed(List<String> postIds, List<String> texts,
-				List<Drawable> urlovi_u_postu, List<String> timestamps,
+				List<String> urlovi_u_postu, List<String> timestamps,
 				List<String> senderIds, List<String> senderNames,
 				List<String> senderLastnames, List<Drawable> senderPictures,
 				List<String> senderUsernames, List<String> senderEmails,
@@ -113,6 +113,7 @@ public class NewsfeedFragment extends Fragment implements Newsfeed.prenesi, Like
 				redak.put("recipientId", recipientIds.get(i));
 				data.add(redak);
 			}
+			Log.e("sadrzaj",""+Vrati_id.cache_sadrzaj);
 			pd.dismiss();
 			adapter.notifyDataSetChanged();
 			trenutacni_index+=1;

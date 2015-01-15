@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Davor
- * Date: 12.11.2014.
- * Time: 16:52
- */
 
 include_once "../../constants.php";
 include_once "../../classes/Crypter.php";
@@ -25,92 +19,51 @@ if( !isset($_POST['userId'])) {
 // Fetch the data
 $userId = $_POST['userId'];
 $db = new PDO("mysql:host=".SQL_HOST.";dbname=".SQL_DBNAME.";charset=utf8", SQL_USERNAME, SQL_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
-$inbox = $db->prepare("SELECT message, timestamp, flag, sender, recipient FROM messages
-WHERE id IN (SELECT MAX(id) FROM messages
-    	WHERE sender = ? AND recipient IN (SELECT DISTINCT recipient FROM messages WHERE sender = ?)
-    	OR sender IN (SELECT DISTINCT sender FROM messages WHERE recipient = ?) AND recipient = ?
-    	GROUP BY sender, recipient
-             )
-ORDER BY id ASC");
-$inbox->bindParam(1, $userId);
-$inbox->bindParam(2, $userId);
-$inbox->bindParam(3, $userId);
-$inbox->bindParam(4, $userId);
-$inbox->setFetchMode(PDO::FETCH_OBJ);
-$inbox->execute();
-$allFriends = array();
-$friendInformations = array();
-foreach ( $inbox as $oneMessage) {
-    if ( $oneMessage->sender != $userId ) {
-        if (in_array($oneMessage->sender, $allFriends)) {
-            $position = array_search($oneMessage->sender, $allFriends);
-            //older messages on database always have lower ID, so we can be sure that newer messages will come later
-            //if ( $oneMessage->timestamp > $friendInformations[$position]["lastMessage"]["timestamp"]) {
-                $lastMessage = array(
-                    "message" => $oneMessage->message,
-                    "senderId" => $oneMessage->sender,
-                    "timestamp" => $oneMessage->timestamp,
-                    "flag" => $oneMessage->flag
+
+
+$prijatelji = $db->prepare("SELECT DISTINCT(sender) as 'id' FROM messages WHERE recipient = ?
+UNION
+SELECT DISTINCT(recipient) as 'id' FROM messages WHERE sender = ?");
+$prijatelji->bindParam(1, $userId);
+$prijatelji->bindParam(2, $userId);
+$prijatelji->setFetchMode(PDO::FETCH_OBJ);
+$prijatelji->execute();
+
+$friendsInformations = array();
+$lastMessage = array();
+foreach($prijatelji as $prijatelj){
+    $zadnja_poruka = $db->prepare("SELECT id,message, timestamp, flag, sender FROM messages
+	WHERE sender = ? AND recipient = ? 
+	OR sender = ? AND recipient = ?
+	ORDER BY id DESC
+	LIMIT 1;");
+    $zadnja_poruka->bindParam(1, $prijatelj->id);
+    $zadnja_poruka->bindParam(2, $userId);
+    $zadnja_poruka->bindParam(3, $userId);
+    $zadnja_poruka->bindParam(4, $prijatelj->id);
+    $zadnja_poruka->setFetchMode(PDO::FETCH_OBJ);
+    $zadnja_poruka->execute();
+    $zadnja_poruka2=$zadnja_poruka->fetch();
+    $lastMessage = array(
+                    "message" => $zadnja_poruka2->message,
+                    "senderId" => $zadnja_poruka2->sender,
+                    "timestamp" => $zadnja_poruka2->timestamp,
+                    "flag" => $zadnja_poruka2->flag
                 );
-                $friendInformations[$position]["lastMessage"] = $lastMessage;
-                $container = $friendInformations[$position];
-                array_splice($friendInformations, $position, 1);
-                $friendInformations[] = $container;
-            //}
-        } else {
-            $allFriends[] = $oneMessage->sender;
-            $lastMessage = array(
-                "message" => $oneMessage->message,
-                "senderId" => $oneMessage->sender,
-                "timestamp" => $oneMessage->timestamp,
-                "flag" => $oneMessage->flag
-            );
-            $friend = $db->prepare("SELECT name, last_name FROM user WHERE id = ?");
-            $friend->bindParam(1, $oneMessage->sender);
-            $friend->setFetchMode(PDO::FETCH_OBJ);
-            $friend->execute();
-            $row = $friend->fetch();
-            $friendInformations[] = array(
-                "userId" => $oneMessage->sender,
+    $korisnik = $db->prepare("SELECT name, last_name, picture FROM user
+	WHERE id = ?");
+    $korisnik->bindParam(1, $prijatelj->id);
+    $korisnik->setFetchMode(PDO::FETCH_OBJ);
+    $korisnik->execute();
+    $row = $korisnik->fetch();
+    $friendInformations[] = array(
+                "userId" => $prijatelj->id,
                 "name" => $row->name,
                 "lastname" => $row->last_name,
+		"picture" => $row->picture,
                 "lastMessage" => $lastMessage
             );
-        }
-    } else if (in_array($oneMessage->recipient, $allFriends)) {
-        $position = array_search($oneMessage->recipient, $allFriends);
-        //if ( $oneMessage->timestamp > $friendInformations[$position]["lastMessage"]["timestamp"]) {
-            $lastMessage = array(
-                "message" => $oneMessage->message,
-                "senderId" => $oneMessage->sender,
-                "timestamp" => $oneMessage->timestamp,
-                "flag" => $oneMessage->flag
-            );
-            $friendInformations[$position]["lastMessage"] = $lastMessage;
-            $container = $friendInformations[$position];
-            array_splice($friendInformations, $position, 1);
-            $friendInformations[] = $container;
-        //}
-    } else {
-        $allFriends[] = $oneMessage->recipient;
-        $lastMessage = array(
-            "message" => $oneMessage->message,
-            "senderId" => $oneMessage->sender,
-            "timestamp" => $oneMessage->timestamp,
-            "flag" => $oneMessage->flag
-        );
-        $friend = $db->prepare("SELECT name, last_name FROM user WHERE id = ?");
-        $friend->bindParam(1, $oneMessage->recipient);
-        $friend->setFetchMode(PDO::FETCH_OBJ);
-        $friend->execute();
-        $row = $friend->fetch();
-        $friendInformations[] = array(
-            "userId" => $oneMessage->recipient,
-            "name" => $row->name,
-            "lastname" => $row->last_name,
-            "lastMessage" => $lastMessage
-        );
-    }
 }
+
 $response["data"] = $friendInformations;
 echo json_encode($response, (float) JSON_UNESCAPED_UNICODE);

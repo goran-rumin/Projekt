@@ -10,6 +10,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,21 @@ import android.widget.TextView;
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			HashMap<String,Object> redak = values.get(position);
-			View rowView = inflater.inflate(R.layout.news_layout, parent, false);
+			View rowView = null;
+			if(convertView!=null){
+				if(convertView.getTag().equals("element")){
+					Log.e("reciklaza", "radi");
+					rowView=convertView;
+				}
+				else{
+					rowView = inflater.inflate(R.layout.news_layout, parent, false);
+					rowView.setTag("element");
+				}
+			}
+			else{
+				rowView = inflater.inflate(R.layout.news_layout, parent, false);
+				rowView.setTag("element");
+			}
 			ImageView profilna = (ImageView) rowView.findViewById(R.id.news_item_pimage);
 			ImageView profilna2 = (ImageView) rowView.findViewById(R.id.news_item_p2image);
 			TextView ime_korisnika = (TextView) rowView.findViewById(R.id.news_item_ptext);
@@ -49,12 +64,20 @@ import android.widget.TextView;
 			TextView broj_likeova = (TextView) rowView.findViewById(R.id.news_item_likesnum);
 			TextView timestamp = (TextView) rowView.findViewById(R.id.news_item_timestamp);
 			
+			Drawable velika_slika=null;
+			if(redak.get("news_item_image")!=null){
+				String put = context.getCacheDir()+"/"+redak.get("news_item_image"); 
+				velika_slika = Drawable.createFromPath(put);
+			}
+			
+			
 			profilna.setImageDrawable((Drawable)redak.get("news_item_pimage"));
 			profilna2.setImageDrawable((Drawable)redak.get("news_item_p2image"));
 			ime_korisnika.setText((String)redak.get("news_item_ptext"));
 			ime_korisnika2.setText((String)redak.get("news_item_p2text"));
 			tekst.setText((String)redak.get("news_item_text"));
-			slika.setImageDrawable((Drawable)redak.get("news_item_image"));  //asynctask vraca urlove
+			slika.setImageDrawable(velika_slika);  //asynctask vraca urlove
+			velika_slika=null;
 			broj_likeova.setText((String)redak.get("news_item_likesnum"));
 			timestamp.setText((String)redak.get("news_item_timestamp"));
 			
@@ -67,7 +90,9 @@ import android.widget.TextView;
 			
 			if((Boolean)redak.get("news_item_like").equals(true))
 				like.setText("   Liked    ");
-			like.setTag(redak.get("news_item_pid"));
+			else
+				like.setText("    Like    ");
+			like.setTag(redak.get("news_item_pid")+"|"+position);
 			ime_korisnika.setOnClickListener(listener);
 			profilna.setOnClickListener(listener);
 			ime_korisnika2.setOnClickListener(listener);
@@ -76,29 +101,23 @@ import android.widget.TextView;
 			slika.setTag(redak.get("news_item_pid"));
 			slika.setOnClickListener(listener2);
 			
-			broj_likeova.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					CommentDialog dialog = new CommentDialog(context,CommentDialog.TYPE_SHOW_LIKES, (String) v.getTag(), host);
-					dialog.show();
-				}
-			});
+			broj_likeova.setOnClickListener(listener3);
 			
-			comment.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					CommentDialog dialog = new CommentDialog(context,CommentDialog.TYPE_COMMENT, (String) v.getTag(), host);
-					dialog.show();
-				}
-			});
+			comment.setOnClickListener(listener4);
 			
-			like.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					new Like().execute(Vrati_id.vrati((Activity) context),v.getTag(),host, v);
-				}
-				
-			});
+			like.setOnClickListener(listener5);
+			
+			profilna = null;
+			profilna2 = null;
+			ime_korisnika = null;
+			ime_korisnika2 = null;
+			tekst = null;
+			slika = null;
+			like = null;
+			comment = null;
+			broj_likeova = null;
+			timestamp = null;
+			
 			return rowView;
 		}
 
@@ -132,6 +151,37 @@ import android.widget.TextView;
 				Intent prebaci = new Intent(((Activity) context).getBaseContext(), activity_fullscreen_image.class);
 				prebaci.putExtra("com.ferbook.image_position", (String) v.getTag());
 				((Activity) context).startActivity(prebaci);
+			}
+		};
+		
+		View.OnClickListener listener3 = new View.OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				CommentDialog dialog = new CommentDialog(context,CommentDialog.TYPE_SHOW_LIKES, (String) v.getTag(), host);
+				dialog.show();
+			}
+		};
+		View.OnClickListener listener4 = new View.OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				CommentDialog dialog = new CommentDialog(context,CommentDialog.TYPE_COMMENT, (String) v.getTag(), host);
+				dialog.show();
+			}
+		};
+		View.OnClickListener listener5 = new View.OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				String a[] = ((String) v.getTag()).split("\\|");
+				int trenutacni_broj = Integer.parseInt(((String)values.get(Integer.parseInt(a[1])).get("news_item_likesnum")).split("\\ ")[1]);
+				if(((Button)v).getText().equals("   Liked    ")){
+					values.get(Integer.parseInt(a[1])).put("news_item_likesnum", "Likes: "+(trenutacni_broj-1));
+					values.get(Integer.parseInt(a[1])).put("news_item_like",false);
+				}
+				else{
+					values.get(Integer.parseInt(a[1])).put("news_item_likesnum", "Likes: "+(trenutacni_broj+1));
+					values.get(Integer.parseInt(a[1])).put("news_item_like",true);
+				}
+				new Like().execute(Vrati_id.vrati((Activity) context),a[0],host, v);
 			}
 		};
 	} 

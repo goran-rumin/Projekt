@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import android.app.Activity;
 
@@ -13,6 +14,7 @@ public class Vrati_id {
 
 	//public static String ROOT = "http://vdl.hr/ferbook/";
 	public static String ROOT = "http://ferbook.duckdns.org/ferbook/";
+	public static ArrayList<String> cache_sadrzaj=null;
 	
 	public static String vrati(Activity ak){
 		

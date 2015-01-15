@@ -1,5 +1,8 @@
 package com.ferbook;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -35,6 +38,10 @@ public class MainActivity extends Activity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		if(Vrati_id.cache_sadrzaj==null)  //inicijalizacija indexa cachea
+			Vrati_id.cache_sadrzaj=new ArrayList<String>();
+		
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		user_id = Vrati_id.vrati(this);
 		
@@ -177,13 +184,21 @@ public class MainActivity extends Activity implements
 			startActivity(prebaci);*/
 		}
 		else {
+	        
 			new AlertDialog.Builder(this)
-	        .setTitle("Izlaz?")
-	        .setMessage("Jeste li sigurni da zelite izaci?")
-	        .setNegativeButton("Odustani", null)
-	        .setPositiveButton("Da", new OnClickListener() {
+	        .setTitle("Quit")
+	        .setMessage("Are you sure?")
+	        .setNegativeButton("Cancel", null)
+	        .setPositiveButton("Yes", new OnClickListener() {
 
 	            public void onClick(DialogInterface arg0, int arg1) {
+	            	//brisanje cachea
+	    			File dir = getBaseContext().getCacheDir();
+	    			File[] files = dir.listFiles();
+	    	        for (File file : files)
+	    	            file.delete();
+	    	            
+	    	        Vrati_id.cache_sadrzaj=null;
 	                MainActivity.super.onBackPressed();
 	            }
 	        }).create().show();

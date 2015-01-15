@@ -103,6 +103,7 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi, OnScroll
 						chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
 						chooseFile.setType("image/jpeg");
 						intent = Intent.createChooser(chooseFile, "Choose a picture");
+						System.gc();
 						startActivityForResult(intent, ACTIVITY_CHOOSE_FILE);
 					}
 				}});
@@ -137,7 +138,7 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi, OnScroll
 		
 		@Override
 		public void prenesi_newsfeed(List<String> postIds, List<String> texts,
-				List<Drawable> urlovi_u_postu, List<String> timestamps,
+				List<String> urlovi_u_postu, List<String> timestamps,
 				List<String> senderIds, List<String> senderNames,
 				List<String> senderLastnames, List<Drawable> senderPictures,
 				List<String> senderUsernames, List<String> senderEmails,
@@ -225,6 +226,7 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi, OnScroll
 							File file = new File(put);
 							float velicina = file.length();
 							if(velicina<1024*2014){
+								System.gc();
 								slika = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
 								Toast.makeText(getActivity(), "Picture selected", Toast.LENGTH_SHORT).show();
 								//new Upload().execute(Vrati_id.vrati(getActivity()),slika,null,this);   //odkomentirati kad sve bude na serveru rijeseno

@@ -1,7 +1,9 @@
 package com.ferbook;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,6 +28,9 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -50,7 +55,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	Drawable nova;
 	List<String> postIds = new ArrayList<String>();
 	List<String> texts = new ArrayList<String>();
-	List<Drawable> urlovi_u_postu = new ArrayList<Drawable>();
+	List<String> urlovi_u_postu = new ArrayList<String>();
 	List<String> timestamps = new ArrayList<String>();
 	List<String> senderIds=new ArrayList<String>();
 	List<String> senderNames= new ArrayList<String>();
@@ -74,6 +79,8 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	private String url;
 	static Activity ak;
 	
+	File cacheDir;
+	
 	
     protected Void doInBackground(Object... arg0) { //(int broj, this)   //1 na početku, a dalje se broj povecava, najbolje u activityu
     	String userId=(String) arg0[0];
@@ -83,7 +90,8 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     	  	
     	
     	ak=(MainActivity) arg0[4];			//MainActivity?
-    	    	
+    	
+    	cacheDir = ak.getBaseContext().getCacheDir();
     	List<NameValuePair> params= new ArrayList<NameValuePair>();
     	
     	NameValuePair user=new BasicNameValuePair("userId", userId);    
@@ -199,7 +207,12 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 						texts.add(text);		
 						
 						if(url_u_postu.equals(""))urlovi_u_postu.add(null);
-						else urlovi_u_postu.add(Image.vrati_sliku(url_u_postu));	
+						else {
+							//urlovi_u_postu.add(Image.vrati_sliku(url_u_postu));
+							String a[] = url_u_postu.split("/");
+							urlovi_u_postu.add(a[a.length-1]);
+							spremi_u_cache(url_u_postu,a[a.length-1]);
+						}
 						
 						timestamps.add(timestamp);  
 						senderIds.add(senderId);
@@ -267,7 +280,7 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
        
     
     public interface prenesi{
-    	void prenesi_newsfeed(List<String> postIds,List<String> texts,List<Drawable> urlovi_u_postu,List<String> timestamps,List<String> senderIds,List<String> senderNames,List<String> senderLastnames,List<Drawable> senderPictures,List<String> senderUsernames, List<String> senderEmails,List<String> recipientIds,List<String> recipientNames,List<String> recipientLastnames,List<Drawable> recipientPictures,List<String>  recipientUsernames,List<String> recipientEmails,List<Boolean> liked_lista_boolean, List<Integer> broj_likeova,String error_info);
+    	void prenesi_newsfeed(List<String> postIds,List<String> texts,List<String> urlovi_u_postu,List<String> timestamps,List<String> senderIds,List<String> senderNames,List<String> senderLastnames,List<Drawable> senderPictures,List<String> senderUsernames, List<String> senderEmails,List<String> recipientIds,List<String> recipientNames,List<String> recipientLastnames,List<Drawable> recipientPictures,List<String>  recipientUsernames,List<String> recipientEmails,List<Boolean> liked_lista_boolean, List<Integer> broj_likeova,String error_info);
     }
 
     
@@ -277,7 +290,6 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
     		Drawable d = ak.getResources().getDrawable( R.drawable.ferbook );
 	    	return d;
     	}	
-    	
 	    try {
 	    	url = url.substring(0, url.length()-4);
     		url= url + "thm.jpg";
@@ -291,6 +303,35 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 	    	return d;
 	    }
 	}
+    
+    private static Bitmap vrati_bitmap(String url) {
+    	try {
+	        InputStream is = (InputStream) new URL(url).getContent();
+	        Bitmap bitmap = BitmapFactory.decodeStream(is);
+	        return bitmap;
+	    } catch (Exception e) {
+	        return null;
+	    }
+	}
+    
+    private void spremi_u_cache(String url, String ime){
+    	File tempFile = new File(cacheDir.getPath() + "/" + ime);
+    	try {
+    		if(!Vrati_id.cache_sadrzaj.contains(ime)){
+    			FileOutputStream out = new FileOutputStream(tempFile);
+    			Bitmap a = vrati_bitmap(url);
+    			if(a.getWidth()>600 || a.getHeight()>600){
+    				float omjer = (float)a.getHeight()/a.getWidth();
+    				a=Bitmap.createScaledBitmap(a, 600, (int)(omjer*600), false);
+    			}
+    			a.compress(Bitmap.CompressFormat.JPEG, 80, out);
+				Vrati_id.cache_sadrzaj.add(ime);
+    		}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+    }
+    
     
 private static String vrati_vrijeme(Activity ak){
 		
