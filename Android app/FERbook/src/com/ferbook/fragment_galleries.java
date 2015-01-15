@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 public class fragment_galleries extends Fragment implements Galleries.prenesi {
 	
 	private static final String ARG_SECTION_NUMBER = "section_number";
+	public static final String EXTRA_NEW_ALBUM = "com.ferbook.new_album";
 	
 	private ArrayList<Drawable> mNaslovnice = new ArrayList<Drawable>();
 	private ArrayList<String> mNazivi = new ArrayList<String>();
@@ -38,6 +40,9 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 	private GridView mGridView;
 	private View view;
 	private TextView noAlbumMessage;
+	private Boolean mNewAlbumUploaded = false;
+	private ProgressDialog mProgressDialog;
+	private Boolean mProgressDialogShowed = false;
 	
 	public static fragment_galleries newInstance(int sectionNumber) {
 		fragment_galleries fragment = new fragment_galleries();
@@ -58,27 +63,6 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 		userId = Vrati_id.vrati(getActivity());
 
 		new Galleries().execute(userId, this);
-	
-		/*
-		 * Ovo zakomentirano je simulacija albuma da se moze vidjeti kako ce to izgledati.
-		 * Simulacija tri albuma koji imaju id: 10, 21, 5.
-		 * Treba ovo otkomentirati i zakomentirati redak iznad: new Galleries... 
-		 * */
-		/*
-		mNaslovnice.add(getResources().getDrawable(R.drawable.ic_launcher));
-		mNaslovnice.add(getResources().getDrawable(R.drawable.search));
-		mNaslovnice.add(getResources().getDrawable(R.drawable.more));
-		
-		mNazivi.add("Album 1");
-		mNazivi.add("Album 2");
-		mNazivi.add("Album 2");
-		
-		mIds.add("10");
-		mIds.add("5");
-		mIds.add("20");
-		
-		mGridView.setAdapter(new GalleryImageAdapter(view.getContext(), mNaslovnice, mIds));  
-		*/
 		
 		mGridView.setOnItemClickListener(new OnItemClickListener() 
 		{
@@ -87,6 +71,8 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 		    	Log.d("denis", mGridView.getItemAtPosition(position).toString());
 		    	Intent i = new Intent(getActivity(), activity_gallery.class);
 		    	String galleryId = (String) (mGridView.getItemAtPosition(position));
+		    	String galleryName = mNazivi.get(position);
+		    	i.putExtra(activity_gallery.EXTRA_GALLERY_NAME, galleryName);
 				i.putExtra(activity_gallery.EXTRA_GALLERY_ID, galleryId);
 				startActivity(i);
 		    }
@@ -95,6 +81,8 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 		
 		return view;
 	}
+	
+
 	
 	/*
 	 * MENU
@@ -109,7 +97,7 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 		switch (item.getItemId()) {
 			case R.id.menu_item_new_album:
 				Intent i = new Intent(getActivity(), activity_newAlbum.class);
-				startActivity(i);
+				startActivityForResult(i, 0);
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -123,7 +111,11 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 	@Override
 	public void prenesi_getlikes(List<String> albumIds, List<String> names, List<Drawable> naslovnice, 
 			int broj_galerija, String error) {
-		
+		mProgressDialog.dismiss();
+		mProgressDialogShowed = true;
+		mNaslovnice.clear();
+		mNazivi.clear();
+		mIds.clear();
 		if (error == null) {
 			for (int i = 0; i < broj_galerija; i++) { 
 				mNaslovnice.add(naslovnice.get(i));
@@ -146,10 +138,42 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 				ARG_SECTION_NUMBER));
 	}
 	
+	/*
+	 * 	ONSTART
+	 * */
+	@Override
+    public void onStart(){
+    	super.onStart();
+    	Log.d("denis", "onStart");
+    	if (!mProgressDialogShowed)
+    		mProgressDialog = ProgressDialog.show(getActivity(), "", "Please wait...", true, true);
+    }
+	
+	
 	//Osvjezi galeriju kada se korisnik vrati iz activity_newAlbum
 	@Override
     public void onResume(){
+		Log.d("denis", "onResume");
     	super.onResume();
     	//new Galleries().execute(userId, this);
     }
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data){
+		Log.d("denis", "onActivityResult");
+    	if (data == null) {
+    		return;
+    	}
+    	mNewAlbumUploaded = data.getBooleanExtra(fragment_galleries.EXTRA_NEW_ALBUM, false);
+    	Log.d("denis", "" + mNewAlbumUploaded);
+    	if (mNewAlbumUploaded) {
+    		Log.d("denis", "Novi album je tu");
+    		mProgressDialog = ProgressDialog.show(getActivity(), "", "Please wait...", true, true);
+    		new Galleries().execute(userId, this);
+    	} else {
+    		Log.d("denis", "Nema novog albuma");
+    	}
+    }
+	
+	
 }

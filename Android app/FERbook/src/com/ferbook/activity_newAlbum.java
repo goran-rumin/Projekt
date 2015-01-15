@@ -34,11 +34,13 @@ import android.widget.Toast;
 
 public class activity_newAlbum extends Activity implements Upload.prenesi, addGallery.prenesi {
 		
+	
 	private ArrayList<Bitmap> mPictures = new ArrayList<Bitmap>();
 	private ArrayList<String> mPicturePaths = new ArrayList<String>();
 	private GridView mGridView;
 	private Boolean smije_objaviti = true;
 	private EditText editText_imeAlbuma;
+	private Boolean mNewAlbumUploaded = false;
 	
 	private ArrayList<String> putevi = new ArrayList<String>();
 	
@@ -50,7 +52,11 @@ public class activity_newAlbum extends Activity implements Upload.prenesi, addGa
 		setContentView(R.layout.new_album);	//Edittext i gridView
 
 		mGridView = (GridView)findViewById(R.id.gridview);
-		editText_imeAlbuma = (EditText)findViewById(R.id.album_title);	
+		editText_imeAlbuma = (EditText)findViewById(R.id.album_title);
+		
+		Intent data = new Intent();
+		data.putExtra(fragment_galleries.EXTRA_NEW_ALBUM, mNewAlbumUploaded);
+		setResult(RESULT_OK, data);
 	}
 	
 	/*
@@ -79,6 +85,15 @@ public class activity_newAlbum extends Activity implements Upload.prenesi, addGa
 					if (mPictures.size() > 0) {
 						if (editText_imeAlbuma.getText().toString() != "") {
 							smije_objaviti=false;
+							
+							mNewAlbumUploaded = true;
+							
+							Intent data = new Intent();
+							data.putExtra(fragment_galleries.EXTRA_NEW_ALBUM, mNewAlbumUploaded);
+							setResult(RESULT_OK, data);
+							
+							
+							
 							Toast.makeText(this, "Starting upload..." , Toast.LENGTH_SHORT).show();
 							new addGallery().execute(Vrati_id.vrati(this), editText_imeAlbuma.getText().toString(), this);
 							

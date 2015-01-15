@@ -3,7 +3,9 @@ package com.ferbook;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -32,8 +34,10 @@ public class activity_gallery extends Activity implements Gallery.prenesi {
 	final int ACTIVITY_CHOOSE_FILE = 1;
 	
 	public static final String EXTRA_GALLERY_ID = "com.ferbook.image_position";
+	public static final String EXTRA_GALLERY_NAME = "com.ferbook.gallery_name";
 	
 	private String mGalleryId;
+	private String mGalleryName;
 	private GridView mGridView;
 	private Boolean smije_objaviti = true;
 	private ArrayList<Drawable> slike = new ArrayList<Drawable>();
@@ -54,6 +58,9 @@ public class activity_gallery extends Activity implements Gallery.prenesi {
 		setContentView(R.layout.gallery);
 		
 		mGalleryId = getIntent().getStringExtra(EXTRA_GALLERY_ID);
+		mGalleryName = getIntent().getStringExtra(EXTRA_GALLERY_NAME);
+		
+		this.setTitle(mGalleryName);
 		
 		mGridView = (GridView)findViewById(R.id.gridview);
 		
@@ -148,6 +155,8 @@ public class activity_gallery extends Activity implements Gallery.prenesi {
 		    }
 		});
 	}
+	
+
 	
 	
 	/*
