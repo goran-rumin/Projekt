@@ -68,6 +68,7 @@ public class Image extends AsyncTask<Object, Void, Void> {
 	
 	protected void onPostExecute(Void param) {
 	        sucelje.prenesi_image(slika ,error_info);	
+	        slika=null;
 	    }
 	
 	public interface prenesi{

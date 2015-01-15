@@ -113,8 +113,10 @@ public class Gallery extends AsyncTask<Object, Void, Void> {
     }
 
     protected void onPostExecute(Void param) {
-    	Log.e("prenosim", "prenosim_gallery");
+    	//Log.e("prenosim", "prenosim_gallery");
         sucelje.prenesi_gallery(postIds, slike, br_slika,  error_info);
+        postIds=null;
+    	slike=null;
     }
     
     
@@ -123,6 +125,7 @@ public class Gallery extends AsyncTask<Object, Void, Void> {
     
     public interface prenesi{
     	void prenesi_gallery(List<String> postIds, List<Drawable> slike, int broj_slika, String error);
+    	
     }
 
     

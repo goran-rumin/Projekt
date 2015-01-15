@@ -255,6 +255,12 @@ public class Newsfeed extends AsyncTask<Object, Void, Void> {
 
     protected void onPostExecute(Void param) {
         sucelje.prenesi_newsfeed(postIds,texts,urlovi_u_postu,timestamps,senderIds,senderNames,senderLastnames,senderPictures,senderUsernames, senderEmails,recipientIds,recipientNames,recipientLastnames,recipientPictures, recipientUsernames,recipientEmails, liked_boolean, broj_likeova,error_info);
+       
+        postId=null; text=null; url_u_postu=null; timestamp=null; senderId=null; senderName=null; senderLastname=null; 
+    			senderPicture=null; senderUsername=null; senderEmail=null;  recipientId=null; recipientName=null; recipientLastname=null; 
+    			recipientPicture=null; recipientUsername=null; recipientEmail=null;
+    			
+    	postIds=null; texts=null; urlovi_u_postu=null; timestamps=null;senderIds=null; senderNames=null; senderLastnames=null; senderPictures=null; senderUsernames=null;senderEmails=null; recipientIds=null; recipientNames=null; recipientLastnames=null;recipientPictures=null; recipientUsernames=null;recipientEmails=null; liked_boolean=null; broj_likeova=null;error_info=null;
     }
     
     

@@ -109,6 +109,9 @@ public class Galleries extends AsyncTask<Object, Void, Void> {
 
     protected void onPostExecute(Void param) {
         sucelje.prenesi_getlikes(albumIds, names, naslovnice, br_galerija,error_info);
+        albumIds=null;
+        names=null;
+        naslovnice=null;
     }
     
     
