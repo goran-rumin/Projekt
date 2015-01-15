@@ -41,7 +41,6 @@ public class Image extends AsyncTask<Object, Void, Void> {
     			JSONObject data = jsonObj.getJSONObject("data");
     			
     			url_slike=data.getString("url");
-    			url_slike=url_slike.replace("ferbook.duckdns.org", "192.168.1.221");
     			slika=vrati_sliku(url_slike);
     		
     		}

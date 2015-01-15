@@ -225,7 +225,6 @@ public class WallFragment extends Fragment implements Newsfeed.prenesi, OnScroll
 							}
 							File file = new File(put);
 							float velicina = file.length();
-							Log.e("velicina",""+velicina);
 							if(velicina<(1024*1024)){
 								System.gc();
 								slika = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
