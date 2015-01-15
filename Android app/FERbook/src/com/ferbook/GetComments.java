@@ -183,7 +183,6 @@ public class GetComments extends AsyncTask<Object, Void, Void> {
     		Drawable d = ak.getResources().getDrawable( R.drawable.ferbook );
 	    	return d;
     	}	
-    	
 	    try {
 	    	url = url.substring(0, url.length()-4);
     		url= url + "thm.jpg";

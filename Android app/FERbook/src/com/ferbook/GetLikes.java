@@ -177,7 +177,6 @@ public class GetLikes extends AsyncTask<Object, Void, Void> {//{ "data" : [{"lik
     		Drawable d = ak.getResources().getDrawable( R.drawable.ferbook );
 	    	return d;
     	}	
-    	
 	    try {
 	    	url = url.substring(0, url.length()-4);
     		url= url + "thm.jpg";

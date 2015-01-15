@@ -62,7 +62,7 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 		
 		userId = Vrati_id.vrati(getActivity());
 
-		new Galleries().execute(userId, this);
+		new Galleries().execute(userId, this, getActivity());
 		
 		mGridView.setOnItemClickListener(new OnItemClickListener() 
 		{
@@ -111,7 +111,8 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
 	@Override
 	public void prenesi_getlikes(List<String> albumIds, List<String> names, List<Drawable> naslovnice, 
 			int broj_galerija, String error) {
-		mProgressDialog.dismiss();
+		if(mProgressDialog!=null)
+			mProgressDialog.dismiss();
 		mProgressDialogShowed = true;
 		mNaslovnice.clear();
 		mNazivi.clear();
@@ -169,7 +170,7 @@ public class fragment_galleries extends Fragment implements Galleries.prenesi {
     	if (mNewAlbumUploaded) {
     		Log.d("denis", "Novi album je tu");
     		mProgressDialog = ProgressDialog.show(getActivity(), "", "Please wait...", true, true);
-    		new Galleries().execute(userId, this);
+    		new Galleries().execute(userId, this, getActivity());
     	} else {
     		Log.d("denis", "Nema novog albuma");
     	}

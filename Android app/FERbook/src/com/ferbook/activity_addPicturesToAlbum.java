@@ -129,7 +129,7 @@ public class activity_addPicturesToAlbum extends Activity implements Upload.pren
 						}
 						File file = new File(put);
 						float velicina = file.length();
-						if(velicina<1024*2014){
+						if(velicina<1024*1024){
 							slika = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
 							
 							put = getRealPathFromURI(uri); //iz puta cu dobiti Bitmap sliku

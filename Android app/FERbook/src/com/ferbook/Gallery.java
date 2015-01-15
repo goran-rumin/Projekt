@@ -129,7 +129,7 @@ public class Gallery extends AsyncTask<Object, Void, Void> {
     }
 
     
-    public static Drawable vrati_sliku(String url) {				
+    public static Drawable vrati_sliku(String url) {
 	    try {
 	        InputStream is = (InputStream) new URL(url).getContent();
 	        Drawable d = Drawable.createFromStream(is, "src name");//u ovom slucaju "src name" netrebam

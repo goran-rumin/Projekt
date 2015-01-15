@@ -31,7 +31,8 @@ public class Upload extends AsyncTask<Object, Void, Void> {
 		String userId2 = (String) arg0[5];
 		
 		String imageStream=encodeTobase64(image);
-		
+		image = null;
+		System.gc();
 		NameValuePair prvi=new BasicNameValuePair("userId", userId);
 		NameValuePair treci=new BasicNameValuePair("userId2", userId2);
 		NameValuePair drugi=new BasicNameValuePair("url", imageStream);
